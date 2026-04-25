@@ -54,8 +54,7 @@
         @foreach($images as $img)
             <div style="border:1px solid #ddd;padding:10px;width:220px;">
                 <div style="margin-bottom:8px;">
-                    <img src="{{ asset('storage/' . $img->path) }}" style="width:200px;height:120px;object-fit:cover;">
-                </div>
+<img src="{{ Storage::url($img->path) }}" style="width:200px;height:120px;object-fit:cover;">                </div>
 
                 <div>
                     <strong>ID:</strong> {{ $img->id }} <br>

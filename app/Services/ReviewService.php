@@ -20,25 +20,25 @@ class ReviewService
 
             if ($booking->user_id !== $userId) {
                 throw new AuthorizationException(
-                    'You are not allowed to rate this reservation'
+                    'You are not allowed to rate this booking'
                 );
             }
 
             if ($booking->status !== 'completed') {
                 throw new BadRequestHttpException(
-                    'You cannot rate or leave a comment until the visit is complete'
+                    'You cannot rate until the booking is completed'
                 );
             }
 
             $review = Review::where('user_id', $userId)
-                ->where('property_id', $booking->property_id)
+                ->where('car_id', $booking->car_id)
                 ->first();
 
             if ($review) {
 
                 if (isset($data['rating'])) {
                     throw new BadRequestHttpException(
-                        'Rating cannot be evaluated more than once and cannot be modified'
+                        'Rating cannot be modified'
                     );
                 }
 
@@ -51,26 +51,26 @@ class ReviewService
 
             if (! isset($data['rating'])) {
                 throw new BadRequestHttpException(
-                    'Rating is required for the first review'
+                    'Rating is required for first review'
                 );
             }
 
             $review = Review::create([
                 'booking_id' => $booking->id,
                 'user_id' => $userId,
-                'property_id' => $booking->property_id,
+                'car_id' => $booking->car_id,
                 'rating' => $data['rating'],
                 'comment' => $data['comment'] ?? null,
             ]);
 
-            $property = Property::findOrFail($booking->property_id);
+            $car = Car::findOrFail($booking->car_id);
 
-            $property->increment('rating_count');
-            $property->increment('rating_sum', $data['rating']);
+            $car->increment('rating_count');
+            $car->increment('rating_sum', $data['rating']);
 
-            $property->update([
+            $car->update([
                 'rating_avg' => round(
-                    $property->rating_sum / $property->rating_count,
+                    $car->rating_sum / $car->rating_count,
                     2
                 ),
             ]);

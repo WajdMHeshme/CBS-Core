@@ -5,14 +5,14 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
-class PropertyActionNotification extends Notification
+class CarActionNotification extends Notification
 {
     use Queueable;
 
     public function __construct(
-        public string $action,        // created | updated | deleted
-        public string $propertyTitle, // property name
-        public string $byUser         // user name
+        public string $action,     // created | updated | deleted
+        public string $carTitle,   // car name/title
+        public string $byUser      // user name
     ) {}
 
     /**
@@ -29,9 +29,9 @@ class PropertyActionNotification extends Notification
     public function toDatabase($notifiable): array
     {
         return [
-            'message' => "Property '{$this->propertyTitle}' {$this->action}",
+            'message' => "Car '{$this->carTitle}' {$this->action}",
             'by'      => $this->byUser,
-            'type'    => 'property',
+            'type'    => 'car',
         ];
     }
 }

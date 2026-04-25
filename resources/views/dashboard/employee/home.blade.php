@@ -106,7 +106,7 @@
                                 {{ $booking->user->name }}
                             </td>
 
-                            {{-- 🔥 FIXED: property → car --}}
+                          
                             <td class="px-4 py-2 text-sm">
                                 {{ $booking->car?->title ?? 'No Car' }}
                             </td>

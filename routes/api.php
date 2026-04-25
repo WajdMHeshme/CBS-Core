@@ -3,7 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Customer\ReviewController;
 use App\Http\Controllers\Employee\BookingMessageController;
-use App\Http\Controllers\Visitor\PropertyController as VisitorPropertyController;
+use App\Http\Controllers\Visitor\CarController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,10 +35,10 @@ Route::middleware(['auth:sanctum'])->prefix('bookings')->group(function () {
     Route::post('/{booking}/messages', [BookingMessageController::class, 'store']);
 });
 
-// Public Property endpoints (visitor – no auth)
+// Public Car endpoints (visitor – no auth)
 
-Route::get('/properties', [VisitorPropertyController::class, 'index']);
-Route::get('/properties/{property}', [VisitorPropertyController::class, 'show']);
+Route::get('/cars', [CarController::class, 'index']);
+Route::get('/cars/{car}', [CarController::class, 'show']);
 
 /*
 |--------------------------------------------------------------------------

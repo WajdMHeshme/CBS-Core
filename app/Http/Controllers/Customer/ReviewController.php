@@ -22,8 +22,7 @@ class ReviewController extends Controller
         $data = $request->validated();
 
         $review = $this->reviewService->addRating(Auth::id(), $data);
-
-        $review->load(['user', 'property']);
+        $review->load(['user', 'car']);
 
         return response()->json([
             'message' => __('messages.api.rating_added'),

@@ -69,34 +69,34 @@ class CarService
             ->paginate($filters['limit'] ?? 6);
     }
 
-public function create(array $data): Car
-{
-    $amenities = $data['amenity_ids'] ?? [];
-    $images = $data['images'] ?? [];
-    unset($data['amenity_ids'], $data['images']);
+    public function create(array $data): Car
+    {
+        $amenities = $data['amenity_ids'] ?? [];
+        $images = $data['images'] ?? [];
+        unset($data['amenity_ids'], $data['images']);
 
-    $data['user_id'] = auth()->id();
-    $data['year'] = $data['year'] ?? now()->year;
-    $data['price_per_day'] = $data['price_per_day'] ?? 0;
+        $data['user_id'] = auth()->id();
+        $data['year'] = $data['year'] ?? now()->year;
+        $data['price_per_day'] = $data['price_per_day'] ?? 0;
 
-    $car = Car::create($data);
+        $car = Car::create($data);
 
-    if (!empty($amenities)) {
-        $car->amenities()->sync($amenities);
-    }
+        if (!empty($amenities)) {
+            $car->amenities()->sync($amenities);
+        }
 
-    if (!empty($images)) {
-        foreach ($images as $image) {
+        // ✅ الحل - أضف is_main للصورة الأولى
+        foreach ($images as $i => $image) {
             $path = $image->store('cars', 'public');
 
             $car->images()->create([
-                'path' => $path,
+                'path'    => $path,
+                'is_main' => $i === 0, // الصورة الأولى تصير main
             ]);
         }
-    }
 
-    return $car;
-}
+        return $car;
+    }
 
     public function update(Car $car, array $data): Car
     {

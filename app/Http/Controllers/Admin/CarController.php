@@ -8,10 +8,10 @@ use App\Http\Requests\UpdateCarRequest;
 use App\Models\Car;
 use App\Models\CarType;
 use App\Models\User;
+use App\Notifications\CarActionNotification;
 use App\Services\AmenityService;
 use App\Services\CarService;
 use App\Services\ImageService;
-use App\Notifications\PropertyActionNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
@@ -43,7 +43,7 @@ class CarController extends Controller
         $filters = $filters
             ->when(
                 $filters->get('type') && ! $filters->has('car_type_ids'),
-                fn ($col) => $col->put('car_type_ids', Arr::wrap($col->get('type')))
+                fn($col) => $col->put('car_type_ids', Arr::wrap($col->get('type')))
             )
             ->all();
 
@@ -63,24 +63,31 @@ class CarController extends Controller
         return view('dashboard.cars.create', compact('amenities', 'carTypes'));
     }
 
-    public function store(StoreCarRequest $request): RedirectResponse
+    public function store(StoreCarRequest $request, ImageService $imageService): RedirectResponse
     {
         $data = $request->validated();
 
         $car = $this->carService->create($data);
+
+        if ($request->hasFile('images')) {
+            $imageService->upload(
+                $car,
+                $request->file('images'),
+                $request->input('alt')
+            );
+        }
 
         $title = $car->brand . ' ' . $car->model . " (#{$car->id})";
         $by = auth()->user()?->name ?? 'System';
 
         $users = User::role(['admin', 'employee'])->get();
         foreach ($users as $user) {
-            $user->notify(new PropertyActionNotification('created', $title, $by));
+            $user->notify(new CarActionNotification('created', $title, $by));
         }
 
         return redirect()->route('dashboard.cars.index')
             ->with('success', 'Car added successfully');
     }
-
     public function edit(Car $car): View
     {
         $car->load('images');
@@ -98,12 +105,12 @@ class CarController extends Controller
 
         $car->refresh();
 
-       $title = $car->brand . ' ' . $car->model . " (#{$car->id})";
+        $title = $car->brand . ' ' . $car->model . " (#{$car->id})";
         $by = auth()->user()?->name ?? 'System';
 
         $users = User::role(['admin', 'employee'])->get();
         foreach ($users as $user) {
-            $user->notify(new PropertyActionNotification('updated', $title, $by));
+            $user->notify(new CarActionNotification('updated', $title, $by));
         }
 
         return redirect()->route('dashboard.cars.index')
@@ -112,14 +119,14 @@ class CarController extends Controller
 
     public function destroy(Car $car): RedirectResponse
     {
-       $title = $car->brand . ' ' . $car->model . " (#{$car->id})";
+        $title = $car->brand . ' ' . $car->model . " (#{$car->id})";
         $by = auth()->user()?->name ?? 'System';
 
         $this->carService->delete($car);
 
         $users = User::role(['admin', 'employee'])->get();
         foreach ($users as $user) {
-            $user->notify(new PropertyActionNotification('deleted', $title, $by));
+            $user->notify(new CarActionNotification('deleted', $title, $by));
         }
 
         return back()->with('success', 'Car deleted successfully');

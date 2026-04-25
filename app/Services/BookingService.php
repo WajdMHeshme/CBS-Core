@@ -4,60 +4,76 @@ namespace App\Services;
 
 use App\Models\Booking;
 use App\Models\Car;
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class BookingService
 {
     /**
-     * transcation => all or nothing
+     * Create booking (transaction)
      */
     public function create(array $data): Booking
     {
-        // Check if the property exists before using it
-        $property = Property::find($data['property_id'] ?? null);
-        if (! $property) {
-            throw new \Exception('Property not found');
+
+        $car = Car::find($data['car_id'] ?? null);
+
+        if (! $car) {
+            throw new \Exception('Car not found');
         }
 
-        // Ensure the user is authenticated
+
         $userId = auth('sanctum')->id();
+
         if (! $userId) {
             throw new \Exception('Unauthenticated');
         }
 
-        // Create the booking inside a transaction
-        return DB::transaction(function () use ($data, $userId, $property) {
+        if (!empty($data['start_date']) && !empty($data['end_date'])) {
+
+            $isBooked = Booking::where('car_id', $car->id)
+                ->where(function ($q) use ($data) {
+                    $q->whereBetween('start_date', [$data['start_date'], $data['end_date']])
+                      ->orWhereBetween('end_date', [$data['start_date'], $data['end_date']]);
+                })
+                ->exists();
+
+            if ($isBooked) {
+                throw new \Exception('Car is already booked for this period');
+            }
+        }
+
+        return DB::transaction(function () use ($data, $userId, $car) {
 
             $booking = Booking::create([
-                'property_id' => $property->id,
+                'car_id' => $car->id,
                 'user_id' => $userId,
-                'employee_id' => $property->employee_id ?? null, // assign employee if exists
-                'scheduled_at' => $data['scheduled_at'],
+
+                'employee_id' => $car->employee_id ?? null,
+
+                'scheduled_at' => $data['scheduled_at'] ?? null,
+                'start_date' => $data['start_date'] ?? null,
+                'end_date' => $data['end_date'] ?? null,
+
                 'status' => 'pending',
             ]);
 
-            // Load property and employee relationships before returning
-            return $booking->load(['property', 'employee']);
+            return $booking->load(['car', 'employee', 'user']);
         });
     }
 
     /**
-     * derails of booking
-     *
-     * @return Booking
+     * Show booking details
      */
     public function show(Booking $booking)
     {
         return $booking->load([
-            'property',
+            'car',
             'employee',
             'user',
         ]);
     }
 
     /**
-     * cancel booking
+     * Cancel booking
      */
     public function cancel(Booking $booking)
     {

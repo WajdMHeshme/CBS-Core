@@ -10,6 +10,7 @@
 
     <div class="flex flex-wrap items-center gap-3 w-full justify-center mb-10">
         <div class="flex flex-wrap gap-2 justify-center">
+
             <a href="{{ route('employee.bookings.my') }}"
                class="px-3 py-1.5 rounded-xl text-sm border shadow-sm {{ !request('status') ? 'bg-indigo-50 text-indigo-700 border-indigo-300 font-semibold' : 'text-gray-600 hover:bg-gray-50' }}">
                 {{ __('messages.booking.all') }} ({{ $counts['all'] }})
@@ -21,6 +22,7 @@
                     {{ __("messages.status.$st") }} ({{ $counts[$st] }})
                 </a>
             @endforeach
+
         </div>
     </div>
 
@@ -29,7 +31,7 @@
         @forelse($bookings as $booking)
 
             @php
-                $property = $booking->property;
+                $car = $booking->car;
                 $user = $booking->user;
             @endphp
 
@@ -39,11 +41,11 @@
 
                     <div>
                         <h3 class="font-semibold text-gray-900 leading-tight">
-                            {{ $property?->title ?? 'No Property' }}
+                            {{ $car?->brand ?? 'unknown Car' }}
                         </h3>
 
                         <p class="text-sm text-gray-500 mt-0.5">
-                            {{ $property?->city ?? '-' }}
+                            {{ $car?->model ?? '-' }}
                         </p>
                     </div>
 
@@ -177,6 +179,7 @@
                 </button>
             </div>
         </form>
+
     </div>
 </div>
 

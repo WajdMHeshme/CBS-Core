@@ -9,8 +9,6 @@ class ReviewResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
      */
     public function toArray(Request $request): array
     {
@@ -27,10 +25,10 @@ class ReviewResource extends JsonResource
                 ];
             }),
 
-            'property' => $this->whenLoaded('property', function () {
+            'car' => $this->whenLoaded('car', function () {
                 return [
-                    'id' => $this->property->id,
-                    'title' => $this->property->title,
+                    'id' => $this->car->id,
+                    'title' => $this->car->title,
                 ];
             }),
 

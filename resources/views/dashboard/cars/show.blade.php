@@ -4,10 +4,11 @@
 <div class="container mx-auto p-6 max-w-5xl">
     <div class="bg-white shadow-xl rounded-2xl p-8 space-y-8">
 
-        {{-- Header --}}
         <div class="flex flex-col md:flex-row justify-between gap-4">
             <div>
-                <h1 class="text-3xl font-extrabold text-gray-900">{{ $car->title }}</h1>
+                <h1 class="text-3xl font-extrabold text-gray-900">
+                    {{ $car->title }}
+                </h1>
             </div>
 
             <div class="flex flex-wrap items-center gap-3">
@@ -23,12 +24,10 @@
             </div>
         </div>
 
-        {{-- Info Grid --}}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
             <div class="md:col-span-2 space-y-6">
 
-                {{-- Description --}}
                 <div class="bg-gray-50 p-6 rounded-2xl shadow">
                     <h3 class="text-lg font-semibold mb-2">Description</h3>
                     <p class="text-gray-700">
@@ -36,13 +35,12 @@
                     </p>
                 </div>
 
-                {{-- Images --}}
                 <div class="bg-gray-50 p-6 rounded-2xl shadow">
                     <h3 class="text-lg font-semibold mb-3">Images</h3>
 
                     <div class="grid grid-cols-2 gap-3">
                         @forelse($car->images as $img)
-                            <img src="{{ asset('storage/'.$img->path) }}"
+                            <img src="{{ Storage::url($img->path) }}"
                                  class="rounded-xl h-32 w-full object-cover cursor-pointer"
                                  onclick="openLightbox(this.src)">
                         @empty
@@ -51,7 +49,6 @@
                     </div>
                 </div>
 
-                {{-- Amenities --}}
                 <div class="bg-gray-50 p-6 rounded-2xl shadow">
                     <h3 class="text-lg font-semibold mb-3">Amenities</h3>
 
@@ -66,10 +63,8 @@
 
             </div>
 
-            {{-- Right side --}}
             <div class="space-y-4">
 
-                {{-- Price --}}
                 <div class="bg-white p-6 rounded-2xl shadow">
                     <p class="text-sm text-gray-500">Price per day</p>
                     <p class="text-3xl font-extrabold text-green-600">
@@ -77,7 +72,6 @@
                     </p>
                 </div>
 
-                {{-- Specs --}}
                 <div class="bg-white p-6 rounded-2xl shadow space-y-2">
                     <h3 class="font-bold border-b pb-2">Specs</h3>
 
@@ -92,7 +86,6 @@
     </div>
 </div>
 
-{{-- Lightbox --}}
 <div id="lightbox" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center">
     <img id="lightbox-img" class="max-w-3xl rounded-xl">
 </div>

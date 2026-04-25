@@ -7,12 +7,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class BookingResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
-    //  Resources are The format of the data returned by the API
     public function toArray(Request $request): array
     {
         return [
@@ -20,34 +14,32 @@ class BookingResource extends JsonResource
             'status' => $this->status,
             'scheduled_at' => $this->scheduled_at?->format('Y-m-d H:i'),
             'notes' => $this->notes,
+            'rejection_reason' => $this->rejection_reason,
 
-            'property' => $this->property ? [
-                'id' => $this->property->id,
-                'title' => $this->property->title,
-                'city' => $this->property->city,
+            // 🚗 Car instead of property
+            'car' => $this->car ? [
+                'id' => $this->car->id,
+                'title' => $this->car->title,
+                'brand' => $this->car->brand,
+                'model' => $this->car->model,
+                'price_per_day' => $this->car->price_per_day,
             ] : null,
 
-            'customer' => $this->customer ? [
-                'id' => $this->customer->id,
-                'name' => $this->customer->name,
-                'email' => $this->customer->email,
+            // 👤 Customer (user)
+            'customer' => $this->user ? [
+                'id' => $this->user->id,
+                'name' => $this->user->name,
+                'email' => $this->user->email,
             ] : null,
 
-            'employee' => $this->employee
-                ? [
-                    'id' => $this->employee->id,
-                    'name' => $this->employee->name,
-                ]
-                : null,
+            // 👷 Employee
+            'employee' => $this->employee ? [
+                'id' => $this->employee->id,
+                'name' => $this->employee->name,
+            ] : null,
         ];
     }
 
-    /**
-     * use meta data in dashbord
-     *
-     * @param  mixed  $request
-     * @return array{meta: array{created_at: mixed, updated_at: mixed}}
-     */
     public function with($request)
     {
         return [

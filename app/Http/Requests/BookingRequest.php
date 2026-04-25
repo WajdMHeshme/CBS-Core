@@ -6,24 +6,21 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class BookingRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            'property_id' => 'required|exists:properties,id',
+            'car_id' => 'required|exists:cars,id',
+
             'scheduled_at' => 'required|date|after:now',
+
+            'start_date' => 'nullable|date|after_or_equal:today',
+            'end_date' => 'nullable|date|after:start_date',
+
             'notes' => 'nullable|string|max:500',
         ];
     }
@@ -31,8 +28,14 @@ class BookingRequest extends FormRequest
     public function messages()
     {
         return [
+            'car_id.required' => 'Car is required',
+            'car_id.exists' => 'Selected car does not exist',
+
             'scheduled_at.after' => 'The booking date must be in the future',
             'scheduled_at.date' => 'Invalid date format',
+
+            'start_date.after_or_equal' => 'Start date must be today or later',
+            'end_date.after' => 'End date must be after start date',
         ];
     }
 }
