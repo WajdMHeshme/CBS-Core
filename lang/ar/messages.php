@@ -39,7 +39,7 @@ return [
     'sidebar' => [
         'system_name' => 'نظام إدارة العقارات',
         'home' => 'الرئيسية',
-        'properties' => 'العقارات',
+        'cars' => 'السيارات',
         'amenities' => 'المرافق',
         'bookings' => 'الحجوزات',
         'reports' => 'التقارير',

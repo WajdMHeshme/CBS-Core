@@ -44,7 +44,7 @@ return [
     'sidebar' => [
         'system_name' => 'Real Estate Management System',
         'home' => 'Home',
-        'properties' => 'Properties',
+        'cars' => 'Cars',
         'amenities' => 'Amenities',
         'bookings' => 'Bookings',
         'reports' => 'Reports',

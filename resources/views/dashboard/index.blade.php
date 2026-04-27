@@ -51,11 +51,11 @@
                 </div>
             </div>
 
-            {{-- Properties per Month --}}
+            {{-- Cars per Month --}}
             <div class="bg-white p-6 rounded-xl shadow-sm ring-1 ring-indigo-50 h-full flex flex-col">
                 <div class="flex items-start {{ app()->getLocale() == 'ar' ? 'justify-start' : 'justify-end' }} mb-3">
                     <div>
-                        <h3 class="text-lg font-semibold text-indigo-600">{{ __('messages.dashboard.properties_per_month') }}</h3>
+                        <h3 class="text-lg font-semibold text-indigo-600">{{ __('messages.dashboard.cars_per_month') }}</h3>
                         <p class="text-sm text-gray-500 {{ app()->getLocale() == 'ar' ? 'text-start' : 'text-end' }}">{{ __('messages.dashboard.last_6_months') }}</p>
                     </div>
                 </div>
@@ -109,12 +109,12 @@
 <script>
 window.DASHBOARD = {
     status: @json($statusStats ?? []),
-    propertiesPerMonth: @json($propertiesPerMonth ?? []),
+    propertiesPerMonth: @json($carsPerMonth ?? []),
     translations: {
         pending: "{{ __('messages.reports.pending') }}",
         approved: "{{ __('messages.reports.approved') }}",
         rejected: "{{ __('messages.reports.rejected') }}",
-        properties: "{{ __('messages.sidebar.properties') }}"
+        properties: "{{ __('messages.sidebar.cars') }}"
     }
 };
 
