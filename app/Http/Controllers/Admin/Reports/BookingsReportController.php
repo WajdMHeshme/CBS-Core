@@ -52,7 +52,6 @@ class BookingsReportController extends Controller
                 ->limit(5)
                 ->get(),
 
-            // 📌 NEW: BOOKINGS BY CAR BRAND (بديل عن properties.city)
             'by_brand' => Booking::selectRaw('cars.brand, COUNT(*) as total')
                 ->join('cars', 'bookings.car_id', '=', 'cars.id')
                 ->groupBy('cars.brand')

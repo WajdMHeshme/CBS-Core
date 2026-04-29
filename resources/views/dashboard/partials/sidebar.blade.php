@@ -133,7 +133,7 @@ $asideBorder = $isRtl ? 'border-l' : 'border-r';
                 </button>
 
                 <p class="mt-3 text-xs text-gray-400 text-center">
-                    © {{ date('Y') }} RealEstateSys
+                    © {{ date('Y') }} CBS. {{ __('messages.sidebar.rights_reserved') }}
                 </p>
             </div>
         </div>

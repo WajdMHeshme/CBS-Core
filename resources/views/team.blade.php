@@ -5,7 +5,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Our Team — Real Estate Management</title>
-    <link rel="icon" type="image/png" href="{{ asset('/logo.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
@@ -267,11 +266,9 @@
     <header class="py-8">
         <div class="container mx-auto px-6 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <!-- replaced logo with /logo.png -->
-                <img src="{{ asset('logo.png') }}" alt="Logo" class="w-12 h-12 rounded-lg object-cover shadow-lg" />
 
                 <div>
-                    <h1 class="text-2xl font-extrabold tracking-tight text-indigo-900">Real Estate Management</h1>
+                    <h1 class="text-2xl font-extrabold tracking-tight text-indigo-900">Car Rental and Management System</h1>
                     <p class="text-sm text-indigo-600/80">Our team — crafted with care</p>
                 </div>
             </div>

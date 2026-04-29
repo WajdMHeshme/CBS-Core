@@ -13,8 +13,8 @@
     <div class="flex-none">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="bg-white rounded-xl p-4 shadow-sm ring-1 ring-indigo-50">
-                <p class="text-sm text-gray-500 {{ app()->getLocale() == 'ar' ? 'text-start' : 'text-end' }}">{{ __('messages.dashboard.total_properties') }}</p>
-                <p class="text-2xl font-bold text-gray-800">{{ $totalProperties ?? 0 }}</p>
+                <p class="text-sm text-gray-500 {{ app()->getLocale() == 'ar' ? 'text-start' : 'text-end' }}">{{ __('messages.dashboard.total_cars') }}</p>
+                <p class="text-2xl font-bold text-gray-800">{{ $totalCars ?? 0 }}</p>
             </div>
 
             <div class="bg-white rounded-xl p-4 shadow-sm ring-1 ring-indigo-50">
@@ -73,8 +73,8 @@
                     <div class="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm min-w-[160px]">
                         <div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-semibold">P</div>
                         <div>
-                            <p class="text-xs text-gray-500">{{ __('messages.dashboard.total_properties') }}</p>
-                            <p class="text-sm font-semibold text-gray-800">{{ $totalProperties ?? 0 }}</p>
+                            <p class="text-xs text-gray-500">{{ __('messages.dashboard.total_cars') }}</p>
+                            <p class="text-sm font-semibold text-gray-800">{{ $totalCars ?? 0 }}</p>
                         </div>
                     </div>
 

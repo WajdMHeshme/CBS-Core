@@ -6,8 +6,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Dashboard')</title>
-    <link rel="icon" type="image/png" href="{{ asset('/logo.png') }}">
-
     @vite(['resources/css/app.css','resources/js/app.js'])
 
     <style>
@@ -24,13 +22,13 @@
     <div class="flex">
         @include('dashboard.partials.sidebar')
 
-        
-        <main class="flex-1 min-h-screen pt-6 px-6 lg:px-12 transition-all duration-300 
-            {{ app()->getLocale() == 'ar' ? 'lg:mr-64' : 'lg:ml-64' }}" 
+
+        <main class="flex-1 min-h-screen pt-6 px-6 lg:px-12 transition-all duration-300
+            {{ app()->getLocale() == 'ar' ? 'lg:mr-64' : 'lg:ml-64' }}"
             style="margin-top: 64px;">
-            
+
             <div class="max-w-8xl mx-auto">
-                
+
                 @if(session('success') || session('status'))
                     <div class="mb-4 flex items-center bg-green-100 border-{{ app()->getLocale() == 'ar' ? 'r' : 'l' }}-4 border-green-500 text-green-700 p-4 shadow-sm rounded" role="alert">
                         <svg class="h-5 w-5 {{ app()->getLocale() == 'ar' ? 'ml-2' : 'mr-2' }}" fill="currentColor" viewBox="0 0 20 20">

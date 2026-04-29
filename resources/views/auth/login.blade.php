@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RealEstateSys - Login</title>
+<title>CBS - Login</title>
 
-<link rel="icon" href="{{ asset('logo.png') }}">
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
@@ -98,9 +97,8 @@ html, body {
     <div class="w-full max-w-md">
 
       <div class="flex flex-col items-center justify-center gap-3 mb-8">
-        <img src="{{ asset('logo.png') }}" class="h-12 w-12 rounded">
-        <span class="text-indigo-600 text-3xl font-extrabold tracking-tight">RealEstate<span class="text-gray-400 font-medium">Sys</span></span>
-        <p class="text-gray-500 text-sm mt-1">Manage properties, bookings & more</p>
+        <span class="text-indigo-600 text-3xl font-extrabold tracking-tight">Car Rental<span class="text-gray-400 font-medium">Sys</span></span>
+        <p class="text-gray-500 text-sm mt-1">Manage cars, bookings & more</p>
       </div>
 
       <div class="form-card rounded-2xl p-6 md:p-8">
@@ -160,7 +158,7 @@ html, body {
         </form>
       </div>
 
-      <p class="text-center text-xs text-gray-400 mt-4">© {{ date('Y') }} RealEstateSys</p>
+      <p class="text-center text-xs text-gray-400 mt-4">© {{ date('Y') }} CBS </p>
     </div>
   </div>
 

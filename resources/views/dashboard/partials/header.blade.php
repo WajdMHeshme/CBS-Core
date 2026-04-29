@@ -6,10 +6,9 @@
         <div class="flex items-center gap-3">
             <a href="{{ url('dashboard') }}" class="flex items-center gap-3">
                 <div class="hidden sm:flex flex-col leading-tight">
-                    <span class="text-2xl font-bold text-indigo-600">RealEstate</span>
+                    <span class="text-2xl font-bold text-indigo-600">CBS</span>
                     <span class="text-xs text-gray-500">Dashboard</span>
                 </div>
-                <img src="/logo.png" alt="logo" class="h-10 w-10 object-contain">
             </a>
         </div>
 
@@ -133,7 +132,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path d="M12 5v14M5 12h14" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    {{ __('messages.header.new_property') }}
+                    {{ __('messages.header.new_car') }}
                 </a>
             @endrole
 
@@ -168,7 +167,7 @@
                     <div class="border-t border-gray-100"></div>
 
                     @role('admin')
-                        <a href="{{ url('dashboard/properties') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-start">{{ __('messages.sidebar.properties') }}</a>
+                        <a href="{{ url('dashboard/cars') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-start">{{ __('messages.sidebar.cars') }}</a>
                         <a href="{{ url('dashboard/bookings') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-start">{{ __('messages.sidebar.bookings') }}</a>
                     @elserole('employee')
                         <a href="{{ url('dashboard/my-own-bookings') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-start">{{ __('messages.sidebar.my_bookings') }}</a>
