@@ -8,7 +8,7 @@
     {{-- Icon above the card --}}
     <div class="flex justify-center mt-8 mb-6">
         <svg xmlns="http://www.w3.org/2000/svg"
-             class="h-20 w-20 text-indigo-600"
+             class="h-20 w-20 text-black"
              fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <circle cx="12" cy="7" r="3" stroke-width="1.5"/>
             <path d="M5 20c0-3.866 3.134-7 7-7s7 3.134 7 7"
@@ -19,7 +19,7 @@
     </div>
 
     <div class="bg-white shadow-xl rounded-2xl p-8">
-        <h1 class="text-3xl font-extrabold text-indigo-600 mb-6 text-center">
+        <h1 class="text-3xl font-extrabold text-black mb-6 text-center">
             {{ __('messages.user.account_status') }}
         </h1>
 
@@ -59,9 +59,9 @@
                            {{ $user->is_active ? 'checked' : '' }}
                            class="sr-only peer">
                     <div class="relative w-11 h-6 bg-gray-300 rounded-full peer
-                                peer-checked:bg-indigo-600 transition
-                                after:content-[''] after:absolute after:top-[2px] 
-                                {{ $isRtl ? 'after:right-[2px]' : 'after:left-[2px]' }} 
+                                peer-checked:bg-black transition
+                                after:content-[''] after:absolute after:top-[2px]
+                                {{ $isRtl ? 'after:right-[2px]' : 'after:left-[2px]' }}
                                 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all
                                 peer-checked:after:translate-x-full {{ $isRtl ? 'peer-checked:after:-translate-x-5' : '' }}">
                     </div>
@@ -80,7 +80,7 @@
                 </a>
 
                 <button type="submit"
-                        class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-indigo-500
+                        class="px-6 py-3 bg-gradient-to-r from-black to-indigo-500
                                text-white rounded-full font-bold shadow-2xl
                                hover:scale-[1.03] transform transition
                                focus:outline-none focus:ring-4 focus:ring-indigo-200">

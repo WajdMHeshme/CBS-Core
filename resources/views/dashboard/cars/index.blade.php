@@ -4,12 +4,12 @@
 <div class="container mx-auto p-6">
 
     <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-extrabold text-indigo-600">
+        <h1 class="text-2xl font-extrabold text-black">
             {{ __('messages.car.title') }}
         </h1>
 
         <a href="{{ route('dashboard.cars.create') }}"
-            class="px-5 py-2 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white rounded-full font-semibold shadow-lg hover:scale-[1.03] transform transition">
+            class="px-5 py-2  bg-black text-white rounded-full font-semibold shadow-lg hover:scale-[1.03] transform transition">
             {{ __('messages.car.add_car') }}
         </a>
     </div>
@@ -49,7 +49,7 @@
 
         <div class="flex items-end gap-2">
             <button type="submit"
-                class="w-full px-4 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-500 transition">
+                class="w-full px-4 py-2 bg-black text-white rounded-full hover:bg-indigo-500 transition">
                 {{ __('messages.car.filter') }}
             </button>
 
@@ -114,7 +114,7 @@
                     <h2 class="text-lg font-semibold">{{ $car->title }}</h2>
 
                     @if($car->carType)
-                    <span class="text-xs px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full">
+                    <span class="text-xs px-2 py-1 bg-indigo-100 text-black rounded-full">
                         {{ $car->carType->name }}
                     </span>
                     @endif

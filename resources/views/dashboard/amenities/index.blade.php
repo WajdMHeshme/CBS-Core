@@ -8,7 +8,7 @@
     <h3 class="text-lg font-semibold">{{ __('messages.amenity.amenities_list') }}</h3>
 
     <a href="{{ route('dashboard.amenities.create') }}"
-        class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+        class="px-4 py-2 bg-black text-white rounded-lg hover:bg-black transition">
         + {{ __('messages.amenity.add_amenity') }}
     </a>
 </div>

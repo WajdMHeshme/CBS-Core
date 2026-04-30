@@ -4,7 +4,7 @@
 <div class="container mx-auto p-6 max-w-4xl">
     <div class="bg-white shadow-xl rounded-2xl p-8">
 
-        <h1 class="text-3xl font-extrabold text-indigo-600 mb-6 text-center">
+        <h1 class="text-3xl font-extrabold text-black mb-6 text-center">
             Add New Car
         </h1>
 
@@ -113,7 +113,7 @@
                                    name="amenity_ids[]"
                                    value="{{ $a->id }}"
                                    {{ in_array($a->id, old('amenity_ids', [])) ? 'checked' : '' }}
-                                   class="form-checkbox h-5 w-5 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-400">
+                                   class="form-checkbox h-5 w-5 text-black rounded focus:ring-2 focus:ring-indigo-400">
                             <span class="ml-2 text-gray-700">{{ $a->name }}</span>
                         </label>
                     @endforeach
@@ -132,7 +132,7 @@
                 </a>
 
                 <button type="submit"
-                        class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white rounded-full font-bold shadow-2xl hover:scale-[1.05] transform transition focus:outline-none focus:ring-4 focus:ring-indigo-200">
+                        class="px-6 py-3 bg-gradient-to-r from-black to-indigo-500 text-white rounded-full font-bold shadow-2xl hover:scale-[1.05] transform transition focus:outline-none focus:ring-4 focus:ring-indigo-200">
                     Save Car
                 </button>
             </div>

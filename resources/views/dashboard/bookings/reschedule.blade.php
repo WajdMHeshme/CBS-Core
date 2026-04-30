@@ -71,7 +71,7 @@
             <div class="flex items-center gap-3 pt-2">
 
                 <button
-                    class="px-3 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-black">
+                    class="px-3 py-2 rounded-lg bg-black text-white text-sm font-medium hover:bg-black">
                     {{ __('messages.user.save_changes') }}
                 </button>
 

@@ -40,8 +40,8 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center gap-4">
-                      
-                            <a href="{{ route('employee.bookings.show', $booking->id) }}" class="text-indigo-600 hover:text-indigo-900 font-medium">
+
+                            <a href="{{ route('employee.bookings.show', $booking->id) }}" class="text-black hover:text-indigo-900 font-medium">
                                 {{ __('messages.booking.view_details') }}
                             </a>
 
@@ -83,20 +83,20 @@
 <div id="rejectModal" class="fixed inset-0 z-50 hidden bg-gray-900 bg-opacity-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
         <h3 class="text-xl font-bold text-gray-900 mb-4">{{ __('messages.booking.reject_booking') }}</h3>
-        
+
         <form id="rejectForm" method="POST">
-            @csrf 
+            @csrf
             @method('PATCH')
-            
+
             <div class="mb-4 text-right">
                 <label class="block text-sm font-medium text-gray-700 mb-2">
                     {{ __('messages.booking.rejection_reason_label') }}
                 </label>
-                <textarea 
-                    name="reason" 
-                    required 
-                    minlength="5" 
-                    class="w-full border rounded-xl p-3 text-sm outline-none focus:ring-2 focus:ring-red-500" 
+                <textarea
+                    name="reason"
+                    required
+                    minlength="5"
+                    class="w-full border rounded-xl p-3 text-sm outline-none focus:ring-2 focus:ring-red-500"
                     placeholder="{{ __('messages.booking.reason_placeholder') }}"></textarea>
             </div>
 
@@ -116,7 +116,7 @@
     function openRejectModal(id) {
         const modal = document.getElementById('rejectModal');
         const form = document.getElementById('rejectForm');
-        
+
         let url = "{{ route('employee.bookings.reject', ':id') }}";
         form.action = url.replace(':id', id);
         modal.classList.remove('hidden');
@@ -126,7 +126,7 @@
         document.getElementById('rejectModal').classList.add('hidden');
     }
 
-  
+
     window.onclick = function(event) {
         const modal = document.getElementById('rejectModal');
         if (event.target == modal) {

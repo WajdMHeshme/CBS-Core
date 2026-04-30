@@ -81,6 +81,8 @@ return [
 
     // Reports
     'reports' => [
+        'brand' => 'Brand',
+        'bookings_by_brand' => 'Bookings by Brand',
         'bookings_report' => 'Bookings Report',
         'cars_report' => 'Cars Report',
         'generated_at' => 'Generated at',
@@ -123,6 +125,10 @@ return [
 
     // Car
     'car' => [
+        'filter' => 'Filter Cars',
+        'reset' => 'Reset Filters',
+        'min_price' => 'Min Price',
+        'max_price' => 'Max Price',
         'created' => 'Car created successfully',
         'updated' => 'Car updated successfully',
         'deleted' => 'Car deleted successfully',

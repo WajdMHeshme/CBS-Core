@@ -23,7 +23,7 @@
         </div>
 
         <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-5">
-            <p class="text-sm text-indigo-700">{{ __('messages.dashboard.this_week') }}</p>
+            <p class="text-sm text-black">{{ __('messages.dashboard.this_week') }}</p>
             <p class="text-3xl font-bold text-indigo-800 mt-2">{{ $stats['this_week'] }}</p>
         </div>
 
@@ -106,7 +106,7 @@
                                 {{ $booking->user->name }}
                             </td>
 
-                          
+
                             <td class="px-4 py-2 text-sm">
                                 {{ $booking->car?->title ?? 'No Car' }}
                             </td>

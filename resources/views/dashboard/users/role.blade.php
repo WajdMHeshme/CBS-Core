@@ -5,7 +5,7 @@
 
 <div class="lg:ms-64 container mx-auto p-6 max-w-3xl" dir="{{ $isRtl ? 'rtl' : 'ltr' }}">
     <div class="bg-white shadow-xl rounded-2xl p-8">
-        <h1 class="text-3xl font-extrabold text-indigo-600 mb-6 text-center">
+        <h1 class="text-3xl font-extrabold text-black mb-6 text-center">
             {{ __('messages.user.change_role') }}
         </h1>
 
@@ -63,7 +63,7 @@
                 </a>
 
                 <button type="submit"
-                        class="px-6 py-3 bg-indigo-600
+                        class="px-6 py-3 bg-black
                                text-white rounded-full font-bold shadow-2xl
                                hover:scale-[1.03] transform transition
                                ">

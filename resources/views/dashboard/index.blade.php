@@ -42,7 +42,7 @@
             <div class="bg-white p-6 rounded-xl shadow-sm ring-1 ring-indigo-50 h-full flex flex-col">
                 <div class="flex items-start {{ app()->getLocale() == 'ar' ? 'justify-start' : 'justify-end' }} mb-3">
                     <div>
-                        <h3 class="text-lg font-semibold text-indigo-600">{{ __('messages.dashboard.booking_status_over_time') }}</h3>
+                        <h3 class="text-lg font-semibold text-black">{{ __('messages.dashboard.booking_status_over_time') }}</h3>
                         <p class="text-sm text-gray-500 {{ app()->getLocale() == 'ar' ? 'text-start' : 'text-end' }}">{{ __('messages.dashboard.last_6_months') }}</p>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
             <div class="bg-white p-6 rounded-xl shadow-sm ring-1 ring-indigo-50 h-full flex flex-col">
                 <div class="flex items-start {{ app()->getLocale() == 'ar' ? 'justify-start' : 'justify-end' }} mb-3">
                     <div>
-                        <h3 class="text-lg font-semibold text-indigo-600">{{ __('messages.dashboard.cars_per_month') }}</h3>
+                        <h3 class="text-lg font-semibold text-black">{{ __('messages.dashboard.cars_per_month') }}</h3>
                         <p class="text-sm text-gray-500 {{ app()->getLocale() == 'ar' ? 'text-start' : 'text-end' }}">{{ __('messages.dashboard.last_6_months') }}</p>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
             <div class="bg-gradient-to-r from-indigo-100 via-white to-indigo-50 rounded-2xl p-3 shadow-inner ring-1 ring-indigo-50">
                 <div class="max-w-6xl p-4 mx-auto flex items-center justify-between gap-4">
                     <div class="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm min-w-[160px]">
-                        <div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-semibold">P</div>
+                        <div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-black font-semibold">P</div>
                         <div>
                             <p class="text-xs text-gray-500">{{ __('messages.dashboard.total_cars') }}</p>
                             <p class="text-sm font-semibold text-gray-800">{{ $totalCars ?? 0 }}</p>
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 {
                     label: window.DASHBOARD.translations.approved,
                     data: statusRows.map(r => r.approved),
-                    borderColor: '#4f46e5',
+                    borderColor: '#008000',
                     tension: 0.4,
                     fill: true,
                     backgroundColor: 'rgba(79,70,229,0.1)'
@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: window.DASHBOARD.translations.properties,
                 data: propertyRows.map(r => r.total),
-                borderColor: '#4f46e5',
+                borderColor: '#008000',
                 tension: 0.36,
                 fill: true,
                 backgroundColor: 'rgba(79,70,229,0.1)'

@@ -6,7 +6,7 @@
 <div class="lg:ms-64 container mx-auto p-6 max-w-4xl" dir="{{ $isRtl ? 'rtl' : 'ltr' }}">
     {{-- Icon above the card --}}
     <div class="flex justify-center mt-8 mb-6">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-[90px] w-[90px] text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-[90px] w-[90px] text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <circle cx="10.5" cy="8" r="2.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
             <path d="M4 20c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
             <path d="M19 11v4M17 13h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
@@ -14,7 +14,7 @@
     </div>
 
     <div class="bg-white shadow-xl rounded-2xl p-8">
-        <h1 class="text-3xl font-extrabold text-indigo-600 mb-6 text-center">
+        <h1 class="text-3xl font-extrabold text-black mb-6 text-center">
             {{ __('messages.user.create_employee') }}
         </h1>
 
@@ -89,7 +89,7 @@
                 </a>
 
                 <button type="submit"
-                        class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white rounded-full font-bold shadow-2xl hover:scale-[1.03] transform transition focus:outline-none focus:ring-4 focus:ring-indigo-200">
+                        class="px-6 py-3  bg-black  text-white rounded-full font-bold shadow-2xl hover:scale-[1.03] transform transition focus:outline-none focus:ring-4 focus:ring-indigo-200">
                     {{ __('messages.user.create') }}
                 </button>
             </div>

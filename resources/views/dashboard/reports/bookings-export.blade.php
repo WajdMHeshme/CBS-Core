@@ -10,7 +10,7 @@
 
         .header {
             text-align: center;
-            border-bottom: 2px solid #4f46e5;
+            border-bottom: 2px solid #000000;
             padding-bottom: 15px;
             margin-bottom: 30px;
         }
@@ -21,9 +21,9 @@
         .section-title {
             font-size: 16px;
             font-weight: bold;
-            color: #4f46e5;
+            color: #000000;
             margin-bottom: 10px;
-            border-left: 4px solid #4f46e5;
+            border-left: 4px solid #000000;
             padding-left: 10px;
         }
 

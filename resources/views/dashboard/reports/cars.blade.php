@@ -17,7 +17,7 @@
         </div>
 
         <a href="{{ route('dashboard.reports.cars.export') }}"
-           class="px-4 py-2 rounded-xl text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition shadow-sm">
+           class="px-4 py-2 rounded-xl text-sm font-medium bg-black text-white hover:bg-black transition shadow-sm">
             Export PDF
         </a>
     </div>
@@ -62,7 +62,7 @@
         </div>
 
         <div class="md:col-span-4 flex {{ $isRtl ? 'justify-start' : 'justify-end' }}">
-            <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-xl text-sm">
+            <button type="submit" class="px-6 py-2 bg-black text-white rounded-xl text-sm">
                 Apply Filters
             </button>
         </div>

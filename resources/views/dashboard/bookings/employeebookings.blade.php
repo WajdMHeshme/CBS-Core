@@ -12,13 +12,13 @@
         <div class="flex flex-wrap gap-2 justify-center">
 
             <a href="{{ route('employee.bookings.my') }}"
-               class="px-3 py-1.5 rounded-xl text-sm border shadow-sm {{ !request('status') ? 'bg-indigo-50 text-indigo-700 border-indigo-300 font-semibold' : 'text-gray-600 hover:bg-gray-50' }}">
+               class="px-3 py-1.5 rounded-xl text-sm border shadow-sm {{ !request('status') ? 'bg-indigo-50 text-black border-indigo-300 font-semibold' : 'text-gray-600 hover:bg-gray-50' }}">
                 {{ __('messages.booking.all') }} ({{ $counts['all'] }})
             </a>
 
             @foreach(['pending', 'approved', 'rescheduled', 'completed', 'rejected', 'canceled'] as $st)
                 <a href="?status={{ $st }}"
-                   class="px-3 py-1.5 rounded-xl text-sm border shadow-sm {{ request('status')==$st ? 'bg-indigo-50 text-indigo-700 border-indigo-300 font-semibold' : 'text-gray-600 hover:bg-gray-50' }}">
+                   class="px-3 py-1.5 rounded-xl text-sm border shadow-sm {{ request('status')==$st ? 'bg-indigo-50 text-black border-indigo-300 font-semibold' : 'text-gray-600 hover:bg-gray-50' }}">
                     {{ __("messages.status.$st") }} ({{ $counts[$st] }})
                 </a>
             @endforeach

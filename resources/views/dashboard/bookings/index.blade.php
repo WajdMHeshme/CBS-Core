@@ -31,7 +31,7 @@
             <a href="{{ url('dashboard/bookings') }}"
                 class="px-3 py-1.5 rounded-xl text-sm border shadow-sm
                {{ !request('status')
-                    ? 'bg-indigo-50 text-indigo-700 border-indigo-300 font-semibold'
+                    ? 'bg-indigo-50 text-black border-indigo-300 font-semibold'
                     : 'text-gray-600 hover:bg-gray-50' }}">
                 {{ __('messages.booking.all_bookings') }}
             </a>
@@ -127,7 +127,7 @@
 
             {{-- Admin Assigned Employee --}}
             @if(auth()->user()->hasRole('admin') && $booking->employee)
-            <div class="mt-2 text-sm text-indigo-700 font-semibold">
+            <div class="mt-2 text-sm text-black font-semibold">
                 {{ __('messages.booking.assigned_employee') }}: {{ $booking->employee->name }}
             </div>
             @endif

@@ -7,20 +7,20 @@
     {{-- Page header --}}
     <div class="flex items-center justify-between mb-6">
         <div class="flex items-center gap-4">
-            <div class="rounded-full bg-indigo-600 p-3 shadow-md">
+            <div class="rounded-full bg-black p-3 shadow-md">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 11h14v9a2 2 0 01-2 2H7a2 2 0 01-2-2v-9z" />
                 </svg>
             </div>
 
             <div>
-                <h1 class="text-2xl font-semibold text-indigo-600">{{ __('messages.user.management') }}</h1>
+                <h1 class="text-2xl font-semibold text-black">{{ __('messages.user.management') }}</h1>
                 <p class="text-sm text-gray-500">{{ __('messages.user.management_description') }}</p>
             </div>
         </div>
 
         <div class="flex items-center gap-3">
-            <a href="{{ route('dashboard.admin.employees.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300">
+            <a href="{{ route('dashboard.admin.employees.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg shadow-sm hover:bg-black focus:outline-none focus:ring-2 focus:ring-indigo-300">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -53,7 +53,7 @@
                     @foreach($users as $user)
                         <tr class="hover:bg-indigo-50/40 transition-colors">
                             <td class="px-4 py-3 flex items-center gap-3">
-                                <div class="h-9 w-9 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-700 font-medium">{{ strtoupper(substr($user->name, 0, 1)) }}</div>
+                                <div class="h-9 w-9 rounded-full bg-indigo-50 flex items-center justify-center text-black font-medium">{{ strtoupper(substr($user->name, 0, 1)) }}</div>
                                 <div class="flex flex-col">
                                     <span class="font-medium text-gray-800">{{ $user->name }}</span>
                                     <span class="text-xs text-gray-500">{{ __('messages.user.joined') }} {{ $user->created_at->format('M j, Y') }}</span>
@@ -65,7 +65,7 @@
                             <td class="px-4 py-3">
                                 @php $role = $user->getRoleNames()->first(); @endphp
                                 @if($role)
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-black border border-indigo-100">
                                         {{ __('messages.user.role_' . $role) }}
                                     </span>
                                 @else
@@ -110,7 +110,7 @@
                                         <form action="{{ route('dashboard.admin.users.destroy', $user->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="px-4 py-2 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition">
+                                            <button type="submit" class="px-4 py-2 rounded-full bg-black text-white hover:bg-black transition">
                                                 {{ __('messages.user.delete') }}
                                             </button>
                                         </form>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Our Team — Real Estate Management</title>
+    <title>Our Team — CBS Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
@@ -223,7 +223,7 @@
         .role-badge {
             background: #ffffff;
             color: #3730a3;
-            /* indigo-700 */
+            /* black */
             border: 1px solid rgba(79, 70, 229, 0.08);
             box-shadow: 0 6px 20px rgba(99, 102, 241, 0.06);
             transition: transform .32s cubic-bezier(.2, .9, .2, 1), box-shadow .32s;
@@ -249,7 +249,7 @@
     </style>
 </head>
 
-<body class="antialiased bg-gradient-to-b from-indigo-50 via-white to-indigo-50 min-h-screen text-gray-800">
+<body class="antialiased  min-h-screen text-gray-800">
 
     <!-- decorative background blobs (animated movement) -->
     <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10">
@@ -257,7 +257,7 @@
             style="background: radial-gradient(circle at 20% 30%, #6366f1, transparent 40%);"></div>
 
         <div class="absolute right-0 top-40 w-96 h-96 rounded-full bg-indigo-300 opacity-20 floating-blob floating-blob-2"
-            style="background: radial-gradient(circle at 70% 40%, #4f46e5, transparent 35%);"></div>
+            style="background: radial-gradient(circle at 70% 40%, #000000, transparent 35%);"></div>
 
         <div class="absolute -right-20 bottom-10 w-80 h-80 rounded-full bg-indigo-200 opacity-30 floating-blob floating-blob-3"
             style="background: radial-gradient(circle at 40% 60%, #7c3aed, transparent 45%);"></div>
@@ -269,7 +269,7 @@
 
                 <div>
                     <h1 class="text-2xl font-extrabold tracking-tight text-indigo-900">Car Rental and Management System</h1>
-                    <p class="text-sm text-indigo-600/80">Our team — crafted with care</p>
+                    <p class="text-sm text-black/80">Our team — crafted with care</p>
                 </div>
             </div>
 
@@ -279,21 +279,21 @@
                     class="inline-flex items-center gap-2 px-1 py-1 rounded-full border-indigo-300 shadow-sm hover:shadow-md focus-ring"
                     title="View repository on GitHub">
                     <!-- GitHub SVG -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-indigo-700" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-black" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                         <path d="M12 .5C5.73.5.75 5.48.75 11.75c0 4.92 3.17 9.1 7.57 10.57.55.1.75-.24.75-.53 0-.26-.01-1.12-.02-2.03-3.08.67-3.73-1.49-3.73-1.49-.5-1.27-1.22-1.61-1.22-1.61-.99-.68.08-.67.08-.67 1.1.08 1.68 1.13 1.68 1.13.97 1.66 2.55 1.18 3.17.9.1-.7.38-1.18.69-1.45-2.46-.28-5.05-1.23-5.05-5.47 0-1.21.43-2.2 1.13-2.98-.11-.28-.49-1.4.11-2.93 0 0 .92-.29 3.01 1.13.87-.24 1.8-.36 2.73-.36.93 0 1.86.12 2.73.36 2.09-1.42 3.01-1.13 3.01-1.13.6 1.53.22 2.65.11 2.93.7.78 1.13 1.77 1.13 2.98 0 4.25-2.6 5.19-5.08 5.47.39.34.73 1.02.73 2.06 0 1.49-.01 2.69-.01 3.06 0 .29.2.64.76.53 4.4-1.48 7.56-5.66 7.56-10.57C23.25 5.48 18.27.5 12 .5z" />
                     </svg>
                 </a>
-                <a href="{{ url('/') }}" class="px-4 py-2 rounded-full bg-white/70 hover:bg-white shadow-md text-indigo-700 font-semibold focus-ring">Home</a>
+                <a href="{{ url('/') }}" class="px-4 py-2 rounded-full bg-white/70 hover:bg-white shadow-md text-black font-semibold focus-ring">Home</a>
 
-                <a href="{{ route('login') }}" class="px-4 py-2 rounded-full bg-indigo-600 text-white font-semibold shadow-lg hover:scale-[1.02] focus-ring pulse-soft">Login</a>
+                <a href="{{ route('login') }}" class="px-4 py-2 rounded-full bg-black text-white font-semibold shadow-lg hover:scale-[1.02] focus-ring pulse-soft">Login</a>
             </div>
         </div>
     </header>
 
     <main class="container mx-auto px-6 pb-20">
         <section class="text-center max-w-3xl mx-auto">
-            <h2 class="text-4xl sm:text-5xl font-extrabold text-indigo-900 mb-4 shimmer">Meet the Dream Team</h2>
-            <p class="text-indigo-700/80 mb-8 leading-relaxed">Talented crew combining design and backend craftsmanship focused on shipping reliable real-estate experiences.</p>
+            <h2 class="text-4xl sm:text-5xl font-extrabold text-black-900 mb-4 shimmer">Meet the Dream Team</h2>
+            <p class="text-black/80 mb-8 leading-relaxed">Talented crew combining design and backend craftsmanship focused on shipping reliable real-estate experiences.</p>
 
             <div class="mt-6 inline-flex gap-3 items-center">
                 @php
@@ -308,7 +308,7 @@
                 ];
                 @endphp
 
-                <div class="px-4 py-2 bg-indigo-50 border border-indigo-100 rounded-full text-indigo-700 font-medium shadow-sm">
+                <div class="px-4 py-2 bg-indigo-50 border border-indigo-100 rounded-full text-black font-medium shadow-sm">
                     {{ count($members) }} Members
                 </div>
             </div>
@@ -357,11 +357,11 @@
                     <!-- main info -->
                     <div class="flex-1">
                         <h3 id="member-{{ $i }}-name" class="text-lg font-bold text-indigo-900">{{ $m['name'] }}</h3>
-                        <p class="text-indigo-600/80 mt-1">{{ $m['role'] }}</p>
+                        <p class="text-black/80 mt-1">{{ $m['role'] }}</p>
 
                         <!-- email only (show only when provided; no default emails) -->
                         <div class="mt-4">
-                            <div class="inline-flex items-center gap-2 text-sm text-indigo-700/90 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
+                            <div class="inline-flex items-center gap-2 text-sm text-black/90 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
                                 <!-- mail icon -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 8.5v7A2.5 2.5 0 0 0 5.5 18h13A2.5 2.5 0 0 0 21 15.5v-7A2.5 2.5 0 0 0 18.5 6h-13A2.5 2.5 0 0 0 3 8.5z" />
@@ -385,12 +385,12 @@
 
         <!-- CTA / footer -->
         <section class="mt-16 text-center">
-            <p class="text-indigo-700/80 mb-6">Want to collaborate? <a href="mailto:team@example.com" class="text-indigo-600 font-semibold underline pulse-soft">Drop us a line</a></p>
+            <p class="text-black/80 mb-6">Want to collaborate? <a href="mailto:team@example.com" class="text-black font-semibold underline pulse-soft">Drop us a line</a></p>
         </section>
     </main>
 
     <footer class="py-8 border-t border-indigo-100">
-        <div class="container mx-auto px-6 text-center text-sm text-indigo-600/70">
+        <div class="container mx-auto px-6 text-center text-sm text-black/70">
             © {{ date('Y') }} Real Estate Management
         </div>
     </footer>

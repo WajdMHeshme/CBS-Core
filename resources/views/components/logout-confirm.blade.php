@@ -28,7 +28,7 @@
         <div class="flex justify-center mb-4">
             <div class="w-14 h-14 rounded-full bg-indigo-50 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg"
-                     class="h-7 w-7 text-indigo-600"
+                     class="h-7 w-7 text-black"
                      fill="none"
                      viewBox="0 0 24 24"
                      stroke="currentColor"
@@ -40,7 +40,7 @@
         </div>
 
         {{-- Content --}}
-        <h2 class="text-center text-lg font-semibold text-indigo-600 mb-2">
+        <h2 class="text-center text-lg font-semibold text-black mb-2">
            {{ __('messages.logout_modal.title') }}
         </h2>
 
@@ -62,7 +62,7 @@
                 @csrf
                 <button
                     type="submit"
-                    class="px-5 py-2 rounded-full bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition"
+                    class="px-5 py-2 rounded-full bg-black text-white font-medium hover:bg-black transition"
                 >
                     {{ __('messages.logout_modal.confirm') }}
                 </button>

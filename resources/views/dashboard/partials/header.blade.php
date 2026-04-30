@@ -4,9 +4,10 @@
 
         {{-- Left Section: Logo --}}
         <div class="flex items-center gap-3">
+            <img src="logo2.png" alt="logo" class="h-12 w-12 rounded-full object-cover">
             <a href="{{ url('dashboard') }}" class="flex items-center gap-3">
                 <div class="hidden sm:flex flex-col leading-tight">
-                    <span class="text-2xl font-bold text-indigo-600">CBS</span>
+                    <span class="text-2xl font-bold text-black">CBS</span>
                     <span class="text-xs text-gray-500">Dashboard</span>
                 </div>
             </a>
@@ -51,8 +52,8 @@
                 @click.outside="open = false">
 
                 <button x-ref="btn" @click="open = !open; if(open){ $nextTick(()=> calculate()) }"
-                    class="relative p-2 rounded-full hover:bg-indigo-50 transition focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    class="relative p-2 rounded-full  transition focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0a3 3 0 11-6 0h6z" />
                     </svg>
 
@@ -77,14 +78,14 @@
                         @if($userNotifications->count())
                             <form method="POST" action="{{ route('notifications.read') }}">
                                 @csrf
-                                <button type="submit" class="text-indigo-600 text-xs hover:underline">Mark all as read</button>
+                                <button type="submit" class="text-black text-xs hover:underline">Mark all as read</button>
                             </form>
                         @endif
                     </div>
                     <div class="max-h-80 overflow-y-auto divide-y divide-gray-100 bg-white">
                         @forelse($userNotifications as $notification)
                             <div class="px-4 py-3 flex items-start gap-3 hover:bg-indigo-50 transition cursor-pointer group">
-                                <span class="h-3 w-3 mt-1 rounded-full bg-indigo-600"></span>
+                                <span class="h-3 w-3 mt-1 rounded-full bg-black"></span>
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-medium text-gray-800 truncate group-hover:underline">
                                         {{ $notification->data['message'] ?? 'No message' }}
@@ -128,7 +129,7 @@
             {{-- New Property Button --}}
             @role('admin')
                 <a href="{{ url('dashboard/properties/create') }}"
-                    class="hidden md:inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gradient-to-r from-indigo-600 to-indigo-500 text-white text-sm font-semibold shadow hover:scale-[1.02] transition">
+                    class="hidden md:inline-flex items-center gap-2 px-3 py-2 rounded-full bg-black  text-white text-sm font-semibold shadow hover:scale-[1.02] transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path d="M12 5v14M5 12h14" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
@@ -139,7 +140,7 @@
             {{-- User Menu (Merged & Fixed) --}}
             <div class="relative" x-data="{ open: false }">
                 <button @click="open = !open" class="flex items-center gap-3 p-2 rounded-full hover:bg-indigo-50 transition focus:outline-none">
-                    <div class="h-10 w-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-semibold">
+                    <div class="h-10 w-10 rounded-full bg-indigo-50 flex items-center justify-center text-black font-semibold">
                         {{ strtoupper(substr(auth()->user()?->name ?? 'G', 0, 1)) }}
                     </div>
                     <div class="hidden sm:flex flex-col {{ app()->getLocale() == 'ar' ? 'text-right' : 'text-left' }}">
@@ -155,9 +156,9 @@
                     <div class="px-4 py-3">
                         <div class="flex {{ app()->getLocale() == 'ar' ? 'justify-start' : 'justify-end' }} mb-1">
                             @role('admin')
-                                <span class="px-2 py-0.5 text-xs rounded-full bg-indigo-100 text-indigo-700 font-semibold">{{ __('messages.header.admin_badge') }}</span>
+                                <span class="px-2 py-0.5 text-xs rounded-full bg-indigo-100 text-black font-semibold">{{ __('messages.header.admin_badge') }}</span>
                             @elserole('employee')
-                                <span class="px-2 py-0.5 text-xs rounded-full bg-indigo-50 text-indigo-700 font-medium">{{ __('messages.header.employee_badge') }}</span>
+                                <span class="px-2 py-0.5 text-xs rounded-full bg-indigo-50 text-black font-medium">{{ __('messages.header.employee_badge') }}</span>
                             @endrole
                         </div>
                         <p class="text-sm font-medium text-gray-800">{{ auth()->user()?->name }}</p>
@@ -193,7 +194,7 @@
         <div class="inline-block px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
 
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 mb-4">
-                <svg class="h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <svg class="h-6 w-6 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
                 </svg>
             </div>
@@ -214,7 +215,7 @@
             <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none sm:text-sm">
+                    <button type="submit" class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-black border border-transparent rounded-md shadow-sm hover:bg-black focus:outline-none sm:text-sm">
                         {{ __('messages.logout_modal.confirm') }}
                     </button>
                 </form>

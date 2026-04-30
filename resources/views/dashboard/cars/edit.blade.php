@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mx-auto p-6 max-w-4xl">
     <div class="bg-white shadow-xl rounded-2xl p-8">
-        <h1 class="text-3xl font-extrabold text-indigo-600 mb-6 text-center">
+        <h1 class="text-3xl font-extrabold text-black mb-6 text-center">
             Edit Car
         </h1>
 
@@ -80,7 +80,7 @@
                 </a>
 
                 <button type="submit"
-                        class="px-6 py-2 bg-indigo-600 text-white rounded-full">
+                        class="px-6 py-2 bg-black text-white rounded-full">
                     Save
                 </button>
             </div>

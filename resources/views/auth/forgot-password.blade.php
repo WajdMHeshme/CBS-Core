@@ -14,7 +14,7 @@
         <div class="bg-white rounded-2xl shadow-xl p-8">
 
 
-            <h2 class="text-xl font-bold text-indigo-600 text-center mb-2">
+            <h2 class="text-xl font-bold text-black text-center mb-2">
                 Forgot your password?
             </h2>
             <p class="text-sm text-gray-500 text-center mb-6">
@@ -48,7 +48,7 @@
 
                 <!-- Action -->
                 <button type="submit"
-                        class="w-full mt-4 inline-flex justify-center items-center bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-4 py-3 rounded-lg shadow-lg transition transform hover:-translate-y-0.5">
+                        class="w-full mt-4 inline-flex justify-center items-center bg-black hover:bg-indigo-500 text-white font-semibold px-4 py-3 rounded-lg shadow-lg transition transform hover:-translate-y-0.5">
                     Email Password Reset Link
                 </button>
             </form>
@@ -56,7 +56,7 @@
             <!-- Back to login -->
             <div class="mt-6 text-center">
                 <a href="{{ route('login') }}"
-                   class="text-sm text-indigo-600 hover:underline">
+                   class="text-sm text-black hover:underline">
                     Back to login
                 </a>
             </div>

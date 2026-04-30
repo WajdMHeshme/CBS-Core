@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Real Estate Management</title>
-    <link rel="icon" type="image/png" href="{{ asset('/logo.png') }}">
+    <title>CBS Dashboard</title>
+    <link rel="icon" type="image/png" href="{{ asset('/image.png') }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -68,10 +68,6 @@
             outline: none;
             box-shadow: 0 6px 30px rgba(99,102,241,0.18);
         }
-        .btn-cta:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 12px 40px rgba(59,130,246,0.18);
-        }
 
         /* small utility for better text shadows on big headings */
         .text-glow {
@@ -96,7 +92,7 @@
         <!-- Background Image (fills screen) -->
         <img
             id="hero-img"
-            src="{{ asset('Estate.webp') }}"
+            src="{{ asset('car.png') }}"
             alt="Real estate background"
             class="absolute inset-0 w-full h-full object-cover z-0 hero-img"
             data-parallax
@@ -111,17 +107,17 @@
         <!-- Content -->
         <div class="relative z-20 text-center px-6 max-w-4xl hero-content">
             <h1 class="hero-title text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-4 text-glow">
-                Manage Your Properties Easily
+                Manage Your Cars Easily
             </h1>
             <p class="hero-sub text-lg sm:text-xl text-white mb-8 drop-shadow-md">
-                Track properties, bookings, and clients all in one place.
+                Track Cars, bookings, and clients all in one place.
             </p>
 
             <!-- Buttons: stacked on small screens, inline on sm+ -->
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <!-- Primary: Login -->
                 <a href="{{ route('login') }}"
-                   class="inline-flex items-center justify-center bg-indigo-600 text-white font-bold px-8 py-4 rounded-full text-lg shadow-xl btn-cta focus:outline-none">
+                   class="inline-flex items-center justify-center bg-black border border-stone-700 text-white font-bold px-8 py-4 rounded-full text-lg shadow-xl btn-cta focus:outline-none">
                     Login Now
                 </a>
 
@@ -140,7 +136,7 @@
     Our Team
 
     <svg xmlns="http://www.w3.org/2000/svg"
-         class="w-5 h-5 text-white transition-transform duration-300 group-hover:translate-x-1"
+         class="w-5 h-5 text-white transition-transform duration-300"
          fill="none" viewBox="0 0 24 24"
          stroke="currentColor" stroke-width="2"
          stroke-linecap="round" stroke-linejoin="round">

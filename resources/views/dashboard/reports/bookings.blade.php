@@ -18,7 +18,7 @@
 
         {{-- Export Button --}}
         <a href="{{ route('dashboard.reports.bookings.export') }}"
-           class="px-4 py-2 rounded-xl text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition shadow-sm">
+           class="px-4 py-2 rounded-xl text-sm font-medium bg-black text-white hover:bg-black transition shadow-sm">
             {{ __('messages.reports.export') }}
         </a>
     </div>
@@ -77,7 +77,7 @@
     {{-- ===== TOP EMPLOYEES ===== --}}
     <div class="mt-10 mb-3 flex items-center gap-2">
         <h2 class="text-lg font-semibold text-gray-900">{{ __('messages.reports.top_employees') }}</h2>
-        <span class="text-xs px-2 py-0.5 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200">
+        <span class="text-xs px-2 py-0.5 rounded-lg bg-indigo-50 text-black border border-indigo-200">
             {{ __('messages.reports.performance') }}
         </span>
     </div>
