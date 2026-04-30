@@ -33,8 +33,6 @@ Route::middleware(['auth'])->prefix('chat')->group(function () {
     Route::post('/bookings/{booking}/messages', [BookingMessageController::class, 'store']);
 });
 
-Route::view('/team', 'team')->name('team.index');
-
 /*
 |--------------------------------------------------------------------------
 | Language Switch

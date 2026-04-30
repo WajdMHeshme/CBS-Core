@@ -16,7 +16,6 @@ html, body {
   background: #f8fafc;
 }
 
-/* صورة مُستنسخة أثناء التمدد */
 .cloned-image {
   position: fixed;
   z-index: 1000;
@@ -24,42 +23,6 @@ html, body {
   pointer-events: none;
   transition: transform .6s cubic-bezier(.2,.9,.3,1), opacity .35s ease;
   filter: brightness(0.6) drop-shadow(0 0 2px rgba(0,0,0,0.25));
-}
-
-/* لودر */
-#loader {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: 1100;
-  color: white;
-  backdrop-filter: blur(6px);
-}
-
-#loader.show {
-  display: flex;
-}
-
-#loader::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-color: rgba(0,0,0,0.35);
-  z-index: 10;
-}
-
-#loader .loader-text {
-  position: relative;
-  z-index: 20;
-  font-size: 1.6rem;
-  font-weight: 700;
-  text-align: center;
-  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
 
 .spinner {
@@ -173,110 +136,6 @@ html, body {
 
 </div>
 
-<!-- LOADER -->
-<div id="loader">
-  <div class="flex flex-col items-center gap-6 relative z-20">
-    <div class="spinner"></div>
-    <div class="loader-text">
-      Preparing your dashboard…<br>
-      Please wait a moment
-    </div>
-  </div>
-</div>
-
-<script>
-(function(){
-  // password toggle
-  const pwdInput = document.getElementById('passwordInput');
-  const pwdToggle = document.getElementById('pwdToggle');
-  const eyeOpen = document.getElementById('eyeOpen');
-  const eyeClosed = document.getElementById('eyeClosed');
-
-  pwdToggle.addEventListener('click', function(e){
-    e.preventDefault();
-    const isPwd = pwdInput.getAttribute('type') === 'password';
-    if (isPwd) {
-      pwdInput.setAttribute('type', 'text');
-      eyeOpen.classList.remove('hidden');
-      eyeClosed.classList.add('hidden');
-      pwdToggle.setAttribute('title','Hide password');
-    } else {
-      pwdInput.setAttribute('type', 'password');
-      eyeOpen.classList.add('hidden');
-      eyeClosed.classList.remove('hidden');
-      pwdToggle.setAttribute('title','Show password');
-    }
-    // keep focus on input after toggle
-    pwdInput.focus();
-  });
-
-  // existing submit + animation logic
-  const form   = document.getElementById('loginForm');
-  const btn    = document.getElementById('loginBtn');
-  const img    = document.getElementById('sideImg');
-  const imgCol = document.getElementById('imageCol');
-  const loader = document.getElementById('loader');
-
-  let submitted = false;
-
-  form.addEventListener('submit', function(e){
-    if (submitted) return;
-    e.preventDefault();
-    submitted = true;
-
-    btn.disabled = true;
-    btn.classList.add('opacity-80', 'cursor-not-allowed');
-    document.body.classList.add('no-scroll');
-    document.activeElement?.blur();
-
-    if (!img || window.innerWidth < 768) {
-      loader.style.backgroundImage = 'url("{{ asset('Estate.webp') }}")';
-      loader.classList.add('show');
-      form.submit();
-      return;
-    }
-
-    const r = img.getBoundingClientRect();
-    const clone = img.cloneNode(true);
-    clone.className = 'cloned-image';
-
-    Object.assign(clone.style,{
-      left: r.left + 'px',
-      top: r.top + 'px',
-      width: r.width + 'px',
-      height: r.height + 'px'
-    });
-
-    imgCol.style.visibility = 'hidden';
-    document.body.appendChild(clone);
-
-    const tx = window.innerWidth / 2 - (r.left + r.width / 2);
-    const ty = window.innerHeight / 2 - (r.top + r.height / 2);
-    const scale = Math.max(
-      window.innerWidth / r.width,
-      window.innerHeight / r.height
-    ) * 1.05;
-
-    requestAnimationFrame(() => {
-      clone.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${scale})`;
-    });
-
-    clone.addEventListener('transitionend', () => {
-      loader.style.backgroundImage = `url('${img.src}')`;
-      loader.classList.add('show');
-      clone.style.opacity = '0';
-      setTimeout(() => form.submit(), 120);
-    }, { once: true });
-  });
-
-  // accessibility: toggle via Enter when focused
-  pwdToggle.addEventListener('keydown', function(e){
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault(); pwdToggle.click();
-    }
-  });
-})();
-</script>
 
 </body>
 </html>

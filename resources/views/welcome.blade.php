@@ -84,8 +84,6 @@
 
 <body class="bg-gray-50 font-sans antialiased">
 
-    {{-- Loader --}}
-    @include('dashboard.partials.loader')
 
     <!-- Hero Section -->
     <section id="hero" class="relative w-full h-screen flex items-center justify-center overflow-hidden">
@@ -120,30 +118,6 @@
                    class="inline-flex items-center justify-center bg-black border border-stone-700 text-white font-bold px-8 py-4 rounded-full text-lg shadow-xl btn-cta focus:outline-none">
                     Login Now
                 </a>
-
-                <!-- Secondary: Our Team (button-like) -->
-<a href="{{ route('team.index') }}" target="_blank" rel="noopener"
-   class="group inline-flex items-center justify-center gap-3
-          border-[3.5px] border-white/40
-
-          bg-white/10 backdrop-blur
-          text-white font-bold
-          px-8 py-4 rounded-full text-lg
-          shadow-lg
-          btn-cta
-          focus:outline-none focus:ring-2 focus:ring-white/70">
-
-    Our Team
-
-    <svg xmlns="http://www.w3.org/2000/svg"
-         class="w-5 h-5 text-white transition-transform duration-300"
-         fill="none" viewBox="0 0 24 24"
-         stroke="currentColor" stroke-width="2"
-         stroke-linecap="round" stroke-linejoin="round">
-        <path d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-    </svg>
-</a>
-
             </div>
 
         </div>
@@ -156,92 +130,6 @@
     </section>
 
 
-    {{-- Hide Loader after page load + Parallax effect --}}
-    <script>
-        window.addEventListener('load', function () {
-            const loader = document.getElementById('loader-root');
-            if (loader) {
-                // keep loader visible a bit longer for nicer UX (2.2s), then fade out smoothly
-                const extraVisibleMs = 2200; // زيادتك للودر شوي — تقدر تغير الرقم لو تحب زيادة/نقص
-                setTimeout(() => {
-                    loader.style.transition = 'opacity 400ms ease';
-                    loader.style.opacity = '0';
-                    setTimeout(() => {
-                        loader.style.display = 'none';
-                    }, 450);
-                }, extraVisibleMs);
-            }
-
-            // Fade-in of hero content is handled by CSS animation (animate on load)
-        });
-
-        // Parallax effect: translateY the hero image slightly on scroll
-        (function () {
-            const img = document.getElementById('hero-img');
-            if (!img) return;
-
-            // For performance, throttle using requestAnimationFrame
-            let latestScroll = 0;
-            let ticking = false;
-
-            function onScroll() {
-                latestScroll = window.scrollY || window.pageYOffset;
-                requestTick();
-            }
-
-            function requestTick() {
-                if (!ticking) {
-                    requestAnimationFrame(update);
-                }
-                ticking = true;
-            }
-
-            function update() {
-                // small parallax only on larger screens
-                const maxTranslate = 40; // px
-                const screenWidth = window.innerWidth || document.documentElement.clientWidth;
-                let factor = screenWidth > 1024 ? 0.18 : (screenWidth > 640 ? 0.08 : 0); // reduce on mobile
-                const translate = Math.min(maxTranslate, latestScroll * factor);
-                // Apply slight upward movement to image to create depth
-                // Preserve existing animation scale by only setting translate + scale
-                img.style.transform = `translateY(${translate * -1}px) scale(1.02)`;
-                ticking = false;
-            }
-
-            window.addEventListener('scroll', onScroll, { passive: true });
-
-            // Ensure initial position is set
-            update();
-
-            // Optional: subtle parallax tilt on pointer move (desktop only)
-            function onPointerMove(e) {
-                if (window.innerWidth < 1024) return;
-                const rect = img.getBoundingClientRect();
-                const cx = rect.left + rect.width / 2;
-                const cy = rect.top + rect.height / 2;
-                const dx = (e.clientX - cx) / rect.width;
-                const dy = (e.clientY - cy) / rect.height;
-                const rotateY = dx * 3; // degrees
-                const rotateX = dy * -3; // degrees
-
-                // Append rotation while keeping translate/scale already applied in update()
-                // Read current transform to preserve translate/scale if present
-                const baseTransform = img.style.transform.replace(/ rotateX\([^)]+\)| rotateY\([^)]+\)/g, '');
-                img.style.transform = `${baseTransform} rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            }
-            function onPointerEnter() { /* noop */ }
-            function onPointerLeave() {
-                // remove any rotateX/rotateY while preserving translate/scale
-                img.style.transform = img.style.transform.replace(/ rotateX\([^)]+\)| rotateY\([^)]+\)/g, '');
-            }
-
-            if (window.matchMedia('(pointer: fine)').matches) {
-                img.addEventListener('pointermove', onPointerMove);
-                img.addEventListener('pointerenter', onPointerEnter);
-                img.addEventListener('pointerleave', onPointerLeave);
-            }
-        })();
-    </script>
 
 </body>
 </html>

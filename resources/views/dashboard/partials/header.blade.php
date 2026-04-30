@@ -4,7 +4,7 @@
 
         {{-- Left Section: Logo --}}
         <div class="flex items-center gap-3">
-            <img src="logo2.png" alt="logo" class="h-12 w-12 rounded-full object-cover">
+            <img src="/logo2.png" alt="logo" class="h-12 w-12 rounded-full object-cover">
             <a href="{{ url('dashboard') }}" class="flex items-center gap-3">
                 <div class="hidden sm:flex flex-col leading-tight">
                     <span class="text-2xl font-bold text-black">CBS</span>
