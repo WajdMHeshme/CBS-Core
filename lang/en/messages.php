@@ -223,7 +223,7 @@ return [
 
     // Booking
     'booking' => [
-
+        'car' => 'Car',
         'created' => 'Request sent successfully',
         'all' => 'all',
         'all_status' => 'all_status',

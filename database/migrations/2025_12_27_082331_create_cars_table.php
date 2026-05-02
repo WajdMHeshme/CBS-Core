@@ -8,36 +8,39 @@ return new class extends Migration
 {
     public function up(): void
     {
-Schema::create('cars', function (Blueprint $table) {
-    $table->id();
+        Schema::create('cars', function (Blueprint $table) {
+            $table->id();
 
-    $table->string('title');
+            $table->string('title');
 
-    $table->foreignId('user_id')
-        ->constrained()
-        ->cascadeOnDelete();
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete();
 
-    $table->foreignId('car_type_id')
-        ->nullable()
-        ->constrained('car_types')
-        ->nullOnDelete();
+            $table->foreignId('car_type_id')
+                ->nullable()
+                ->constrained('car_types')
+                ->nullOnDelete();
 
-    $table->string('brand');
-    $table->string('model')->nullable(); // ✔️ إصلاح
-    $table->year('year')->nullable();     // ✔️ إصلاح
+            $table->string('brand');
+            $table->string('model')->nullable();
+            $table->year('year')->nullable();
 
-    $table->string('color')->nullable();
-    $table->string('plate_number')->nullable()->unique();
+            $table->string('color')->nullable();
+            $table->string('plate_number')->nullable()->unique();
 
-    $table->decimal('price_per_day', 10, 2)->nullable(); // ✔️ إصلاح
+            $table->decimal('price_per_day', 10, 2)->nullable();
 
-    $table->enum('status', ['available', 'booked', 'maintenance'])
-        ->default('available');
+            $table->enum('status', ['available', 'booked', 'maintenance'])
+                ->default('available');
+            $table->unsignedInteger('rating_count')->default(0);
+            $table->unsignedInteger('rating_sum')->default(0);
+            $table->decimal('average_rating', 3, 2)->default(0);
 
-    $table->text('description')->nullable();
+            $table->text('description')->nullable();
 
-    $table->timestamps();
-});
+            $table->timestamps();
+        });
     }
 
     public function down(): void

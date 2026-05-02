@@ -86,6 +86,10 @@ class Car extends Model
         return $this->hasMany(Review::class, 'car_id');
     }
 
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class, 'car_id');
+    }
     /*
     |-------------------------
     | Scopes

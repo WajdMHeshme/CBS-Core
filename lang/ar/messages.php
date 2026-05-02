@@ -217,6 +217,8 @@ return [
 
     // Booking
     'booking' => [
+        'car' => 'السيارة',
+        'created' => 'تم إرسال طلب الحجز بنجاح',
         'all' => 'الكل',
         'all_status' => 'جميع الحالات',
         'assigned_to' => 'مُسند إلى',
