@@ -1,13 +1,23 @@
 <?php
 
 use App\Http\Controllers\Customer\BookingController as CustomerBookingController;
+use App\Http\Controllers\Customer\CarReviewController;
 use App\Http\Controllers\Customer\FavoriteController;
 use App\Http\Controllers\Customer\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
+    // booking reviews
     Route::post('/ratings', [ReviewController::class, 'store'])
         ->name('customer.ratings.store');
+
+    //car reviews
+    Route::get('/cars/{car}/reviews', [CarReviewController::class, 'index'])
+        ->name('customer.cars.reviews.index');
+    Route::post('/cars/{car}/reviews', [CarReviewController::class, 'store'])
+        ->name('customer.cars.reviews.store');
+    Route::delete('/reviews/{review}', [CarReviewController::class, 'destroy'])
+        ->name('customer.reviews.destroy');
 });
 
 Route::middleware(['auth:sanctum'])->prefix('bookings')->group(function () {

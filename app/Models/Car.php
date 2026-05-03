@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Amenity;
 use App\Models\Booking;
-use App\Models\Review;
 use App\Models\CarType;
 use App\Models\CarImage;
 
@@ -83,7 +82,7 @@ class Car extends Model
 
     public function reviews()
     {
-        return $this->hasMany(Review::class, 'car_id');
+        return $this->hasMany(CarReview::class, 'car_id');
     }
 
     public function favorites()
