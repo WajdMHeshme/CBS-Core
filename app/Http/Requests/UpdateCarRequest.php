@@ -13,28 +13,30 @@ class UpdateCarRequest extends FormRequest
 
     public function rules(): array
     {
-return [
-    'title' => 'sometimes|string|max:255',
-    'brand' => 'sometimes|string|max:255',
-    'model' => 'sometimes|string|max:255',
+        return [
+            'title' => 'sometimes|string|max:255',
+            'brand' => 'sometimes|string|max:255',
+            'model' => 'sometimes|string|max:255',
 
-    'car_type_id' => 'nullable|exists:car_types,id',
+            'car_type_id' => 'nullable|exists:car_types,id',
 
-    'city' => 'nullable|string|max:255',
-    'neighborhood' => 'nullable|string|max:255',
-    'address' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'neighborhood' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
 
-    'seats' => 'nullable|integer|min:1',
-    'price_per_day' => 'nullable|numeric|min:0',
+            'seats' => 'nullable|integer|min:1',
+            'price_per_day' => 'nullable|numeric|min:0',
 
-    'status' => 'nullable|in:available,booked,rented,hidden',
-    'description' => 'nullable|string',
+            'status' => 'nullable|in:available,booked,rented,maintenance',
+            'description' => 'nullable|string',
 
-    'amenity_ids' => 'nullable|array',
-    'amenity_ids.*' => 'exists:amenities,id',
+            'amenity_ids' => 'nullable|array',
+            'amenity_ids.*' => 'exists:amenities,id',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
 
-    'images' => 'nullable|array',
-    'images.*' => 'image|mimes:jpg,jpeg,png,gif,webp|max:5120',
-];
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpg,jpeg,png,gif,webp|max:5120',
+        ];
     }
 }

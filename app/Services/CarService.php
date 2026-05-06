@@ -17,57 +17,48 @@ class CarService
         ])->get();
     }
 
-    public function getPaginated(array $filters = []): LengthAwarePaginator
-    {
-        $query = Car::with([
-            'carType',
-            'mainImage',
-            'amenities',
-            'images',
-        ]);
+public function getPaginated(array $filters = []): LengthAwarePaginator
+{
+    $query = Car::with([
+        'carType',
+        'mainImage',
+        'amenities',
+        'images',
+    ]);
 
-        $query->when(
-            !empty($filters['search']),
-            function ($q) use ($filters) {
-                $search = $filters['search'];
+    // 🚗 Model
+    $query->when(
+        !empty($filters['model']),
+        fn($q) => $q->where('model', 'like', "%{$filters['model']}%")
+    );
 
-                $q->where(function ($sub) use ($search) {
-                    $sub->where('brand', 'like', "%{$search}%")
-                        ->orWhere('model', 'like', "%{$search}%")
-                        ->orWhere('plate_number', 'like', "%{$search}%");
-                });
-            }
-        );
+    // 💰 Price range
+    $query->when(
+        isset($filters['min_price']) && $filters['min_price'] !== '',
+        fn($q) => $q->where('price_per_day', '>=', $filters['min_price'])
+    );
 
-        $query->when(
-            !empty($filters['car_types']),
-            fn($q) => $q->whereIn('car_type_id', (array) $filters['car_types'])
-        );
+    $query->when(
+        isset($filters['max_price']) && $filters['max_price'] !== '',
+        fn($q) => $q->where('price_per_day', '<=', $filters['max_price'])
+    );
 
-        $query->when(
-            !empty($filters['status']),
-            fn($q) => $q->where('status', $filters['status'])
-        );
+    // 🧩 Amenities (many-to-many)
+    $query->when(
+        !empty($filters['amenity_ids']),
+        fn($q) => $q->whereHas('amenities', function ($sub) use ($filters) {
+            $sub->whereIn('amenities.id', (array) $filters['amenity_ids']);
+        })
+    );
 
-        $query->when(
-            isset($filters['min_price_per_day']) && $filters['min_price_per_day'] !== '',
-            fn($q) => $q->where('price_per_day', '>=', $filters['min_price_per_day'])
-        );
+    // 🚘 Car Types
+    $query->when(
+        !empty($filters['car_types']),
+        fn($q) => $q->whereIn('car_type_id', (array) $filters['car_types'])
+    );
 
-        $query->when(
-            isset($filters['max_price_per_day']) && $filters['max_price_per_day'] !== '',
-            fn($q) => $q->where('price_per_day', '<=', $filters['max_price_per_day'])
-        );
-
-        $sortBy = in_array($filters['sort'] ?? null, ['brand', 'model', 'price_per_day', 'created_at'])
-            ? $filters['sort']
-            : 'created_at';
-
-        $order = strtolower($filters['order'] ?? 'desc') === 'asc' ? 'asc' : 'desc';
-
-        return $query->orderBy($sortBy, $order)
-            ->paginate($filters['limit'] ?? 6);
-    }
+    return $query->latest()->paginate(6);
+}
 
     public function create(array $data): Car
     {

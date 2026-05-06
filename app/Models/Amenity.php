@@ -16,13 +16,13 @@ class Amenity extends Model
     /**
      * The cars that belong to the amenity.
      */
-    public function cars()
-    {
-        return $this->belongsToMany(
-            Car::class,
-            'car_amenity',
-            'amenity_id',
-            'car_id'
-        );
-    }
+public function cars()
+{
+    return $this->belongsToMany(
+        Car::class,
+        'car_amenities',
+        'amenity_id',
+        'car_id'
+    );
+}
 }

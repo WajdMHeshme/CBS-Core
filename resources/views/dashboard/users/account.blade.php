@@ -80,7 +80,7 @@
                 </a>
 
                 <button type="submit"
-                        class="px-6 py-3 bg-gradient-to-r from-black to-indigo-500
+                        class="px-6 py-3  bg-black
                                text-white rounded-full font-bold shadow-2xl
                                hover:scale-[1.03] transform transition
                                focus:outline-none focus:ring-4 focus:ring-indigo-200">

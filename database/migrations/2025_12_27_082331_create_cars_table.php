@@ -36,6 +36,8 @@ return new class extends Migration
             $table->unsignedInteger('rating_count')->default(0);
             $table->unsignedInteger('rating_sum')->default(0);
             $table->decimal('average_rating', 3, 2)->default(0);
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
 
             $table->text('description')->nullable();
 
