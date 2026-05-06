@@ -265,15 +265,14 @@ return [
         ],
     ],
 
-    // Status
-    'status' => [
+
         'pending' => 'قيد الانتظار',
         'approved' => 'تمت الموافقة',
         'completed' => 'مكتمل',
         'rejected' => 'مرفوض',
         'canceled' => 'ملغى',
         'rescheduled' => 'تمت إعادة الجدولة',
-    ],
+
 
     // User
     'user' => [

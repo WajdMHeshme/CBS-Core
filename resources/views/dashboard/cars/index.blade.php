@@ -14,79 +14,76 @@
         </a>
     </div>
 
-    {{-- Filters --}}
-    <form method="GET" class="mb-8 bg-white p-5 rounded-2xl shadow grid grid-cols-1 md:grid-cols-4 gap-4">
+    <form method="GET" class="mb-8 bg-white p-6 rounded-2xl shadow flex flex-col gap-6">
 
-        <div>
-            <label class="block mb-1 text-sm font-medium text-gray-700">
-                {{ __('messages.car.city') }}
-            </label>
-            <input type="text"
-                name="city"
-                value="{{ request('city') }}"
-                class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+        {{-- Row 1: Prices --}}
+        <div class="flex flex-col md:flex-row gap-4">
+
+            <div class="flex-1">
+                <label class="block mb-1 text-sm font-medium text-gray-700">Min Price</label>
+                <input type="number"
+                    name="min_price"
+                    value="{{ request('min_price') }}"
+                    class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+            </div>
+
+            <div class="flex-1">
+                <label class="block mb-1 text-sm font-medium text-gray-700">Max Price</label>
+                <input type="number"
+                    name="max_price"
+                    value="{{ request('max_price') }}"
+                    class="w-full rounded-lg border-gray-300 focus:border-black focus:ring-black">
+            </div>
+
         </div>
 
-        <div>
-            <label class="block mb-1 text-sm font-medium text-gray-700">
-                {{ __('messages.car.min_price') }}
-            </label>
-            <input type="number"
-                name="min_price"
-                value="{{ request('min_price') }}"
-                class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+        {{-- Row 2: Car Types --}}
+        <div class="flex justify-between gap-4 flex-col md:flex-row">
+
+            <div class="w-[48%]">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Car Types</label>
+
+                <select name="car_types[]" multiple
+                    class="w-full rounded-xl border-gray-300 h-28 p-2">
+                    @foreach($carTypes as $type)
+                    <option value="{{ $type->id }}"
+                        {{ in_array($type->id, (array) request('car_types', [])) ? 'selected' : '' }}>
+                        {{ $type->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            {{-- Row 3: Amenities (full width) --}}
+            <div class="w-[48%]">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Amenities</label>
+
+                <select name="amenity_ids[]" multiple
+                    class="w-full rounded-xl border-gray-300 h-28 p-2">
+                    @foreach($amenities as $amenity)
+                    <option value="{{ $amenity->id }}"
+                        {{ in_array($amenity->id, (array) request('amenity_ids', [])) ? 'selected' : '' }}>
+                        {{ $amenity->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
         </div>
 
-        <div>
-            <label class="block mb-1 text-sm font-medium text-gray-700">
-                {{ __('messages.car.max_price') }}
-            </label>
-            <input type="number"
-                name="max_price"
-                value="{{ request('max_price') }}"
-                class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
-        </div>
 
-        <div class="flex items-end gap-2">
-            <button type="submit"
-                class="w-full px-4 py-2 bg-black text-white rounded-full hover:bg-indigo-500 transition">
-                {{ __('messages.car.filter') }}
-            </button>
+        {{-- Row 4: Buttons --}}
+        <div class="flex justify-end gap-3 pt-2">
 
             <a href="{{ route('dashboard.cars.index') }}"
-                class="px-4 py-2 bg-gray-200 rounded-full hover:bg-gray-300 transition">
-                {{ __('messages.car.reset') }}
+                class="px-5 py-2 bg-gray-200 rounded-full hover:bg-gray-300 transition">
+                Reset
             </a>
-        </div>
 
-        <div class="md:col-span-2">
-            <label class="block mb-2 text-sm font-medium text-gray-700">
-                {{ __('messages.car.amenities') }}
-            </label>
+            <button type="submit"
+                class="px-6 py-2 bg-black text-white rounded-full hover:bg-gray-800 transition">
+                Apply Filters
+            </button>
 
-            <select name="amenity_ids[]" multiple class="w-full rounded-xl border-gray-300 h-40 p-2">
-                @foreach($amenities as $amenity)
-                <option value="{{ $amenity->id }}"
-                    {{ in_array($amenity->id, (array) request('amenity_ids', [])) ? 'selected' : '' }}>
-                    {{ $amenity->name }}
-                </option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="md:col-span-2">
-            <label class="block mb-2 text-sm font-medium text-gray-700">
-                {{ __('messages.car.types') }}
-            </label>
-
-            <select name="car_types[]" multiple class="w-full rounded-xl border-gray-300 h-40 p-2">
-                @foreach($carTypes as $type)
-                <option value="{{ $type->id }}"
-                    {{ in_array($type->id, (array) request('car_types', [])) ? 'selected' : '' }}>
-                    {{ $type->name }}
-                </option>
-                @endforeach
-            </select>
         </div>
 
     </form>

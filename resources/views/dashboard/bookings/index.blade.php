@@ -2,6 +2,22 @@
 
 @section('content')
 
+@if ($errors->any())
+    <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl">
+        <ul class="list-disc pl-5 space-y-1">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+@if(session('status'))
+    <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl">
+        {{ session('status') }}
+    </div>
+@endif
+
 {{-- ملاحظة: تم تغيير direction حسب لغة النظام بشكل ديناميكي --}}
 <div class="lg:ml-50 px-6 py-8 {{ app()->getLocale() == 'ar' ? 'text-right' : 'text-left' }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 

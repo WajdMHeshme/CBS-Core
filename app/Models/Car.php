@@ -28,6 +28,8 @@ class Car extends Model
         'year',
         'color',
         'plate_number',
+        'latitude',
+        'longitude',
         'is_furnished',
     ];
     protected $casts = [

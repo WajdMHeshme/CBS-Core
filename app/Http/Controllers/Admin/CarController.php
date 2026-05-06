@@ -30,11 +30,11 @@ class CarController extends Controller
     public function index(): View
     {
         $filters = collect(request()->only([
-            'car_type_ids',
+            'car_types',
             'type',
-            'city',
             'min_price',
             'max_price',
+            'amenity_ids',
             'sort',
             'order',
             'limit',

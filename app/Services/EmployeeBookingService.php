@@ -37,18 +37,20 @@ class EmployeeBookingService
             ]);
         }
 
+        // تعيين الموظف إذا أول مرة يتعامل مع الحجز
         if (is_null($booking->employee_id)) {
             $booking->employee_id = Auth::id();
             $booking->save();
         }
 
+        // التحقق من تعارض السيارة (وليس الموظف)
         if ($this->hasTimeConflict(
-            $booking->employee_id,
+            $booking->car_id,
             $booking->scheduled_at,
             $booking->id
         )) {
             throw ValidationException::withMessages([
-                'scheduled_at' => 'Employee has another booking at this time',
+                'scheduled_at' => 'This car is already booked at this time.',
             ]);
         }
 
@@ -149,14 +151,15 @@ class EmployeeBookingService
     /**
      * Time conflict check
      */
-    public function hasTimeConflict($employeeId, $scheduledAt, $excludeId = null)
+    public function hasTimeConflict($carId, $scheduledAt, $excludeId = null)
     {
-        if (empty($employeeId)) {
+        if (empty($carId)) {
             return false;
         }
 
-        return Booking::where('employee_id', $employeeId)
-            ->when($excludeId, fn ($q) => $q->where('id', '!=', $excludeId))
+        return Booking::where('car_id', $carId)
+            ->when($excludeId, fn($q) => $q->where('id', '!=', $excludeId))
+            ->whereIn('status', ['pending', 'approved', 'rescheduled'])
             ->whereBetween('scheduled_at', [
                 Carbon::parse($scheduledAt)->subHour(),
                 Carbon::parse($scheduledAt)->addHour(),
