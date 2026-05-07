@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="container mx-auto p-6 max-w-5xl">
+
     <div class="bg-white shadow-xl rounded-2xl p-8 space-y-8">
 
         <div class="flex flex-col md:flex-row justify-between gap-4">
@@ -9,15 +10,19 @@
                 <h1 class="text-3xl font-extrabold text-gray-900">
                     {{ $car->title }}
                 </h1>
+
+                <p class="text-gray-500 mt-1">
+                    {{ $car->brand }} - {{ $car->model }}
+                </p>
             </div>
 
             <div class="flex flex-wrap items-center gap-3">
-                <a href="{{ route('dashboard.admin.cars.edit', $car->id) }}"
+                <a href="{{ route('lessor.cars.edit', $car->id) }}"
                    class="px-6 py-2.5 bg-yellow-100 text-yellow-800 border rounded-full font-semibold">
                     Edit
                 </a>
 
-                <a href="{{ route('dashboard.admin.cars.index') }}"
+                <a href="{{ route('lessor.cars.index') }}"
                    class="px-6 py-2.5 bg-gray-100 text-gray-700 border rounded-full font-semibold">
                     Back
                 </a>
@@ -95,6 +100,7 @@ function openLightbox(src) {
     document.getElementById('lightbox-img').src = src;
     document.getElementById('lightbox').classList.remove('hidden');
 }
+
 document.getElementById('lightbox').onclick = () => {
     document.getElementById('lightbox').classList.add('hidden');
 };

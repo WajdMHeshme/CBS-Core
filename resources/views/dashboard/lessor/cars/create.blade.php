@@ -18,7 +18,7 @@
             </div>
         @endif
 
-        <form action="{{ route('dashboard.admin.cars.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ route('lessor.cars.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
 
             <div>
@@ -39,7 +39,7 @@
                     <label class="block mb-2 font-medium text-gray-700">Model</label>
                     <input name="model" value="{{ old('model') }}"
                            class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none shadow-sm"
-                           placeholder="e.g Corolla" required>
+                           placeholder="e.g Corolla">
                 </div>
             </div>
 
@@ -48,7 +48,7 @@
                     <label class="block mb-2 font-medium text-gray-700">Year</label>
                     <input name="year" type="number" value="{{ old('year') }}"
                            class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none shadow-sm"
-                           placeholder="2024" required>
+                           placeholder="2024">
                 </div>
 
                 <div>
@@ -64,7 +64,7 @@
                     <label class="block mb-2 font-medium text-gray-700">Plate Number</label>
                     <input name="plate_number" value="{{ old('plate_number') }}"
                            class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none shadow-sm"
-                           placeholder="ABC-1234" required>
+                           placeholder="ABC-1234">
                 </div>
 
                 <div>
@@ -80,7 +80,6 @@
                 <select name="status"
                         class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none shadow-sm">
                     <option value="available" {{ old('status', 'available') == 'available' ? 'selected' : '' }}>Available</option>
-                    <option value="booked" {{ old('status') == 'booked' ? 'selected' : '' }}>Booked</option>
                     <option value="maintenance" {{ old('status') == 'maintenance' ? 'selected' : '' }}>Maintenance</option>
                 </select>
             </div>
@@ -95,7 +94,8 @@
             <div>
                 <label class="block mb-2 font-medium text-gray-700">Car Type</label>
                 <select name="car_type_id"
-                        class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none shadow-sm" required>
+                        class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none shadow-sm">
+                    <option value="">Select Car Type</option>
                     @foreach($carTypes as $type)
                         <option value="{{ $type->id }}" {{ old('car_type_id') == $type->id ? 'selected' : '' }}>
                             {{ $type->name }}
@@ -126,7 +126,7 @@
             </div>
 
             <div class="flex flex-wrap gap-4 justify-end">
-                <a href="{{ route('dashboard.admin.cars.index') }}"
+                <a href="{{ route('lessor.cars.index') }}"
                    class="px-6 py-3 bg-gray-200 rounded-full text-gray-700 font-semibold hover:bg-gray-300 transition">
                     Cancel
                 </a>

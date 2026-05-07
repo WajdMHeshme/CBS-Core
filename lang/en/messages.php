@@ -39,13 +39,15 @@ return [
         'Last_7_Days' => 'Last 7 Days',
         'This_Month_(January 2026)' => '',
     ],
-
+    'approve' => 'Approve',
+    'reject' => 'Reject',
     // Sidebar
     'sidebar' => [
         'system_name' => 'Car Rental and Management System',
         'rights_reserved' => 'All rights reserved',
         'home' => 'Home',
         'cars' => 'Cars',
+        'Lessor_Requests' => 'Lessor Requests',
         'amenities' => 'Amenities',
         'bookings' => 'Bookings',
         'reports' => 'Reports',
@@ -275,6 +277,8 @@ return [
 
     // User
     'user' => [
+        'role_lessor' => 'Lessor',
+        'role_customer' => 'Customer',
         'created' => 'Employee created successfully',
         'role_updated' => 'User role updated',
         'deleted' => 'User deleted successfully',

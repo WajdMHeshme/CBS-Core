@@ -30,7 +30,7 @@ class AdminService
 
             // Assign role (default to 'employee' if not provided)
             $role = $data['role'] ?? 'employee';
-            if (! in_array($role, ['admin', 'employee', 'customer'])) {
+            if (! in_array($role, ['admin', 'employee', 'lessor', 'customer'])) {
                 // If the provided role is invalid, rollback by throwing.
                 throw new BadRequestHttpException('Invalid role provided.');
             }
@@ -48,7 +48,7 @@ class AdminService
     public function changeRole(int $userId, string $role): User
     {
         return DB::transaction(function () use ($userId, $role) {
-            if (! in_array($role, ['admin', 'employee', 'customer'])) {
+            if (! in_array($role, ['admin', 'employee', 'lessor' , 'customer'])) {
                 throw new BadRequestHttpException('Invalid role');
             }
 

@@ -29,7 +29,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('dashboard.admin.employees.store') }}" class="space-y-6">
+        <form method="POST" action="{{ route('dashboard.admin.users.store') }}" class="space-y-6">
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -77,13 +77,14 @@
                     <option value="employee" {{ old('role', 'employee') == 'employee' ? 'selected' : '' }}>{{ __('messages.user.role_employee') }}</option>
                     <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>{{ __('messages.user.role_admin') }}</option>
                     <option value="customer" {{ old('role') == 'customer' ? 'selected' : '' }}>{{ __('messages.user.role_customer') }}</option>
+                    <option value="lessor" {{ old('role') == 'lessor' ? 'selected' : '' }}>{{ __('messages.user.role_lessor') }}</option>
                 </select>
             </div>
 
 
             {{-- Buttons --}}
             <div class="flex flex-wrap gap-4 {{ $isRtl ? 'justify-start' : 'justify-end' }}">
-                <a href="{{ route('dashboard.admin.employees.index') }}"
+                <a href="{{ route('dashboard.admin.users.index') }}"
                    class="px-6 py-3 bg-gray-200 rounded-full text-gray-700 font-semibold hover:bg-gray-300 transition">
                    {{ __('messages.user.cancel') }}
                 </a>

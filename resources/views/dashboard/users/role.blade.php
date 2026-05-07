@@ -24,12 +24,12 @@
         </div>
 
         @php
-            $currentRole = $user->getRoleNames()->first();
+        $currentRole = $user->getRoleNames()->first();
         @endphp
 
         <form method="POST"
-              action="{{ route('dashboard.admin.users.change-role', $user->id) }}"
-              class="space-y-6">
+            action="{{ route('dashboard.admin.users.change-role', $user->id) }}"
+            class="space-y-6">
             @csrf
             @method('PATCH')
 
@@ -37,7 +37,7 @@
             <div>
                 <label class="block mb-2 font-medium text-gray-700">{{ __('messages.user.role') }}</label>
                 <select name="role" required
-                        class="w-full border border-gray-300 rounded-xl p-3
+                    class="w-full border border-gray-300 rounded-xl p-3
                                focus:ring-2 focus:ring-indigo-400 focus:outline-none shadow-sm">
                     <option value="admin" {{ $currentRole === 'admin' ? 'selected' : '' }}>
                         {{ __('messages.user.role_admin') }}
@@ -48,6 +48,9 @@
                     <option value="customer" {{ $currentRole === 'customer' ? 'selected' : '' }}>
                         {{ __('messages.user.role_customer') }}
                     </option>
+                    <option value="lessor" {{ $currentRole === 'lessor' ? 'selected' : '' }}>
+                        {{ __('messages.user.role_lessor') }}
+                    </option>
                 </select>
                 <p class="mt-2 text-sm text-gray-500">
                     {{ __('messages.user.role_change_hint') }}
@@ -56,22 +59,20 @@
 
             {{-- Buttons --}}
             <div class="flex flex-wrap gap-4 {{ $isRtl ? 'justify-start' : 'justify-end' }}">
-                <a href="{{ route('dashboard.admin.employees.index') }}"
-                   class="px-6 py-3 bg-gray-200 rounded-full text-gray-700 font-semibold
-                          hover:bg-gray-300 transition">
+                <a href="{{ route('dashboard.admin.users.index') }}">
                     {{ __('messages.user.cancel') }}
                 </a>
 
                 <button type="submit"
-                        class="px-6 py-3 bg-black
+                    class="px-6 py-3 bg-black
                                text-white rounded-full font-bold shadow-2xl
                                hover:scale-[1.03] transform transition
                                ">
                     <svg xmlns="http://www.w3.org/2000/svg"
-                         class="h-5 w-5 inline {{ $isRtl ? 'ml-2' : 'mr-2' }}"
-                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        class="h-5 w-5 inline {{ $isRtl ? 'ml-2' : 'mr-2' }}"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M12 4v16m8-8H4" />
+                            d="M12 4v16m8-8H4" />
                     </svg>
                     {{ __('messages.user.save_changes') }}
                 </button>

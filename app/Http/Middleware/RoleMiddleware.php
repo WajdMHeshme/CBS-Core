@@ -2,51 +2,38 @@
 
 use App\Http\Controllers\Employee\EmployeeBookingController;
 use App\Http\Controllers\Employee\EmployeeDashboardController;
+use App\Http\Controllers\Lessor\CarController;
+use App\Http\Controllers\Lessor\LessorDashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Employee Routes (fixed)
-|--------------------------------------------------------------------------
-| - Prefix: /dashboard
-| - Name prefix: employee.*
-| - Notes:
-|   * Use `role:employee` middleware to restrict these routes to employees only.
-|   * Use consistent route-model-binding parameter `{booking}` (not `{id}`).
-|   * Dashboard index should be `/` (because of the 'dashboard' prefix).
+| EMPLOYEE ROUTES
 |--------------------------------------------------------------------------
 */
-
-Route::middleware(['auth', 'role:employee'])
+Route::middleware(['auth', 'check.active', 'role:employee'])
     ->prefix('dashboard')
     ->name('employee.')
     ->group(function () {
 
-        // Employee home dashboard: GET /dashboard
         Route::get('/', [EmployeeDashboardController::class, 'index'])
             ->name('dashboard');
 
-        // Bookings List: GET /dashboard/bookings
         Route::get('bookings', [EmployeeBookingController::class, 'index'])
             ->name('bookings.index');
 
-        // My Bookings: GET /dashboard/bookings/my
         Route::get('bookings/my', [EmployeeBookingController::class, 'myBookings'])
             ->name('bookings.my');
 
-        // Pending Bookings: GET /dashboard/bookings/pending
         Route::get('bookings/pending', [EmployeeBookingController::class, 'pending'])
             ->name('bookings.pending');
 
-        // Booking Details (use route-model-binding): GET /dashboard/bookings/{booking}
         Route::get('bookings/{booking}', [EmployeeBookingController::class, 'show'])
             ->name('bookings.show');
 
-        // Reschedule form (GET): /dashboard/bookings/{booking}/reschedule
         Route::get('bookings/{booking}/reschedule', [EmployeeBookingController::class, 'rescheduleForm'])
             ->name('reschedule.form');
 
-        // Actions (PATCH) - use {booking} for model binding
         Route::patch('bookings/{booking}/approve', [EmployeeBookingController::class, 'approve'])
             ->name('bookings.approve');
 
@@ -61,4 +48,20 @@ Route::middleware(['auth', 'role:employee'])
 
         Route::patch('bookings/{booking}/reject', [EmployeeBookingController::class, 'reject'])
             ->name('bookings.reject');
+    });
+
+/*
+|--------------------------------------------------------------------------
+| LESSOR ROUTES
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'check.active', 'role:lessor'])
+    ->prefix('dashboard')
+    ->name('lessor.')
+    ->group(function () {
+
+        Route::get('/', [LessorDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        Route::resource('cars', CarController::class);
     });

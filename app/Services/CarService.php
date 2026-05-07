@@ -60,34 +60,45 @@ public function getPaginated(array $filters = []): LengthAwarePaginator
     return $query->latest()->paginate(6);
 }
 
-    public function create(array $data): Car
-    {
-        $amenities = $data['amenity_ids'] ?? [];
-        $images = $data['images'] ?? [];
-        unset($data['amenity_ids'], $data['images']);
+public function create(array $data): Car
+{
+    $user = auth()->user();
 
-        $data['user_id'] = auth()->id();
-        $data['year'] = $data['year'] ?? now()->year;
-        $data['price_per_day'] = $data['price_per_day'] ?? 0;
-
-        $car = Car::create($data);
-
-        if (!empty($amenities)) {
-            $car->amenities()->sync($amenities);
-        }
-
-        // ✅ الحل - أضف is_main للصورة الأولى
-        foreach ($images as $i => $image) {
-            $path = $image->store('cars', 'public');
-
-            $car->images()->create([
-                'path'    => $path,
-                'is_main' => $i === 0, // الصورة الأولى تصير main
-            ]);
-        }
-
-        return $car;
+    // ❗ تحديد المالك حسب الدور
+    if ($user->hasRole('lessor')) {
+        $data['user_id'] = $user->id;
     }
+
+    // admin ممكن يختار user_id أو يكون system
+    if ($user->hasRole('admin')) {
+        $data['user_id'] = $data['user_id'] ?? $user->id;
+    }
+
+    $amenities = $data['amenity_ids'] ?? [];
+    $images = $data['images'] ?? [];
+
+    unset($data['amenity_ids'], $data['images']);
+
+    $data['year'] = $data['year'] ?? now()->year;
+    $data['price_per_day'] = $data['price_per_day'] ?? 0;
+
+    $car = Car::create($data);
+
+    if (!empty($amenities)) {
+        $car->amenities()->sync($amenities);
+    }
+
+    foreach ($images as $i => $image) {
+        $path = $image->store('cars', 'public');
+
+        $car->images()->create([
+            'path' => $path,
+            'is_main' => $i === 0,
+        ]);
+    }
+
+    return $car;
+}
 
     public function update(Car $car, array $data): Car
     {

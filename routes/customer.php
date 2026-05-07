@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\LessorRequestApiController;
 use App\Http\Controllers\Customer\BookingController as CustomerBookingController;
 use App\Http\Controllers\Customer\CarReviewController;
 use App\Http\Controllers\Customer\FavoriteController;
+use App\Http\Controllers\Customer\LessorRequestController;
 use App\Http\Controllers\Customer\ReviewController;
 use Illuminate\Support\Facades\Route;
 

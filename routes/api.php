@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Customer\LessorRequestController;
 use App\Http\Controllers\Customer\ReviewController;
 use App\Http\Controllers\Employee\BookingMessageController;
 use App\Http\Controllers\Visitor\CarController;
@@ -57,6 +58,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Add a new review / rating
     Route::post('/reviews', [ReviewController::class, 'store']);
+
+
+    Route::post('/lessor-requests', [
+        LessorRequestController::class,
+        'store'
+    ]);
 });
 
-require __DIR__.'/customer.php';
+require __DIR__ . '/customer.php';

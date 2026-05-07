@@ -2,14 +2,22 @@
 
 use App\Http\Controllers\Employee\EmployeeBookingController;
 use App\Http\Controllers\Employee\EmployeeDashboardController;
+use App\Http\Controllers\Lessor\CarController;
+use App\Http\Controllers\Lessor\LessorDashboardController;
 use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| EMPLOYEE ROUTES
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware(['auth', 'role:admin|employee'])
     ->prefix('dashboard')
     ->name('employee.')
     ->group(function () {
 
-        Route::get('/dashboard', [EmployeeDashboardController::class, 'index'])
+        Route::get('/employee', [EmployeeDashboardController::class, 'index'])
             ->name('dashboard.employee');
 
         // Bookings List employee
@@ -27,7 +35,8 @@ Route::middleware(['auth', 'role:admin|employee'])
 
         // Actions
         // reschedual
-        Route::get('/bookings/{booking}/reschedule',
+        Route::get(
+            '/bookings/{booking}/reschedule',
             [EmployeeBookingController::class, 'rescheduleForm']
         )->name('reschedule.form');
         // apprve
@@ -49,5 +58,20 @@ Route::middleware(['auth', 'role:admin|employee'])
         // Booking Details
         Route::get('/bookings/{booking}', [EmployeeBookingController::class, 'show'])
             ->name('bookings.show');
+    });
 
+/*
+|--------------------------------------------------------------------------
+| LESSOR ROUTES
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'check.active', 'role:lessor'])
+    ->prefix('dashboard')
+    ->name('lessor.')
+    ->group(function () {
+
+        Route::get('/lessor-cars', [LessorDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        Route::resource('lessor/cars', CarController::class);
     });

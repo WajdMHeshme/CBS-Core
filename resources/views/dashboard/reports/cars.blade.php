@@ -16,7 +16,7 @@
             </p>
         </div>
 
-        <a href="{{ route('dashboard.reports.cars.export') }}"
+        <a href="{{ route('dashboard.admin.reports.cars.export') }}"
            class="px-4 py-2 rounded-xl text-sm font-medium bg-black text-white hover:bg-black transition shadow-sm">
             Export PDF
         </a>

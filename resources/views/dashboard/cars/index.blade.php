@@ -8,7 +8,7 @@
             {{ __('messages.car.title') }}
         </h1>
 
-        <a href="{{ route('dashboard.cars.create') }}"
+        <a href="{{ route('dashboard.admin.cars.create') }}"
             class="px-5 py-2  bg-black text-white rounded-full font-semibold shadow-lg hover:scale-[1.03] transform transition">
             {{ __('messages.car.add_car') }}
         </a>
@@ -74,7 +74,7 @@
         {{-- Row 4: Buttons --}}
         <div class="flex justify-end gap-3 pt-2">
 
-            <a href="{{ route('dashboard.cars.index') }}"
+            <a href="{{ route('dashboard.admin.cars.index') }}"
                 class="px-5 py-2 bg-gray-200 rounded-full hover:bg-gray-300 transition">
                 Reset
             </a>
@@ -125,17 +125,17 @@
 
                 <div class="flex gap-2 flex-wrap">
 
-                    <a href="{{ route('dashboard.cars.show', $car->id) }}"
+                    <a href="{{ route('dashboard.admin.cars.show', $car->id) }}"
                         class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm">
                         View
                     </a>
 
-                    <a href="{{ route('dashboard.cars.edit', $car->id) }}"
+                    <a href="{{ route('dashboard.admin.cars.edit', $car->id) }}"
                         class="px-3 py-1 bg-yellow-50 text-yellow-700 rounded-full text-sm">
                         Edit
                     </a>
 
-                    <form action="{{ route('dashboard.cars.destroy', $car->id) }}" method="POST"
+                    <form action="{{ route('dashboard.admin.cars.destroy', $car->id) }}" method="POST"
                         onsubmit="event.preventDefault(); window.currentDeleteForm = this; window.dispatchEvent(new CustomEvent('open-modal', { detail: 'delete-car' }));">
                         @csrf @method('DELETE')
 
