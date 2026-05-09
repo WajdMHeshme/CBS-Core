@@ -1,5 +1,4 @@
 <?php
-
 return [
     // Dashboard
     'dashboard' => [
@@ -14,7 +13,10 @@ return [
         'last_6_months' => 'آخر 6 أشهر',
         'pending_6m' => 'قيد الانتظار (6 أشهر)',
         'dashboard_preview' => 'لوحة التحكم • معاينة البيانات',
-
+        'lessors_growth' => 'نمو المؤجرين',
+        'new_lessors_last_6m' => 'المؤجرين الجدد (آخر 6 أشهر)',
+        'new_lessors' => 'المؤجرين الجدد',
+        'no_lessors' => 'لا يوجد مؤجرين بعد',
         'this_week' => 'هذا الأسبوع',
         'this_month' => 'هذا الشهر',
         'pending' => 'قيد الانتظار',

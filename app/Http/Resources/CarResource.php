@@ -27,13 +27,20 @@ class CarResource extends JsonResource
 
             'description' => $this->description,
 
+            // owner info
+            'owner' => [
+                'id' => $this->owner?->id,
+                'name' => $this->owner?->name,
+            ],
+
             // main image
-            'main_image' => $this->images->firstWhere('is_main', true)?->path,
+            'main_image' => $this->images
+                ->firstWhere('is_main', true)?->path,
 
             // all images
             'images' => $this->images->pluck('path'),
 
-            // amenities (optional)
+            // amenities
             'features' => $this->amenities->pluck('name'),
 
             'created_at' => $this->created_at?->toDateTimeString(),

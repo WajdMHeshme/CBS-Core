@@ -144,17 +144,7 @@ $asideBorder = $isRtl ? 'border-l' : 'border-r';
                 {{-- LESSOR --}}
                 @role('lessor')
                 <nav class="space-y-2">
-
-                    <a href="{{ route('lessor.dashboard') }}"
-                        class="{{ $linkBase }} {{ $linkDirectional }}">
-                        Statistics
-                    </a>
-
-                    <a href="{{ route('lessor.cars.index') }}"
-                        class="{{ $linkBase }} {{ $linkDirectional }}">
-                        My Cars
-                    </a>
-
+                    <span class="text-base font-medium">{{ __('messages.sidebar.cars') }}</span>
                 </nav>
                 @endrole
 

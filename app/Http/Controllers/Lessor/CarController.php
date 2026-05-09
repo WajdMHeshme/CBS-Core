@@ -11,7 +11,6 @@ use App\Models\CarType;
 use App\Services\AmenityService;
 use App\Services\CarService;
 use App\Services\ImageService;
-use Illuminate\Http\Request;
 
 class CarController extends Controller
 {

@@ -8,7 +8,6 @@ use App\Http\Controllers\Admin\CarImageController;
 use App\Http\Controllers\Admin\LessorRequestAdminController;
 use App\Http\Controllers\Admin\Reports\BookingsReportController;
 use App\Http\Controllers\Admin\Reports\CarReportController;
-use App\Http\Controllers\Customer\LessorRequestController;
 use App\Http\Controllers\Employee\BookingMessageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -20,50 +19,55 @@ use Illuminate\Support\Facades\Session;
 |--------------------------------------------------------------------------
 */
 
-Route::post('/dashboard/notifications/read', function () {
-    auth()->user()->unreadNotifications->markAsRead();
-    return back();
-})->name('notifications.read');
-
 Route::get('/', fn() => view('welcome'));
+
+Route::get('lang/{locale}', function ($locale) {
+    if (in_array($locale, ['ar', 'en'])) {
+        Session::put('locale', $locale);
+    }
+
+    return redirect()->back();
+});
 
 Route::middleware(['auth'])->prefix('chat')->group(function () {
     Route::get('/bookings/{booking}/messages', [BookingMessageController::class, 'index']);
     Route::post('/bookings/{booking}/messages', [BookingMessageController::class, 'store']);
 });
 
-/*
-|--------------------------------------------------------------------------
-| Language Switch
-|--------------------------------------------------------------------------
-*/
-Route::get('lang/{locale}', function ($locale) {
-    if (in_array($locale, ['ar', 'en'])) {
-        Session::put('locale', $locale);
-    }
-    return redirect()->back();
-});
+Route::post('/dashboard/notifications/read', function () {
+    auth()->user()->unreadNotifications->markAsRead();
+    return back();
+})->name('notifications.read');
 
 /*
 |--------------------------------------------------------------------------
-| Dashboard Redirect (حسب الدور)
+| Dashboard Redirect
 |--------------------------------------------------------------------------
 */
-Route::get('/', function () {
+
+Route::get('/dashboard', function () {
+
+    if (!auth()->check()) {
+        return redirect('/login');
+    }
+
     $user = auth()->user();
 
-    if ($user->hasRole('admin'))    return redirect()->route('dashboard.admin.index');
-    if ($user->hasRole('employee')) return redirect()->route('employee.dashboard.employee');
-    if ($user->hasRole('lessor'))   return redirect()->route('lessor.dashboard');
+    return match (true) {
+        $user->hasRole('admin') => redirect()->route('dashboard.admin.index'),
+        $user->hasRole('employee') => redirect()->route('employee.dashboard.employee'),
+        $user->hasRole('lessor') => redirect()->route('lessor.dashboard'),
+        default => redirect('/login'),
+    };
+})->middleware(['auth', 'check.active']);
 
-    return redirect('/login');
-})->middleware(['auth', 'check.active'])->name('dashboard');
 
 /*
 |--------------------------------------------------------------------------
 | ADMIN DASHBOARD
 |--------------------------------------------------------------------------
 */
+
 Route::middleware(['auth', 'check.active', 'role:admin'])
     ->prefix('dashboard')
     ->name('dashboard.admin.')
@@ -91,7 +95,6 @@ Route::middleware(['auth', 'check.active', 'role:admin'])
 
         Route::get('reports/bookings/export', [BookingsReportController::class, 'export'])
             ->name('reports.bookings.export');
-
 
         Route::prefix('users')->name('users.')->group(function () {
             Route::get('users', [AdminController::class, 'index'])
@@ -125,6 +128,7 @@ Route::middleware(['auth', 'check.active', 'role:admin'])
 | PROFILE
 |--------------------------------------------------------------------------
 */
+
 Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -136,11 +140,11 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
 | LESSOR REQUESTS (admin)
 |--------------------------------------------------------------------------
 */
+
 Route::middleware(['auth', 'check.active', 'role:admin'])
     ->prefix('dashboard')
     ->name('dashboard.')
     ->group(function () {
-
         Route::get('customer-lessor-requests', [LessorRequestAdminController::class, 'index'])
             ->name('lessor-requests.index');
 
@@ -153,5 +157,6 @@ Route::middleware(['auth', 'check.active', 'role:admin'])
 | AUTH
 |--------------------------------------------------------------------------
 */
+
 require __DIR__ . '/auth.php';
 require __DIR__ . '/employee.php';
