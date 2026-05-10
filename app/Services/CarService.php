@@ -26,45 +26,45 @@ public function getPaginated(array $filters = []): LengthAwarePaginator
         'images',
     ]);
 
-    // 🚗 Model
-    $query->when(
-        !empty($filters['model']),
-        fn($q) => $q->where('model', 'like', "%{$filters['model']}%")
-    );
+    $query->when(!empty($filters['model']), function ($q) use ($filters) {
+        $q->where('model', 'like', "%{$filters['model']}%");
+    });
 
-    // 💰 Price range
-    $query->when(
-        isset($filters['min_price']) && $filters['min_price'] !== '',
-        fn($q) => $q->where('price_per_day', '>=', $filters['min_price'])
-    );
+    $query->when(!empty($filters['car_types']), function ($q) use ($filters) {
+        $q->whereIn('car_type_id', (array) $filters['car_types']);
+    });
 
-    $query->when(
-        isset($filters['max_price']) && $filters['max_price'] !== '',
-        fn($q) => $q->where('price_per_day', '<=', $filters['max_price'])
-    );
+    $query->when(!empty($filters['car_type']), function ($q) use ($filters) {
+        $q->whereHas('carType', function ($sub) use ($filters) {
+            $sub->where('name', $filters['car_type']);
+        });
+    });
 
-    // 🧩 Amenities (many-to-many)
-    $query->when(
-        !empty($filters['amenity_ids']),
-        fn($q) => $q->whereHas('amenities', function ($sub) use ($filters) {
+    // 💰 Min price
+    $query->when(isset($filters['min_price']) && $filters['min_price'] !== '', function ($q) use ($filters) {
+        $q->where('price_per_day', '>=', $filters['min_price']);
+    });
+
+    // 💰 Max price
+    $query->when(isset($filters['max_price']) && $filters['max_price'] !== '', function ($q) use ($filters) {
+        $q->where('price_per_day', '<=', $filters['max_price']);
+    });
+
+    // 🧰 Amenities filter
+    $query->when(!empty($filters['amenity_ids']), function ($q) use ($filters) {
+        $q->whereHas('amenities', function ($sub) use ($filters) {
             $sub->whereIn('amenities.id', (array) $filters['amenity_ids']);
-        })
-    );
+        });
+    });
 
-    // 🚘 Car Types
-    $query->when(
-        !empty($filters['car_types']),
-        fn($q) => $q->whereIn('car_type_id', (array) $filters['car_types'])
-    );
-
-    return $query->latest()->paginate(6);
+    return $query->latest()->paginate($filters['per_page'] ?? 6);
 }
 
 public function create(array $data): Car
 {
     $user = auth()->user();
 
-    // ❗ تحديد المالك حسب الدور
+    // تحديد المالك حسب الدور
     if ($user->hasRole('lessor')) {
         $data['user_id'] = $user->id;
     }

@@ -22,7 +22,7 @@ class CarController extends Controller
      */
     public function index(Request $request)
     {
-        $cars = $this->carService->getAll($request->all());
+        $cars = $this->carService->getPaginated($request->all());
 
         return CarResource::collection($cars);
     }

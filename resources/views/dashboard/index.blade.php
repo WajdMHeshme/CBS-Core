@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="flex-1 min-h-0 h-72">
-                    <canvas id="propertiesChart" class="w-full h-full"></canvas>
+                    <canvas id="carsChart" class="w-full h-full"></canvas>
                 </div>
             </div>
 
@@ -163,13 +163,13 @@
 <script>
     window.DASHBOARD = {
         status: @json($statusStats ?? []),
-        propertiesPerMonth: @json($carsPerMonth ?? []),
+        carsPerMonth: @json($carsPerMonth ?? []),
         lessorsPerMonth: @json($lessorsPerMonth ?? []),
         translations: {
             pending: "{{ __('messages.reports.pending') }}",
             approved: "{{ __('messages.reports.approved') }}",
             rejected: "{{ __('messages.reports.rejected') }}",
-            properties: "{{ __('messages.sidebar.cars') }}",
+            cars: "{{ __('messages.sidebar.cars') }}",
             lessors: "{{ __('messages.dashboard.new_lessors') }}"
         }
     };
@@ -182,7 +182,7 @@
             rejected: Number(r.rejected ?? 0)
         }));
 
-        const propertyRows = (window.DASHBOARD.propertiesPerMonth || []).map(r => ({
+        const carRows = (window.DASHBOARD.carsPerMonth || []).map(r => ({
             month: r.month ?? r.month_key ?? '',
             total: Number(r.total ?? 0)
         }));
@@ -274,16 +274,16 @@
         }
 
         // Cars per Month Chart
-        const propCanvas = document.getElementById('propertiesChart');
+        const propCanvas = document.getElementById('carsChart');
         if (propCanvas) {
             const propCtx = propCanvas.getContext('2d');
             new Chart(propCtx, {
                 type: 'line',
                 data: {
-                    labels: propertyRows.map(r => r.month),
+                    labels: carRows.map(r => r.month),
                     datasets: [{
-                        label: window.DASHBOARD.translations.properties,
-                        data: propertyRows.map(r => r.total),
+                        label: window.DASHBOARD.translations.cars,
+                        data: carRows.map(r => r.total),
                         borderColor: '#2563eb',
                         backgroundColor: 'rgba(37,99,235,0.10)',
                         tension: 0.36,

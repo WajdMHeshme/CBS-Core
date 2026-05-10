@@ -60,7 +60,7 @@ class CarController extends Controller
         $amenities = $this->amenityService->getAll();
         $carTypes = CarType::all();
 
-        return view('dashboard.admin.cars.create', compact('amenities', 'carTypes'));
+        return view('dashboard.cars.create', compact('amenities', 'carTypes'));
     }
 
     public function store(StoreCarRequest $request, ImageService $imageService): RedirectResponse
