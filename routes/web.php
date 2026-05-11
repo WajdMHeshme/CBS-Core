@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\LessorRequestAdminController;
 use App\Http\Controllers\Admin\Reports\BookingsReportController;
 use App\Http\Controllers\Admin\Reports\CarReportController;
 use App\Http\Controllers\Employee\BookingMessageController;
+use App\Http\Controllers\Employee\SupportTicketController as EmployeeSupportTicketController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -88,6 +89,8 @@ Route::middleware(['auth', 'check.active', 'role:admin'])
             Route::patch('{image}/restore', [CarImageController::class, 'restore'])->name('restore');
         });
 
+
+
         Route::get('reports/bookings', [BookingsReportController::class, 'index'])->name('reports.bookings');
         Route::get('reports/cars', [CarReportController::class, 'index'])->name('reports.cars');
         Route::get('reports/cars/export', [CarReportController::class, 'export'])
@@ -121,6 +124,21 @@ Route::middleware(['auth', 'check.active', 'role:admin'])
             Route::delete('users/{user}', [AdminController::class, 'destroy'])
                 ->name('destroy');
         });
+    });
+
+
+
+
+
+Route::middleware(['auth', 'role:employee|admin'])
+    ->prefix('dashboard')
+    ->group(function () {
+
+        Route::get(
+            'support-tickets',
+            [EmployeeSupportTicketController::class, 'index']
+        )->name('employee.support');
+
     });
 
 /*

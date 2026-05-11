@@ -5,6 +5,7 @@ use App\Http\Controllers\Customer\LessorRequestController;
 use App\Http\Controllers\Customer\ReviewController;
 use App\Http\Controllers\Employee\BookingMessageController;
 use App\Http\Controllers\Visitor\CarController;
+use App\Http\Controllers\Visitor\SupportTicketController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -64,6 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
         LessorRequestController::class,
         'store'
     ]);
+    Route::post('/support', [SupportTicketController::class, 'store']);
 });
 
 require __DIR__ . '/customer.php';

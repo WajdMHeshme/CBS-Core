@@ -116,6 +116,31 @@ $asideBorder = $isRtl ? 'border-l' : 'border-r';
                         <span class="text-base font-medium">{{ __('messages.sidebar.users') }}</span>
                     </a>
 
+                    {{-- Support Tickets --}}
+                    <a href="{{ route('employee.support') }}"
+                        class="{{ $linkBase }} {{ $linkDirectional }} {{ request()->is('dashboard/support-tickets*') ? 'bg-indigo-50 text-black font-semibold' : 'text-gray-700 hover:bg-gray-50' }}">
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="h-6 w-6 flex-shrink-0"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="1.7">
+
+                            <path stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m-3.375 3a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m3-3a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H16.5m-1.5 3a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H16.5" />
+
+                            <path stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M3.75 6.75A2.25 2.25 0 016 4.5h12a2.25 2.25 0 012.25 2.25v10.5A2.25 2.25 0 0118 19.5H9.879a2.25 2.25 0 00-1.591.659l-2.47 2.47A.75.75 0 014.5 22.5v-3.75A2.25 2.25 0 013.75 16.5V6.75z" />
+                        </svg>
+
+                        <span class="text-base font-medium">
+                            {{ __('messages.sidebar.support_tickets') }}
+                        </span>
+                    </a>
+
                 </nav>
                 @elserole('employee')
 
