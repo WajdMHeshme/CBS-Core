@@ -35,6 +35,7 @@ return [
         'status_pending' => 'قيد الانتظار',
         'status_approved' => 'مقبول',
         'status_completed' => 'مكتمل',
+        'support_tickets' => 'تذاكر الدعم',
     ],
 
     // Sidebar
@@ -52,6 +53,7 @@ return [
         'my_bookings' => 'حجوزاتي',
         'pending_bookings' => 'حجوزات قيد الانتظار',
         'lessor_requests' => 'طلبات المؤجرين',
+        'support_tickets' => 'تذاكر الدعم',
         'logout' => 'تسجيل الخروج',
 
     ],
