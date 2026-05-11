@@ -1,5 +1,4 @@
 <?php
-
 return [
     // Dashboard
     'dashboard' => [
@@ -14,7 +13,10 @@ return [
         'last_6_months' => 'آخر 6 أشهر',
         'pending_6m' => 'قيد الانتظار (6 أشهر)',
         'dashboard_preview' => 'لوحة التحكم • معاينة البيانات',
-
+        'lessors_growth' => 'نمو المؤجرين',
+        'new_lessors_last_6m' => 'المؤجرين الجدد (آخر 6 أشهر)',
+        'new_lessors' => 'المؤجرين الجدد',
+        'no_lessors' => 'لا يوجد مؤجرين بعد',
         'this_week' => 'هذا الأسبوع',
         'this_month' => 'هذا الشهر',
         'pending' => 'قيد الانتظار',
@@ -33,6 +35,7 @@ return [
         'status_pending' => 'قيد الانتظار',
         'status_approved' => 'مقبول',
         'status_completed' => 'مكتمل',
+        'support_tickets' => 'تذاكر الدعم',
     ],
 
     // Sidebar
@@ -49,6 +52,8 @@ return [
         'users' => 'المستخدمين',
         'my_bookings' => 'حجوزاتي',
         'pending_bookings' => 'حجوزات قيد الانتظار',
+        'lessor_requests' => 'طلبات المؤجرين',
+        'support_tickets' => 'تذاكر الدعم',
         'logout' => 'تسجيل الخروج',
 
     ],
@@ -61,6 +66,9 @@ return [
         'employee_badge' => 'موظف',
 
     ],
+
+    'approve' => 'الموافقة',
+    'reject' => 'الرفض',
     'logout_modal' => [
         'title' => 'تأكيد تسجيل الخروج',
         'message' => 'هل أنت متأكد أنك تريد تسجيل الخروج؟ ستحتاج إلى تسجيل الدخول مرة أخرى للوصول إلى لوحة التحكم.',
@@ -248,12 +256,12 @@ return [
         'all_bookings' => 'كل الحجوزات',
         'cancelled' => 'تم الغاء الحجز بنجاح',
         'reschedule_subtitle' => 'تحديث تاريخ ووقت الزيارة لهذا الحجز',
-    'booking_id' => 'حجز رقم',
-    'review_schedule_hint' => 'يرجى مراجعة الجدول الحالي قبل تطبيق التغييرات',
-    'current_schedule' => 'الجدول الحالي',
-    'new_date_time' => 'التاريخ والوقت الجديد',
-    'completed'=> 'تم الاكتمال بنجاح',
-    'rejected'=> 'تم رفض الحجز بنجاح',
+        'booking_id' => 'حجز رقم',
+        'review_schedule_hint' => 'يرجى مراجعة الجدول الحالي قبل تطبيق التغييرات',
+        'current_schedule' => 'الجدول الحالي',
+        'new_date_time' => 'التاريخ والوقت الجديد',
+        'completed' => 'تم الاكتمال بنجاح',
+        'rejected' => 'تم رفض الحجز بنجاح',
 
         'status' => [
             'pending' => 'قيد الانتظار',
@@ -266,16 +274,18 @@ return [
     ],
 
 
-        'pending' => 'قيد الانتظار',
-        'approved' => 'تمت الموافقة',
-        'completed' => 'مكتمل',
-        'rejected' => 'مرفوض',
-        'canceled' => 'ملغى',
-        'rescheduled' => 'تمت إعادة الجدولة',
+    'pending' => 'قيد الانتظار',
+    'approved' => 'تمت الموافقة',
+    'completed' => 'مكتمل',
+    'rejected' => 'مرفوض',
+    'canceled' => 'ملغى',
+    'rescheduled' => 'تمت إعادة الجدولة',
 
 
     // User
     'user' => [
+        'role_lessor' => 'المؤجر',
+        'role_customer' => 'العميل',
         'created' => 'تم إنشاء الموظف بنجاح',
         'role_updated' => 'تم تحديث دور المستخدم',
         'deleted' => 'تم حذف المستخدم بنجاح',

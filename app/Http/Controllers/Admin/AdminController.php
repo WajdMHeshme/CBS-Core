@@ -56,7 +56,7 @@ class AdminController extends Controller
         // Delegate creation and role assignment to service
         $this->adminService->addEmployee($data);
 
-        return redirect()->route('dashboard.admin.employees.index')
+        return redirect()->route('dashboard.admin.users.index')
             ->with('success', __('messages.user.create'));
     }
 
@@ -79,32 +79,32 @@ class AdminController extends Controller
 
         $this->adminService->changeRole($id, $validated['role']);
 
-        return redirect()->route('dashboard.admin.employees.index')
+        return redirect()->route('dashboard.admin.users.index')
             ->with('success', __('messages.user.role_updated'));
     }
 
     /**
      * Show the account status edit page for a user.
      */
-    public function editAccount(int $userId)
-    {
-        $user = User::findOrFail($userId);
+public function editStatus(int $userId)
+{
+    $user = User::findOrFail($userId);
 
-        return view('dashboard.users.account', compact('user'));
-    }
+    return view('dashboard.users.account', compact('user'));
+}
 
-    /**
-     * Toggle user activation state.
-     */
-    public function toggleUserStatus(ToggleStatusRequest $request, int $userId)
-    {
-        $validated = $request->validated();
+public function toggleStatus(ToggleStatusRequest $request, int $userId)
+{
+    $validated = $request->validated();
 
-        $this->adminService->toggleUserStatus($userId, (bool) $validated['is_active']);
+    $this->adminService->toggleUserStatus(
+        $userId,
+        (bool) $validated['is_active']
+    );
 
-        return redirect()->route('dashboard.admin.employees.index')
-            ->with('success', __('messages.user.status_updated'));
-    }
+    return redirect()->route('dashboard.admin.users.index')
+        ->with('success', __('messages.user.status_updated'));
+}
 
     /**
      * Change current admin password.
@@ -130,7 +130,7 @@ class AdminController extends Controller
         try {
             $this->adminService->deleteUser($userId, $request->user());
 
-            return redirect()->route('dashboard.admin.employees.index')
+            return redirect()->route('dashboard.admin.users.index')
                 ->with('success', __('messages.user.deleted'));
         } catch (BadRequestHttpException $e) {
             // A purposeful check failed (e.g. trying to delete self or last admin)

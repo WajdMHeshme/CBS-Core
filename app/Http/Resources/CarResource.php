@@ -7,36 +7,47 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class CarResource extends JsonResource
 {
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'title' => $this->title,
+public function toArray(Request $request): array
+{
+    return [
+        'id' => $this->id,
+        'title' => $this->title,
 
-            'brand' => $this->brand,
-            'model' => $this->model,
-            'year' => $this->year,
+        'brand' => $this->brand,
+        'model' => $this->model,
+        'year' => $this->year,
 
-            'type' => $this->carType?->name,
+        'car_type' => [
+            'id' => $this->carType?->id,
+            'name' => $this->carType?->name,
+        ],
 
-            'price_per_day' => $this->price_per_day,
-            'status' => $this->status,
+        'price_per_day' => $this->price_per_day,
+        'status' => $this->status,
 
-            'color' => $this->color,
-            'plate_number' => $this->plate_number,
+        'color' => $this->color,
+        'plate_number' => $this->plate_number,
 
-            'description' => $this->description,
+        'description' => $this->description,
 
-            // main image
-            'main_image' => $this->images->firstWhere('is_main', true)?->path,
+        'owner' => [
+            'id' => $this->owner?->id,
+            'name' => $this->owner?->name,
+        ],
 
-            // all images
-            'images' => $this->images->pluck('path'),
+        'images' => [
+            'main' => $this->images->firstWhere('is_main', true)?->path,
+            'gallery' => $this->images->pluck('path')->values(),
+        ],
 
-            // amenities (optional)
-            'features' => $this->amenities->pluck('name'),
+        'features' => $this->amenities->map(function ($a) {
+            return [
+                'id' => $a->id,
+                'name' => $a->name,
+            ];
+        }),
 
-            'created_at' => $this->created_at?->toDateTimeString(),
-        ];
-    }
+        'created_at' => $this->created_at?->toDateTimeString(),
+    ];
+}
 }

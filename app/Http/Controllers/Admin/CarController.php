@@ -85,7 +85,7 @@ class CarController extends Controller
             $user->notify(new CarActionNotification('created', $title, $by));
         }
 
-        return redirect()->route('dashboard.cars.index')
+        return redirect()->route('dashboard.admin.cars.index')
             ->with('success', 'Car added successfully');
     }
     public function edit(Car $car): View
@@ -113,7 +113,7 @@ class CarController extends Controller
             $user->notify(new CarActionNotification('updated', $title, $by));
         }
 
-        return redirect()->route('dashboard.cars.index')
+        return redirect()->route('dashboard.admin.cars.index')
             ->with('success', 'Car updated successfully');
     }
 

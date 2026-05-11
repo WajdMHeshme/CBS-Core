@@ -38,14 +38,17 @@ return [
         'status_completed' => 'status_completed',
         'Last_7_Days' => 'Last 7 Days',
         'This_Month_(January 2026)' => '',
+        'support_tickets' => 'Support Tickets',
     ],
-
+    'approve' => 'Approve',
+    'reject' => 'Reject',
     // Sidebar
     'sidebar' => [
         'system_name' => 'Car Rental and Management System',
         'rights_reserved' => 'All rights reserved',
         'home' => 'Home',
         'cars' => 'Cars',
+        'Lessor_Requests' => 'Lessor Requests',
         'amenities' => 'Amenities',
         'bookings' => 'Bookings',
         'reports' => 'Reports',
@@ -53,6 +56,8 @@ return [
         'bookings_report' => 'Bookings Report',
         'users' => 'Users',
         'my_bookings' => 'My Bookings',
+        'lessor_requests' => 'Lessor Requests',
+        'support_tickets' => 'Support Tickets',
         'pending_bookings' => 'Pending Bookings',
         'logout' => 'Logout',
     ],
@@ -275,6 +280,8 @@ return [
 
     // User
     'user' => [
+        'role_lessor' => 'Lessor',
+        'role_customer' => 'Customer',
         'created' => 'Employee created successfully',
         'role_updated' => 'User role updated',
         'deleted' => 'User deleted successfully',

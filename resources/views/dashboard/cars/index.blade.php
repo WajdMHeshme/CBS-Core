@@ -8,7 +8,7 @@
             {{ __('messages.car.title') }}
         </h1>
 
-        <a href="{{ route('dashboard.cars.create') }}"
+        <a href="{{ route('dashboard.admin.cars.create') }}"
             class="px-5 py-2  bg-black text-white rounded-full font-semibold shadow-lg hover:scale-[1.03] transform transition">
             {{ __('messages.car.add_car') }}
         </a>
@@ -74,7 +74,7 @@
         {{-- Row 4: Buttons --}}
         <div class="flex justify-end gap-3 pt-2">
 
-            <a href="{{ route('dashboard.cars.index') }}"
+            <a href="{{ route('dashboard.admin.cars.index') }}"
                 class="px-5 py-2 bg-gray-200 rounded-full hover:bg-gray-300 transition">
                 Reset
             </a>
@@ -106,15 +106,29 @@
             </div>
 
             <div class="p-4">
-
-                <div class="flex items-center justify-between mb-1">
-                    <h2 class="text-lg font-semibold">{{ $car->title }}</h2>
-
+                <div class="w-full flex justify-end">
                     @if($car->carType)
-                    <span class="text-xs px-2 py-1 bg-indigo-100 text-black rounded-full">
+                    <span class="text-xs px-2 py-1 bg-indigo-100 text-black rounded-full text-left">
                         {{ $car->carType->name }}
                     </span>
                     @endif
+                </div>
+
+                <div class="flex items-center gap-2 text-sm text-gray-600 mt-1">
+                    {{-- Person Icon --}}
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-gray-500"
+                        fill="currentColor"
+                        viewBox="0 0 24 24">
+                        <path d="M12 12c2.76 0 5-2.24 5-5S14.76 2 12 2 7 4.24 7 7s2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z" />
+                    </svg>
+
+                    <span>{{ $car->owner?->name ?? 'Unknown' }}</span>
+
+                </div>
+
+                <div class="flex items-center justify-between mb-1">
+                    <h2 class="text-lg font-semibold">{{ $car->title }}</h2>
                 </div>
 
                 <p class="text-sm text-gray-500">{{ $car->city }}</p>
@@ -125,17 +139,17 @@
 
                 <div class="flex gap-2 flex-wrap">
 
-                    <a href="{{ route('dashboard.cars.show', $car->id) }}"
+                    <a href="{{ route('dashboard.admin.cars.show', $car->id) }}"
                         class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm">
                         View
                     </a>
 
-                    <a href="{{ route('dashboard.cars.edit', $car->id) }}"
+                    <a href="{{ route('dashboard.admin.cars.edit', $car->id) }}"
                         class="px-3 py-1 bg-yellow-50 text-yellow-700 rounded-full text-sm">
                         Edit
                     </a>
 
-                    <form action="{{ route('dashboard.cars.destroy', $car->id) }}" method="POST"
+                    <form action="{{ route('dashboard.admin.cars.destroy', $car->id) }}" method="POST"
                         onsubmit="event.preventDefault(); window.currentDeleteForm = this; window.dispatchEvent(new CustomEvent('open-modal', { detail: 'delete-car' }));">
                         @csrf @method('DELETE')
 

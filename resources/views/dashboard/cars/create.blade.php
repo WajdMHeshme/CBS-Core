@@ -18,7 +18,7 @@
             </div>
         @endif
 
-        <form action="{{ route('dashboard.cars.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ route('dashboard.admin.cars.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
 
             <div>
@@ -126,7 +126,7 @@
             </div>
 
             <div class="flex flex-wrap gap-4 justify-end">
-                <a href="{{ route('dashboard.cars.index') }}"
+                <a href="{{ route('dashboard.admin.cars.index') }}"
                    class="px-6 py-3 bg-gray-200 rounded-full text-gray-700 font-semibold hover:bg-gray-300 transition">
                     Cancel
                 </a>

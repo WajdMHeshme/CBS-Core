@@ -7,7 +7,7 @@
 <div class="flex justify-between items-center mb-6 {{ app()->getLocale() == 'ar' ? 'flex-row-reverse' : '' }}">
     <h3 class="text-lg font-semibold">{{ __('messages.amenity.amenities_list') }}</h3>
 
-    <a href="{{ route('dashboard.amenities.create') }}"
+    <a href="{{ route('dashboard.admin.amenities.create') }}"
         class="px-4 py-2 bg-black text-white rounded-lg hover:bg-black transition">
         + {{ __('messages.amenity.add_amenity') }}
     </a>
@@ -38,12 +38,12 @@
 
                 <td class="px-6 py-3 {{ app()->getLocale() == 'ar' ? 'text-left' : 'text-right' }}">
                     <div class="inline-flex gap-2">
-                        <a href="{{ route('dashboard.amenities.edit', $amenity) }}"
+                        <a href="{{ route('dashboard.admin.amenities.edit', $amenity) }}"
                             class="px-3 py-1 text-xs bg-yellow-500 text-white rounded hover:bg-yellow-600">
                             {{ __('messages.amenity.edit_button') }}
                         </a>
 
-                        <form method="POST" action="{{ route('dashboard.amenities.destroy', $amenity) }}" x-data
+                        <form method="POST" action="{{ route('dashboard.admin.amenities.destroy', $amenity) }}" x-data
                             @submit.prevent="window.currentAmenityDeleteForm = $el; window.dispatchEvent(new CustomEvent('open-modal', { detail: 'delete-amenity' }));">
                             @csrf @method('DELETE')
                             <button type="submit" class="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700">

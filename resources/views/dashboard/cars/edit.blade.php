@@ -7,7 +7,7 @@
             Edit Car
         </h1>
 
-        <form action="{{ route('dashboard.cars.update', $car->id) }}" method="POST" class="space-y-6">
+        <form action="{{ route('dashboard.admin.cars.update', $car->id) }}" method="POST" class="space-y-6">
             @csrf @method('PUT')
 
             {{-- Title --}}
@@ -74,7 +74,7 @@
 
             {{-- Buttons --}}
             <div class="flex justify-end gap-4">
-                <a href="{{ route('dashboard.cars.index') }}"
+                <a href="{{ route('dashboard.admin.cars.index') }}"
                    class="px-6 py-2 bg-gray-200 rounded-full">
                     Cancel
                 </a>

@@ -69,7 +69,7 @@ class AmenityController extends Controller
 
         $this->amenityService->update($amenity, $data);
 
-        return redirect()->route('dashboard.amenities.index')->with('success', __('messages.amenity.amenity_updated'));
+        return redirect()->route('dashboard.admin.amenities.index')->with('success', __('messages.amenity.amenity_updated'));
     }
 
     /**

@@ -46,8 +46,8 @@ class AmenityService
      */
     public function delete(Amenity $amenity): void
     {
-        // Detach from properties to keep pivot clean
-        $amenity->properties()->detach();
+            // Detach from properties to keep pivot clean
+        $amenity->cars()->detach();
         $amenity->delete();
     }
 }

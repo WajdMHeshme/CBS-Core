@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CheckActive
 {
@@ -12,9 +13,13 @@ class CheckActive
         $user = $request->user();
 
         if ($user && ! $user->is_active) {
-            return response()->json([
-                'message' => 'Your account is disabled by admin.',
-            ], 403);
+            Auth::logout();
+
+            return redirect()
+                ->route('login')
+                ->withErrors([
+                    'email' => 'Your account is disabled by admin.',
+                ]);
         }
 
         return $next($request);
