@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Lessor;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCarRequest;
 use App\Http\Requests\UpdateCarRequest;
-use App\Models\Amenity;
-use App\Models\Car;
 use App\Models\CarType;
 use App\Services\AmenityService;
 use App\Services\CarService;
@@ -23,24 +21,18 @@ class CarController extends Controller
     {
         $userId = auth()->id();
 
-        $cars = Car::with(['carType', 'mainImage'])
-            ->where('user_id', $userId)
-            ->latest()
-            ->take(6)
-            ->get();
+        // 🚗 Cars (approved only)
+        $cars = $this->carService->getLessorCars($userId);
 
-        $carsCount = Car::where('user_id', $userId)->count();
+        // 📊 Counts (clean + correct logic)
+        $carsCount = $this->carService->getLessorCarsCount($userId);
 
-        $availableCars = Car::where('user_id', $userId)
-            ->where('status', 'available')
-            ->count();
+        $availableCars = $this->carService->getLessorCarsCountByStatus($userId, 'available');
 
-        $bookedCars = Car::where('user_id', $userId)
-            ->where('status', 'booked')
-            ->count();
+        $bookedCars = $this->carService->getLessorCarsCountByStatus($userId, 'booked');
 
         $carTypes = CarType::all();
-        $amenities = Amenity::all();
+        $amenities = $this->amenityService->getAll();
 
         return view('dashboard.lessor.cars.index', compact(
             'cars',
@@ -76,12 +68,12 @@ class CarController extends Controller
 
         return redirect()
             ->route('lessor.cars.index')
-            ->with('success', 'Car added successfully');
+            ->with('success', 'Car submitted successfully and is pending admin approval.');
     }
 
-    public function edit(Car $car)
+    public function edit($car)
     {
-        abort_if($car->user_id !== auth()->id(), 403);
+        $car = $this->carService->findLessorCarOrFail($car, auth()->id());
 
         $car->load('images');
 
@@ -91,9 +83,9 @@ class CarController extends Controller
         return view('dashboard.lessor.cars.edit', compact('car', 'amenities', 'carTypes'));
     }
 
-    public function update(UpdateCarRequest $request, Car $car)
+    public function update(UpdateCarRequest $request, $car)
     {
-        abort_if($car->user_id !== auth()->id(), 403);
+        $car = $this->carService->findLessorCarOrFail($car, auth()->id());
 
         $this->carService->update($car, $request->validated());
 
@@ -102,18 +94,18 @@ class CarController extends Controller
             ->with('success', 'Car updated successfully');
     }
 
-    public function destroy(Car $car)
+    public function destroy($car)
     {
-        abort_if($car->user_id !== auth()->id(), 403);
+        $car = $this->carService->findLessorCarOrFail($car, auth()->id());
 
         $this->carService->delete($car);
 
         return back()->with('success', 'Car deleted successfully');
     }
 
-    public function show(Car $car)
+    public function show($car)
     {
-        abort_if($car->user_id !== auth()->id(), 403);
+        $car = $this->carService->findLessorCarOrFail($car, auth()->id());
 
         $car->load(['images', 'amenities', 'carType']);
 

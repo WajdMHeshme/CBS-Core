@@ -42,6 +42,31 @@ $asideBorder = $isRtl ? 'border-l' : 'border-r';
                         </svg>
                         <span class="text-base font-medium">{{ __('messages.sidebar.cars') }}</span>
                     </a>
+                    {{-- Pending Cars --}}
+                    <a href="{{ route('dashboard.admin.cars.pending') }}"
+                        class="{{ $linkBase }} {{ $linkDirectional }} {{ request()->is('dashboard/cars/pending') ? 'bg-yellow-50 text-black font-semibold' : 'text-gray-700 hover:bg-gray-50' }}">
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="h-6 w-6 flex-shrink-0"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="1.5">
+
+                            <path stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 6v6l4 2" />
+
+                            <path stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+
+                        </svg>
+
+                        <span class="text-base font-medium">
+                            {{ __('messages.sidebar.pending_cars') }}
+                        </span>
+                    </a>
 
                     {{-- Amenities --}}
                     <a href="{{ route('dashboard.admin.amenities.index') }}"

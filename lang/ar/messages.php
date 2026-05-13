@@ -54,6 +54,7 @@ return [
         'pending_bookings' => 'حجوزات قيد الانتظار',
         'lessor_requests' => 'طلبات المؤجرين',
         'support_tickets' => 'تذاكر الدعم',
+        'pending_cars' => 'السيارات قيد الانتظار',
         'logout' => 'تسجيل الخروج',
 
     ],
