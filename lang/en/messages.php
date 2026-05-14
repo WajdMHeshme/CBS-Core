@@ -17,6 +17,9 @@ return [
         'daily_bookings' => 'Daily Bookings',
         'booking_count' => 'Number of Bookings',
         'day_of_month' => 'Day of Month',
+        'lessors_growth' => 'Lessors Growth',
+        'new_lessors_last_6m' => 'New Lessors (Last 6 Months)',
+        'new_lessors' => 'New Lessors',
 
         'this_week' => 'this_week',
         'this_month' => 'this_month',
@@ -59,6 +62,7 @@ return [
         'lessor_requests' => 'Lessor Requests',
         'support_tickets' => 'Support Tickets',
         'pending_bookings' => 'Pending Bookings',
+        'pending_cars' => 'Pending Cars',
         'logout' => 'Logout',
     ],
 

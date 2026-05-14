@@ -24,12 +24,14 @@ class Car extends Model
         'price',
         'price_per_day',
         'status',
+        'approval_status',
         'description',
         'year',
         'color',
         'plate_number',
         'latitude',
         'longitude',
+        'rejection_reason',
         'is_furnished',
     ];
     protected $casts = [
@@ -100,5 +102,10 @@ class Car extends Model
     public function scopeAvailable($query)
     {
         return $query->where('status', 'available');
+    }
+
+    public function scopeApproved($query)
+    {
+        return $query->where('approval_status', 'approved');
     }
 }

@@ -75,9 +75,17 @@ Route::middleware(['auth', 'check.active', 'role:admin'])
     ->group(function () {
 
         Route::get('/', [DashboardController::class, 'index'])->name('index');
-
+        Route::get('/cars/pending', [AdminCarController::class, 'pending'])
+            ->name('cars.pending');
         Route::resource('amenities', AmenityController::class)->except(['show']);
         Route::resource('cars', AdminCarController::class);
+        Route::patch('cars/{car}/approve', [AdminCarController::class, 'approve'])
+            ->name('cars.approve');
+
+        Route::patch('cars/{car}/reject', [AdminCarController::class, 'reject'])
+            ->name('cars.reject');
+
+
 
         Route::prefix('cars/{car}/images')->name('cars.images.')->group(function () {
             Route::get('/', [CarImageController::class, 'index'])->name('index');
@@ -128,8 +136,6 @@ Route::middleware(['auth', 'check.active', 'role:admin'])
 
 
 
-
-
 Route::middleware(['auth', 'role:employee|admin'])
     ->prefix('dashboard')
     ->group(function () {
@@ -138,7 +144,6 @@ Route::middleware(['auth', 'role:employee|admin'])
             'support-tickets',
             [EmployeeSupportTicketController::class, 'index']
         )->name('employee.support');
-
     });
 
 /*
