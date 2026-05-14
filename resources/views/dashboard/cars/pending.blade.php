@@ -131,8 +131,6 @@
                     </h2>
                 </div>
 
-                <p class="text-sm text-gray-500">{{ $car->city ?? '-' }}</p>
-
                 <p class="text-green-700 font-medium my-2">
                     ${{ number_format($car->price_per_day, 2) }}
                 </p>
