@@ -285,7 +285,7 @@ return [
 
     // User
     'user' => [
-        
+
         'role_lessor' => 'المؤجر',
         'role_customer' => 'العميل',
         'created' => 'تم إنشاء الموظف بنجاح',

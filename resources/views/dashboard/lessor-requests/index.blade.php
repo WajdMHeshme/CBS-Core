@@ -92,6 +92,40 @@
                         {{ $req->message }}
                     </p>
                 </div>
+                {{-- Identity Images --}}
+                @if($req->identity_front_image || $req->identity_back_image)
+
+                <div class="mt-5">
+
+                    <p class="text-xs uppercase tracking-wide text-gray-400 mb-3">
+                        Identity Images
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        {{-- Front --}}
+                        @if($req->identity_front_image)
+                        <a href="{{ asset('storage/' . $req->identity_front_image) }}" target="_blank">
+                            <img
+                                src="{{ asset('storage/' . $req->identity_front_image) }}"
+                                class="w-full h-64 object-cover rounded-2xl border shadow-sm hover:opacity-90 transition">
+                        </a>
+                        @endif
+
+                        {{-- Back --}}
+                        @if($req->identity_back_image)
+                        <a href="{{ asset('storage/' . $req->identity_back_image) }}" target="_blank">
+                            <img
+                                src="{{ asset('storage/' . $req->identity_back_image) }}"
+                                class="w-full h-64 object-cover rounded-2xl border shadow-sm hover:opacity-90 transition">
+                        </a>
+                        @endif
+
+                    </div>
+
+                </div>
+
+                @endif
 
             </div>
 
