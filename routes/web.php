@@ -146,40 +146,6 @@ Route::middleware(['auth', 'role:employee|admin'])
         )->name('employee.support');
     });
 
-/*
-|--------------------------------------------------------------------------
-| PROFILE
-|--------------------------------------------------------------------------
-*/
-
-Route::middleware(['auth'])->prefix('dashboard')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-/*
-|--------------------------------------------------------------------------
-| LESSOR REQUESTS (admin)
-|--------------------------------------------------------------------------
-*/
-
-Route::middleware(['auth', 'check.active', 'role:admin'])
-    ->prefix('dashboard')
-    ->name('dashboard.')
-    ->group(function () {
-        Route::get('customer-lessor-requests', [LessorRequestAdminController::class, 'index'])
-            ->name('lessor-requests.index');
-
-        Route::patch('lessor-requests/{lessorRequest}/status', [LessorRequestAdminController::class, 'update'])
-            ->name('lessor-requests.status');
-    });
-
-/*
-|--------------------------------------------------------------------------
-| AUTH
-|--------------------------------------------------------------------------
-*/
-
-require __DIR__ . '/auth.php';
-require __DIR__ . '/employee.php';
+require __DIR__ . '/web/auth.php';
+require __DIR__ . '/web/lessor.php';
+require __DIR__ . '/web/employee.php';
