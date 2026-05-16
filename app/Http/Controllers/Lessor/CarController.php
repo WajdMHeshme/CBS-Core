@@ -21,10 +21,10 @@ class CarController extends Controller
     {
         $userId = auth()->id();
 
-        // 🚗 Cars (approved only)
+        //  Cars (approved only)
         $cars = $this->carService->getLessorCars($userId);
 
-        // 📊 Counts (clean + correct logic)
+        //  Counts (clean + correct logic)
         $carsCount = $this->carService->getLessorCarsCount($userId);
 
         $availableCars = $this->carService->getLessorCarsCountByStatus($userId, 'available');
@@ -57,14 +57,6 @@ class CarController extends Controller
         $data = $request->validated();
 
         $car = $this->carService->create($data);
-
-        if ($request->hasFile('images')) {
-            $imageService->upload(
-                $car,
-                $request->file('images'),
-                $request->input('alt')
-            );
-        }
 
         return redirect()
             ->route('lessor.cars.index')
