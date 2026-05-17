@@ -4,6 +4,8 @@ use App\Http\Controllers\Customer\BookingController as CustomerBookingController
 use App\Http\Controllers\Customer\CarReviewController;
 use App\Http\Controllers\Customer\FavoriteController;
 use App\Http\Controllers\Customer\ReviewController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Customer\ProfileController as CustomerProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
@@ -18,6 +20,7 @@ Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
         ->name('customer.cars.reviews.store');
     Route::delete('/reviews/{review}', [CarReviewController::class, 'destroy'])
         ->name('customer.reviews.destroy');
+
 });
 
 Route::middleware(['auth:sanctum'])->prefix('bookings')->group(function () {
@@ -44,4 +47,18 @@ Route::middleware(['auth:sanctum', 'role:customer'])
 
         Route::get('/', [FavoriteController::class, 'index'])
             ->name('customer.favorites.index');
+    });
+    //Eng.waeel
+    Route::middleware(['auth:sanctum','role:customer'])->prefix('profiles')
+    ->group(function (){
+
+     Route::post('',[CustomerProfileController::class,'store']);
+
+     Route::get('',[CustomerProfileController::class,'show']);
+
+     Route::put('',[CustomerProfileController::class,'update']);
+
+     Route::post('/avatars',[CustomerProfileController::class,'uploadAvatar']);
+
+     Route::delete('/avatars',[CustomerProfileController::class,'deleteAvatar']);
     });
