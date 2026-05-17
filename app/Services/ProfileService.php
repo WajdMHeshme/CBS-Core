@@ -2,9 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Profile;
 use App\Repo\ProfileRepo;
-use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,40 +14,44 @@ class ProfileService
     {
         $this->profileRepo = $profileRepo;
     }
+
+
+    private function getOrCreateProfile()
+    {
+        return $this->profileRepo->getOrCreateProfile();
+    }
+
+
     public function getProfile()
     {
-        $profile = $this->profileRepo->getProfile();
-        return $profile;
+        return $this->getOrCreateProfile();
     }
 
     public function createProfile($validated)
     {
-        $validated['user_id'] = Auth::user()->id;
+        $validated['user_id'] = Auth::id();
 
-        $profile = $this->profileRepo->createProfile($validated);
-        return $profile;
+        return $this->profileRepo->createProfile($validated);
     }
+
 
     public function updateProfile($validated)
     {
-        $profile = $this->profileRepo->updateProfile($validated);
+        $profile = $this->getOrCreateProfile();
 
-        return $profile;
+        return $this->profileRepo->updateProfile($profile, $validated);
     }
+
+
     public function uploadAvatar($request)
     {
-        $validated = $request->validated();
-        $profile = $this->profileRepo->getProfileByUserID();
+        $profile = $this->getOrCreateProfile();
 
         $this->_removeAvatarFromStorage($profile);
 
+        $path = $request->file('avatar')->store('avatars', 'public');
 
-        if ($request->hasFile('avatar')) {
-            $path = $request->file('avatar')->store('avatars', 'public');
-            $validated['avatar'] = $path;
-        }
-
-        $this->profileRepo->uploadAvatar($path, $profile);
+        $this->profileRepo->uploadAvatar($profile, $path);
 
         return $path;
     }
@@ -57,16 +59,16 @@ class ProfileService
 
     public function deleteAvatar()
     {
-        $profile = $this->profileRepo->getProfileByUserID();
+        $profile = $this->getOrCreateProfile();
 
         $this->_removeAvatarFromStorage($profile);
 
         $this->profileRepo->removeAvatar($profile);
     }
 
+
     private function _removeAvatarFromStorage($profile)
     {
-        //delete avatar from storage
         if ($profile->avatar && Storage::disk('public')->exists($profile->avatar)) {
             Storage::disk('public')->delete($profile->avatar);
         }
