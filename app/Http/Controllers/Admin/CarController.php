@@ -66,14 +66,6 @@ class CarController extends Controller
 
         $car = $this->carService->create($data);
 
-        if ($request->hasFile('images')) {
-            $imageService->upload(
-                $car,
-                $request->file('images'),
-                $request->input('alt')
-            );
-        }
-
         $this->notifyCarAction('created', $car);
 
         return redirect()->route('dashboard.admin.cars.index')

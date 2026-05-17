@@ -12,6 +12,8 @@ class LessorRequest extends Model
         'phone',
         'message',
         'status',
+        'identity_front_image',
+        'identity_back_image',
     ];
 
     public function user()

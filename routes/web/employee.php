@@ -60,18 +60,3 @@ Route::middleware(['auth', 'role:admin|employee'])
             ->name('bookings.show');
     });
 
-/*
-|--------------------------------------------------------------------------
-| LESSOR ROUTES
-|--------------------------------------------------------------------------
-*/
-Route::middleware(['auth', 'check.active', 'role:lessor'])
-    ->prefix('dashboard')
-    ->name('lessor.')
-    ->group(function () {
-
-        Route::get('/lessor-cars', [LessorDashboardController::class, 'index'])
-            ->name('dashboard');
-
-        Route::resource('lessor/cars', CarController::class);
-    });

@@ -3,22 +3,22 @@
 @section('content')
 
 @if ($errors->any())
-    <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl">
-        <ul class="list-disc pl-5 space-y-1">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+<div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl">
+    <ul class="list-disc pl-5 space-y-1">
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
 @endif
 
 @if(session('status'))
-    <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl">
-        {{ session('status') }}
-    </div>
+<div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl">
+    {{ session('status') }}
+</div>
 @endif
 
-{{-- ملاحظة: تم تغيير direction حسب لغة النظام بشكل ديناميكي --}}
+
 <div class="lg:ml-50 px-6 py-8 {{ app()->getLocale() == 'ar' ? 'text-right' : 'text-left' }}" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 
     {{-- ================= Filters Bar ================= --}}
@@ -139,7 +139,11 @@
                         {{ $booking->user->email }}
                     </p>
                 </div>
+
             </div>
+            <p class="font-semibold text-primary py-2">
+                {{ __('messages.user.role_lessor') }}: {{ $booking->car->owner?->name ?? 'Unknown Lessor' }}
+            </p>
 
             {{-- Admin Assigned Employee --}}
             @if(auth()->user()->hasRole('admin') && $booking->employee)
@@ -148,7 +152,7 @@
             </div>
             @endif
 
-            {{-- Schedule --}}
+            {{-- Schedule }}
             <div class="mt-3 flex items-center gap-2">
                 <svg class="w-5 h-5 text-gray-600" viewBox="0 0 24 24" fill="currentColor">
                     <path fill-rule="evenodd" d="M6.75 2.25a.75.75 0 01.75.75V4.5h9V3a.75.75 0 011.5 0v1.5h.75A2.25 2.25 0 0121 6.75v12A2.25 2.25 0 0118.75 21H5.25A2.25 2.25 0 013 18.75v-12A2.25 2.25 0 015.25 4.5H6V3a.75.75 0 01.75-.75zM3.75 9h16.5v9.75a.75.75 0 01-.75.75H4.5a.75.75 0 01-.75-.75V9z" clip-rule="evenodd" />

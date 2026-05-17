@@ -10,12 +10,15 @@ class LessorRequestService
     {
         return LessorRequest::create([
             'user_id' => auth()->id(),
+
             'business_name' => $data['business_name'] ?? null,
             'phone' => $data['phone'] ?? null,
             'message' => $data['message'] ?? null,
+
+            'identity_front_image' => $data['identity_front_image'] ?? null,
+            'identity_back_image' => $data['identity_back_image'] ?? null,
         ]);
     }
-
     public function updateStatus(
         LessorRequest $lessorRequest,
         string $status

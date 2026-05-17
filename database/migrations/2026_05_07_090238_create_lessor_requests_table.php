@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('phone')->nullable();
 
             $table->text('message')->nullable();
+            $table->string('identity_front_image')->nullable();
+            $table->string('identity_back_image')->nullable();
 
             $table->enum('status', [
                 'pending',

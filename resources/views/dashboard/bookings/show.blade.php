@@ -68,6 +68,29 @@
                                 <p class="text-xs text-gray-500">
                                     {{ $booking->user->email ?? '' }}
                                 </p>
+
+                            </div>
+                        </div>
+                    </div>
+                    {{-- Customer --}}
+                    <div class="p-4 border rounded-xl">
+                        <h4 class="font-medium text-gray-800 mb-2">{{ __('messages.user.role_lessor') }}</h4>
+
+                        <div class="flex items-start gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-black" viewBox="0 0 24 24" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12 2.25a4.5 4.5 0 014.5 4.5v.75a4.5 4.5 0 11-9 0V6.75a4.5 4.5 0 014.5-4.5zm-7.5 17.1a7.5 7.5 0 0115 0v.15A2.25 2.25 0 0117.25 21h-10.5A2.25 2.25 0 014.5 19.5v-.15z" clip-rule="evenodd" />
+                            </svg>
+
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">
+                                <p class="font-semibold text-primary py-2">
+                                    {{ $booking->car->owner?->name ?? 'Unknown Lessor' }}
+                                </p>
+                                </p>
+                                <p class="text-xs text-gray-500">
+                                    {{ $booking->car->owner?->email ?? '' }}
+                                </p>
+
                             </div>
                         </div>
                     </div>

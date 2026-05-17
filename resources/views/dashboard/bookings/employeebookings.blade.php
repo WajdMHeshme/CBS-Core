@@ -49,6 +49,7 @@ $isRtl = app()->getLocale() == 'ar';
         @php
         $car = $booking->car;
         $user = $booking->user;
+        $lessor= $booking->car->owner;
         @endphp
 
         <div class="bg-white border rounded-2xl shadow-sm p-5 hover:shadow-md transition">
@@ -62,6 +63,10 @@ $isRtl = app()->getLocale() == 'ar';
 
                     <p class="text-sm text-gray-500 mt-0.5">
                         {{ $car?->model ?? '-' }}
+                    </p>
+
+                    <p class="font-semibold text-primary">
+                      {{ __('messages.user.role_lessor') }}:  {{ $lessor?->name ?? 'Unknown Lessor' }}
                     </p>
                 </div>
 
