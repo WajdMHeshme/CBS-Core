@@ -127,7 +127,7 @@ html, body {
 
   <!-- IMAGE -->
   <div id="imageCol" class="relative hidden md:block overflow-hidden">
-    <img id="sideImg" src="{{ asset('car.png') }}" class="absolute inset-0 w-full h-full object-cover brightness-60">
+    <img id="sideImg" src="{{ asset('hostimage (1).webp') }}" class="absolute inset-0 w-full h-full object-cover brightness-60">
     <div class="absolute inset-0 flex items-center justify-center text-white text-4xl md:text-5xl font-extrabold z-10 px-6 text-center">
       Login To Manage Your Cars
     </div>

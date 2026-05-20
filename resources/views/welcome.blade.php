@@ -90,7 +90,7 @@
         <!-- Background Image (fills screen) -->
         <img
             id="hero-img"
-            src="{{ asset('car.png') }}"
+            src="{{ asset('hostimage (1).webp') }}"
             alt="Real estate background"
             class="absolute inset-0 w-full h-full object-cover z-0 hero-img"
             data-parallax
