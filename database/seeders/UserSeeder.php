@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
             'name'      => 'Admin User',
             'email'     => 'admin@example.com',
             'password'  => Hash::make('password123'),
-            'is_active' => true, // ← أضف هذا
+            'is_active' => true,
         ]);
         $admin->assignRole('admin');
 
@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
             'name'      => 'Test Employee',
             'email'     => 'employee@test.com',
             'password'  => Hash::make('12345678'),
-            'is_active' => true, // ← أضف هذا
+            'is_active' => true,
         ]);
         $employee->assignRole('employee');
         // Lessor
@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
             'name'      => 'Test Lessor',
             'email'     => 'lessor@test.com',
             'password'  => Hash::make('12345678'),
-            'is_active' => true, // ← أضف هذا
+            'is_active' => true, 
         ]);
         $lessor->assignRole('lessor');
 

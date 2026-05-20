@@ -23,7 +23,7 @@ Route::middleware(['auth:sanctum', 'check.active'])
 | Customer Bookings
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth:sanctum', 'check.active', 'role:customer'])
+Route::middleware(['auth:sanctum', 'check.active'])
     ->prefix('bookings')
     ->group(function () {
 

@@ -16,7 +16,7 @@
                         {{ __('messages.booking.customer') }}
                     </th>
                     <th class="px-6 py-3 {{ app()->getLocale() == 'ar' ? 'text-right' : 'text-left' }} text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        {{ __('messages.booking.property') }}
+                        {{ __('messages.booking.car') }}
                     </th>
                     <th class="px-6 py-3 {{ app()->getLocale() == 'ar' ? 'text-right' : 'text-left' }} text-xs font-medium text-gray-500 uppercase tracking-wider">
                         {{ __('messages.booking.scheduled_visit') }}
@@ -33,7 +33,7 @@
                         {{ $booking->user->name ?? __('messages.reports.unknown') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-gray-600">
-                        {{ $booking->property->title ?? __('messages.reports.unknown') }}
+                        {{ $booking->car->title ?? __('messages.reports.unknown') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-gray-600">
                         {{ $booking->scheduled_at ?? __('messages.reports.no_data') }}

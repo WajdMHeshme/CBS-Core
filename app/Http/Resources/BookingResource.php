@@ -16,7 +16,7 @@ class BookingResource extends JsonResource
             'notes' => $this->notes,
             'rejection_reason' => $this->rejection_reason,
 
-            // 🚗 Car instead of property
+            // Car instead of property
             'car' => $this->car ? [
                 'id' => $this->car->id,
                 'title' => $this->car->title,
@@ -25,14 +25,14 @@ class BookingResource extends JsonResource
                 'price_per_day' => $this->car->price_per_day,
             ] : null,
 
-            // 👤 Customer (user)
+            // Customer (user)
             'customer' => $this->user ? [
                 'id' => $this->user->id,
                 'name' => $this->user->name,
                 'email' => $this->user->email,
             ] : null,
 
-            // 👷 Employee
+            // Employee
             'employee' => $this->employee ? [
                 'id' => $this->employee->id,
                 'name' => $this->employee->name,
