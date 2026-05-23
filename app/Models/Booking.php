@@ -27,6 +27,7 @@ class Booking extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+
     public function car()
     {
         return $this->belongsTo(Car::class, 'car_id');
@@ -45,5 +46,14 @@ class Booking extends Model
     public function messages()
     {
         return $this->hasMany(BookingMessage::class);
+    }
+
+    public function commission()
+    {
+        return $this->hasOne(BookingCommission::class);
+    }
+    public function conversations()
+    {
+        return $this->hasMany(BookingConversation::class);
     }
 }

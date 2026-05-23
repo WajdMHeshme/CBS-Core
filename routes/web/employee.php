@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\Employee\CommissionController;
 use App\Http\Controllers\Employee\EmployeeBookingController;
+
 use App\Http\Controllers\Employee\EmployeeDashboardController;
-use App\Http\Controllers\Lessor\CarController;
-use App\Http\Controllers\Lessor\LessorDashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -60,3 +60,25 @@ Route::middleware(['auth', 'role:admin|employee'])
             ->name('bookings.show');
     });
 
+Route::prefix('employee/commissions')->middleware(['auth'])->group(function () {
+
+    Route::post('/request/{booking}', [CommissionController::class, 'requestCommission'])
+        ->name('employee.commissions.request');
+
+    Route::post('/approve/{commission}', [CommissionController::class, 'approve'])
+        ->name('employee.commissions.approve');
+
+    Route::post('/reject/{commission}', [CommissionController::class, 'reject'])
+        ->name('employee.commissions.reject');
+});
+
+Route::post(
+    '/employee/commissions/approve/{commission}',
+    [CommissionController::class, 'approve']
+)->middleware(['auth'])
+    ->name('employee.commissions.approve');
+
+Route::post(
+    '/employee/bookings/{booking}/conversation',
+    [\App\Http\Controllers\Employee\BookingConversationController::class, 'send']
+)->name('employee.booking.conversation');

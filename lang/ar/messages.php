@@ -22,6 +22,10 @@ return [
         'pending' => 'قيد الانتظار',
         'approved' => 'تمت الموافقة',
         'today' => 'اليوم',
+        'Commission_earned' => 'العمولة المكتسبة',
+        'commission' => 'العمولة',
+        'amount' => 'المبلغ',
+        'send_message_to_lessor' => 'إرسال طلب عمولة إلى المؤجر',
         'weekly_overview' => 'نظرة عامة أسبوعية',
         'monthly_overview' => 'نظرة عامة شهرية',
         'latest_bookings' => 'أحدث الحجوزات',
@@ -36,10 +40,12 @@ return [
         'status_approved' => 'مقبول',
         'status_completed' => 'مكتمل',
         'support_tickets' => 'تذاكر الدعم',
+        'payment_reference' => 'مرجع الدفع',
     ],
 
     // Sidebar
     'sidebar' => [
+        'commissions_requests' => 'طلبات العمولة',
         'system_name' => 'نظام تأجير وإدارة السيارات',
         'rights_reserved' => 'جميع الحقوق محفوظة',
         'home' => 'الرئيسية',

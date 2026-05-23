@@ -18,7 +18,7 @@ class BookingAssignmentService
                 },
             ])
             ->having('bookings_at_same_time', '=', 0)
-            ->orderBy('bookings_count')
+            ->orderBy('bookings_at_same_time')
             ->first();
     }
 }

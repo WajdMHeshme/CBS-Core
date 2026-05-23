@@ -142,6 +142,150 @@
                     @endif
 
                 </div>
+                {{-- Commission --}}
+                @if($booking->commission)
+
+                <div class="p-5 border rounded-xl mt-4 bg-white">
+
+                    <div class="flex items-center justify-between mb-4">
+
+                        <h4 class="font-semibold text-gray-900">
+                            {{ __('messages.dashboard.commission') }}
+                        </h4>
+
+                        <span class="px-3 py-1 text-xs rounded-full border
+            @if($booking->commission->status == 'pending')
+                bg-yellow-50 text-yellow-700 border-yellow-200
+            @elseif($booking->commission->status == 'payment_uploaded')
+                bg-blue-50 text-blue-700 border-blue-200
+            @elseif($booking->commission->status == 'paid')
+                bg-green-50 text-green-700 border-green-200
+            @elseif($booking->commission->status == 'rejected')
+                bg-red-50 text-red-700 border-red-200
+            @endif">
+
+                            {{ $booking->commission->status }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="space-y-2 text-sm">
+
+                        <p>
+                            <span class="text-gray-500">
+                                {{ __('messages.dashboard.amount') }}:
+                            </span>
+
+                            <span class="font-medium">
+                                {{ $booking->commission->amount }}
+                                {{ $booking->commission->currency }}
+                            </span>
+                        <div>
+
+                            <span class="text-gray-500">
+                                {{ __('messages.dashboard.payment_reference') }}:
+                            </span>
+
+                            <span class="font-medium">
+                                ({{ $booking->commission->payment_reference ?? (app()->getLocale() == 'ar' ? 'لا يوجد مرجع دفع' : 'No payment reference') }})
+                            </span>
+                        </div>
+
+                        </p>
+
+                    </div>
+
+                    @if($booking->commission->payment_image)
+
+                    <div class="mt-4">
+
+                        <p class="text-sm text-gray-500 mb-2">
+                            Payment Proof
+                        </p>
+
+                        {{-- Thumbnail --}}
+                        <img
+                            src="{{ asset('storage/' . $booking->commission->payment_image) }}"
+                            onclick="openPaymentModal()"
+                            class="w-32 h-32 object-cover rounded-lg border cursor-pointer hover:opacity-80 transition">
+
+                    </div>
+
+                    {{-- Modal --}}
+                    <div id="paymentModal"
+                        class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4">
+
+                        {{-- Close --}}
+                        <button onclick="closePaymentModal()"
+                            class="absolute top-5 right-5 text-white text-3xl">
+                            ×
+                        </button>
+
+                        {{-- Full Image --}}
+                        <img
+                            src="{{ asset('storage/' . $booking->commission->payment_image) }}"
+                            class="max-w-full max-h-[90vh] rounded-xl shadow-2xl">
+
+                    </div>
+
+                    <script>
+                        function openPaymentModal() {
+                            document.getElementById('paymentModal')
+                                .classList.remove('hidden');
+
+                            document.getElementById('paymentModal')
+                                .classList.add('flex');
+                        }
+
+                        function closePaymentModal() {
+                            document.getElementById('paymentModal')
+                                .classList.remove('flex');
+
+                            document.getElementById('paymentModal')
+                                .classList.add('hidden');
+                        }
+                    </script>
+
+                    @endif
+
+                    {{-- Employee Actions --}}
+                    @if(
+                    auth()->user()->hasRole('employee') &&
+                    $booking->commission->status === 'payment_uploaded'
+                    )
+
+                    <div class="flex gap-2 mt-5">
+
+                        <form method="POST"
+                            action="{{ route('employee.commissions.approve', $booking->commission->id) }}">
+                            @csrf
+
+                            <button class="px-4 py-3 rounded-lg bg-green-500 text-white text-sm">
+                                Approve Payment
+                            </button>
+                        </form>
+
+                        {{-- Reject --}}
+                        <form method="POST"
+                            action="{{ route('employee.commissions.reject', $booking->commission->id) }}">
+
+                            @csrf
+                            @method('POST')
+
+                            <button class="px-4 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition">
+                                Reject
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                    @endif
+
+                </div>
+
+                @endif
 
                 {{-- Rejection Reason --}}
                 @if($booking->status == 'rejected')
@@ -190,9 +334,33 @@
                     </div>
                     @endif
                 </div>
-
+                @php
+                $isOwner = $booking->employee_id === auth()->id();
+                $status = $booking->status;
+                @endphp
                 {{-- Actions --}}
                 <div class="mt-6 flex flex-wrap items-center gap-2">
+                    @if(
+                    $isOwner &&
+                    $status === 'approved' &&
+                    $booking->commission &&
+                    $booking->commission->status !== 'paid'
+                    )
+                    <form method="POST" action="{{ route('employee.booking.conversation', $booking->id) }}">
+                        @csrf
+                        <button class="px-3 py-1 rounded-full text-sm bg-indigo-50 border border-indigo-200 text-indigo-700 hover:bg-indigo-100">
+                            {{ __('messages.dashboard.send_message_to_lessor') }}
+                        </button>
+                    </form>
+                    @endif
+                    @if($isOwner && $status === 'approved' && $booking->commission()->doesntExist())
+                    <form method="POST" action="{{ route('employee.commission.create', $booking->id) }}">
+                        @csrf
+                        <button class="px-3 py-1 rounded-full text-sm bg-purple-50 border border-purple-200 text-purple-700 hover:bg-purple-100">
+                            Request Commission
+                        </button>
+                    </form>
+                    @endif
                     <a href="{{ auth()->user()->hasRole('admin') ? route('employee.bookings.index') : route('employee.bookings.my') }}"
                         class="px-3 py-1.5 text-xs rounded-lg border hover:bg-gray-100 transition">
                         {{ app()->getLocale() == 'ar' ? '← العودة للقائمة' : '← Back to list' }}

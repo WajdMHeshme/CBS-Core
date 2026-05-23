@@ -3,12 +3,16 @@
 namespace App\Services;
 
 use App\Models\Booking;
+use App\Services\CommissionService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class EmployeeBookingService
 {
+    public function __construct(
+        protected CommissionService $commissionService
+    ) {}
     /**
      * Get bookings for employee + unassigned pending bookings
      */
@@ -29,38 +33,49 @@ class EmployeeBookingService
     /**
      * Approve booking
      */
-    public function approve(Booking $booking)
-    {
-        if (!in_array($booking->status, ['pending', 'rescheduled'])) {
-            throw ValidationException::withMessages([
-                'status' => 'Action not allowed. Booking must be pending or rescheduled.',
-            ]);
-        }
-
-        // تعيين الموظف إذا أول مرة يتعامل مع الحجز
-        if (is_null($booking->employee_id)) {
-            $booking->employee_id = Auth::id();
-            $booking->save();
-        }
-
-        // التحقق من تعارض السيارة (وليس الموظف)
-        if ($this->hasTimeConflict(
-            $booking->car_id,
-            $booking->scheduled_at,
-            $booking->id
-        )) {
-            throw ValidationException::withMessages([
-                'scheduled_at' => 'This car is already booked at this time.',
-            ]);
-        }
-
-        $booking->update([
-            'status' => 'approved',
-            'rescheduled_at' => null,
+public function approve(Booking $booking)
+{
+    if (!in_array($booking->status, ['pending', 'rescheduled'])) {
+        throw ValidationException::withMessages([
+            'status' => 'Action not allowed. Booking must be pending or rescheduled.',
         ]);
-
-        return $booking;
     }
+
+    if (is_null($booking->employee_id)) {
+        $booking->employee_id = Auth::id();
+        $booking->save();
+    }
+
+    if ($this->hasTimeConflict(
+        $booking->car_id,
+        $booking->scheduled_at,
+        $booking->id
+    )) {
+        throw ValidationException::withMessages([
+            'scheduled_at' => 'This car is already booked at this time.',
+        ]);
+    }
+
+    $booking->update([
+        'status' => 'approved',
+        'rescheduled_at' => null,
+    ]);
+
+    //  حساب العمولة بشكل آمن
+    if (!$booking->commission()->exists()) {
+
+        $price = $booking->car->price_per_day;
+        $commissionAmount = round($price * 0.05, 2);
+
+        $this->commissionService->createForBooking(
+            $booking,
+            Auth::user(),
+            $commissionAmount
+        );
+    }
+
+    return $booking;
+}
 
     /**
      * Cancel booking

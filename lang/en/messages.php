@@ -20,7 +20,11 @@ return [
         'lessors_growth' => 'Lessors Growth',
         'new_lessors_last_6m' => 'New Lessors (Last 6 Months)',
         'new_lessors' => 'New Lessors',
-
+        'commissions' => 'Commissions',
+        'send_message_to_lessor' => 'Send Commission Request to Lessor',
+        'commission_earned' => 'Commission Earned',
+        'commission' => 'Commission',
+        'amount' => 'Amount',
         'this_week' => 'this_week',
         'this_month' => 'this_month',
         'pending' => 'pending',
@@ -42,11 +46,13 @@ return [
         'Last_7_Days' => 'Last 7 Days',
         'This_Month_(January 2026)' => '',
         'support_tickets' => 'Support Tickets',
+        'payment_reference' => 'Payment Reference',
     ],
     'approve' => 'Approve',
     'reject' => 'Reject',
     // Sidebar
     'sidebar' => [
+        'commissions_requests' => 'Commissions Requests',
         'system_name' => 'Car Rental and Management System',
         'rights_reserved' => 'All rights reserved',
         'home' => 'Home',
