@@ -72,7 +72,7 @@ class EmployeeBookingController extends Controller
 
         return redirect()
             ->route('employee.bookings.show', $booking->id)
-            ->with('status', __('messages.booking.approved'));
+            ->with('status', __('messages.dashboard.approved'));
     }
 
     /**

@@ -19,6 +19,7 @@ class BookingCommission extends Model
         'reviewed_at',
         'reviewed_by',
         'notes',
+        'receipt_pdf',
     ];
 
     protected $casts = [

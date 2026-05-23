@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Employee;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\BookingCommission;
@@ -39,28 +41,28 @@ class CommissionController extends Controller
     }
 
 
-public function requestCommission(Booking $booking)
-{
-    // حماية: فقط الموظف المسؤول
-    if ($booking->employee_id !== Auth::id()) {
-        abort(403, 'Unauthorized');
+    public function requestCommission(Booking $booking)
+    {
+        // حماية: فقط الموظف المسؤول
+        if ($booking->employee_id !== Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        if ($booking->commission()->exists()) {
+            return back()->with('error', 'Commission already exists.');
+        }
+
+        $price = $booking->car->price ?? 0;
+        $amount = round($price * 0.05, 2);
+
+        $this->commissionService->createForBooking(
+            $booking,
+            Auth::user(),
+            $amount
+        );
+
+        return back()->with('success', 'Commission created successfully.');
     }
-
-    if ($booking->commission()->exists()) {
-        return back()->with('error', 'Commission already exists.');
-    }
-
-    $price = $booking->car->price ?? 0;
-    $amount = round($price * 0.05, 2);
-
-    $this->commissionService->createForBooking(
-        $booking,
-        Auth::user(),
-        $amount
-    );
-
-    return back()->with('success', 'Commission created successfully.');
-}
 
 
     public function uploadPayment(Request $request, BookingCommission $commission)
@@ -89,12 +91,62 @@ public function requestCommission(Booking $booking)
 
     public function approve(BookingCommission $commission)
     {
-        $this->commissionService->approve(
+        // تحديث حالة العمولة
+        $commission = $this->commissionService->approve(
             $commission,
             Auth::user()
         );
 
-        return back()->with('success', 'Commission marked as paid.');
+        // تحميل العلاقات
+        $commission->load([
+            'booking.car',
+            'booking.user',
+            'lessor',
+            'employee',
+        ]);
+
+        $booking = $commission->booking;
+
+        // توليد PDF
+        $pdf = Pdf::loadView('dashboard.lessor.commissions.commission_receipt', [
+
+            'commission' => $commission,
+            'booking'    => $booking,
+            'customer'   => $booking->user,
+            'lessor'     => $commission->lessor,
+            'employee'   => Auth::user(),
+
+        ])->setOptions([
+            'defaultFont' => 'DejaVu Sans',
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled' => true,
+        ]);
+
+        // اسم الملف
+        $fileName = 'commission-' . $commission->id . '.pdf';
+
+        // مسار التخزين
+        $path = storage_path('app/public/commissions');
+
+        // إنشاء المجلد إذا غير موجود
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        // حفظ الملف مباشرة
+        file_put_contents(
+            $path . '/' . $fileName,
+            $pdf->output()
+        );
+
+        // حفظ الرابط بالداتابيز
+        $commission->receipt_pdf = 'commissions/' . $fileName;
+        $commission->save();
+
+        return back()->with(
+            'success',
+            'Commission approved and PDF generated.'
+        );
     }
 
     public function reject(Request $request, BookingCommission $commission)
