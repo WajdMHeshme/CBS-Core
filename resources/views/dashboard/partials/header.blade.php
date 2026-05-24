@@ -83,20 +83,70 @@
                         @endif
                     </div>
                     <div class="max-h-80 overflow-y-auto divide-y divide-gray-100 bg-white">
-                        @forelse($userNotifications as $notification)
-                            <div class="px-4 py-3 flex items-start gap-3 hover:bg-indigo-50 transition cursor-pointer group">
-                                <span class="h-3 w-3 mt-1 rounded-full bg-black"></span>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-gray-800 truncate group-hover:underline">
-                                        {{ $notification->data['message'] ?? 'No message' }}
-                                    </p>
-                                    <div class="mt-1 flex items-center gap-2 text-xs text-gray-500">
-                                        <span>by <span class="text-gray-700 font-medium">{{ $notification->data['by'] ?? 'System' }}</span></span>
-                                        <span>• {{ $notification->created_at->diffForHumans() }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
+@forelse($userNotifications as $notification)
+    <div
+        x-data="{
+            open: false
+        }"
+    >
+
+        {{-- Item --}}
+        <div
+            @click="open = true"
+            class="px-4 py-3 flex items-start gap-3 hover:bg-indigo-50 transition cursor-pointer group">
+
+            <span class="h-3 w-3 mt-1 rounded-full bg-black"></span>
+
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-800 truncate group-hover:underline">
+                    {{ $notification->data['message'] ?? 'No message' }}
+                </p>
+
+                <div class="mt-1 flex items-center gap-2 text-xs text-gray-500">
+                    <span>by <span class="text-gray-700 font-medium">
+                        {{ $notification->data['by'] ?? 'System' }}
+                    </span></span>
+
+                    <span>• {{ $notification->created_at->diffForHumans() }}</span>
+                </div>
+            </div>
+        </div>
+
+        {{-- GLOBAL FIXED MODAL (IMPORTANT) --}}
+        <div
+            x-show="open"
+            x-cloak
+            x-transition
+            class="fixed z-[9999] flex items-center justify-center p-4">
+
+            <div
+                @click.away="open = false"
+                class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+
+                <div class="px-5 py-4 border-b flex justify-between">
+                    <h2 class="font-semibold">Notification</h2>
+
+                    <button @click="open = false">✕</button>
+                </div>
+
+                <div class="p-5 space-y-3">
+
+                    <p class="text-gray-800">
+                        {{ $notification->data['message'] ?? 'No message' }}
+                    </p>
+
+                    <div class="text-sm text-gray-500 border-t pt-3">
+                        By: {{ $notification->data['by'] ?? 'System' }}
+                        <br>
+                        {{ $notification->created_at->format('Y-m-d H:i') }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+@empty
                             <div class="px-6 py-8 text-center text-sm text-gray-500 flex items-center justify-between">No new notifications <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-off-icon lucide-bell-off"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M17 17H4a1 1 0 0 1-.74-1.673C4.59 13.956 6 12.499 6 8a6 6 0 0 1 .258-1.742"/><path d="m2 2 20 20"/><path d="M8.668 3.01A6 6 0 0 1 18 8c0 2.687.77 4.653 1.707 6.05"/></svg></span></div>
                         @endforelse
                     </div>

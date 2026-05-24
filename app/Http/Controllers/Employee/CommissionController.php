@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\BookingCommission;
+use App\Notifications\CommissionApprovedNotification;
 use App\Services\CommissionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -89,58 +90,72 @@ class CommissionController extends Controller
     }
 
 
-public function approve(BookingCommission $commission)
-{
-    $commission = $this->commissionService->approve(
-        $commission,
-        Auth::user()
-    );
+    public function approve(BookingCommission $commission)
+    {
+        $commission = $this->commissionService->approve(
+            $commission,
+            Auth::user()
+        );
 
-    // تحميل العلاقات بشكل كامل
-    $commission->load([
-        'booking.car.carType',
-        'booking.car.owner',
-        'booking.user',
-        'lessor',
-        'employee',
-    ]);
+        // تحميل العلاقات المطلوبة
+        $commission->load([
+            'booking.car.carType',
+            'booking.car.owner',
+            'booking.user',
+            'lessor',
+            'employee',
+        ]);
 
-    $booking = $commission->booking;
-    $car = $booking->car; // ✅ الحل الأساسي
+        $booking = $commission->booking;
+        $car = $booking->car;
 
-    $pdf = Pdf::loadView('dashboard.lessor.commissions.commission_receipt', [
+        // إنشاء PDF
+        $pdf = Pdf::loadView(
+            'dashboard.lessor.commissions.commission_receipt',
+            [
+                'commission' => $commission,
+                'booking'    => $booking,
+                'car'        => $car,
+                'customer'   => $booking->user,
+                'lessor'     => $commission->lessor,
+                'employee'   => Auth::user(),
+            ]
+        )->setOptions([
+            'defaultFont' => 'DejaVu Sans',
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled' => true,
+        ]);
 
-        'commission' => $commission,
-        'booking'    => $booking,
-        'car'        => $car, // ✅ لازم تضيف هذا
-        'customer'   => $booking->user,
-        'lessor'     => $commission->lessor,
-        'employee'   => Auth::user(),
+        $fileName = 'commission-' . $commission->id . '.pdf';
 
-    ])->setOptions([
-        'defaultFont' => 'DejaVu Sans',
-        'isHtml5ParserEnabled' => true,
-        'isRemoteEnabled' => true,
-    ]);
+        $path = storage_path('app/public/commissions');
 
-    $fileName = 'commission-' . $commission->id . '.pdf';
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
 
-    $path = storage_path('app/public/commissions');
+        file_put_contents(
+            $path . '/' . $fileName,
+            $pdf->output()
+        );
 
-    if (!file_exists($path)) {
-        mkdir($path, 0777, true);
+        // حفظ رابط الملف
+        $commission->receipt_pdf = 'commissions/' . $fileName;
+        $commission->save();
+
+        // إرسال إشعار للمؤجر
+        if ($commission->lessor) {
+
+            $commission->lessor->notify(
+                new CommissionApprovedNotification($commission)
+            );
+        }
+
+        return back()->with(
+            'success',
+            'Commission approved, PDF generated, and notification sent successfully.'
+        );
     }
-
-    file_put_contents(
-        $path . '/' . $fileName,
-        $pdf->output()
-    );
-
-    $commission->receipt_pdf = 'commissions/' . $fileName;
-    $commission->save();
-
-    return back()->with('success', 'Commission approved and PDF generated.');
-}
 
     public function reject(Request $request, BookingCommission $commission)
     {

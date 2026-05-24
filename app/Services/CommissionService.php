@@ -20,7 +20,7 @@ class CommissionService
             ],
             [
                 'employee_id' => $employee->id,
-                'lessor_id'   => $booking->car->user_id,
+                'lessor_id' => $booking->car->user_id,
                 'amount'      => round($amount, 2),
                 'currency'    => 'SYP',
                 'status'      => 'pending',
