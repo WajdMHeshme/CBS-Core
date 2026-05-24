@@ -89,65 +89,58 @@ class CommissionController extends Controller
     }
 
 
-    public function approve(BookingCommission $commission)
-    {
-        // تحديث حالة العمولة
-        $commission = $this->commissionService->approve(
-            $commission,
-            Auth::user()
-        );
+public function approve(BookingCommission $commission)
+{
+    $commission = $this->commissionService->approve(
+        $commission,
+        Auth::user()
+    );
 
-        // تحميل العلاقات
-        $commission->load([
-            'booking.car',
-            'booking.user',
-            'lessor',
-            'employee',
-        ]);
+    // تحميل العلاقات بشكل كامل
+    $commission->load([
+        'booking.car.carType',
+        'booking.car.owner',
+        'booking.user',
+        'lessor',
+        'employee',
+    ]);
 
-        $booking = $commission->booking;
+    $booking = $commission->booking;
+    $car = $booking->car; // ✅ الحل الأساسي
 
-        // توليد PDF
-        $pdf = Pdf::loadView('dashboard.lessor.commissions.commission_receipt', [
+    $pdf = Pdf::loadView('dashboard.lessor.commissions.commission_receipt', [
 
-            'commission' => $commission,
-            'booking'    => $booking,
-            'customer'   => $booking->user,
-            'lessor'     => $commission->lessor,
-            'employee'   => Auth::user(),
+        'commission' => $commission,
+        'booking'    => $booking,
+        'car'        => $car, // ✅ لازم تضيف هذا
+        'customer'   => $booking->user,
+        'lessor'     => $commission->lessor,
+        'employee'   => Auth::user(),
 
-        ])->setOptions([
-            'defaultFont' => 'DejaVu Sans',
-            'isHtml5ParserEnabled' => true,
-            'isRemoteEnabled' => true,
-        ]);
+    ])->setOptions([
+        'defaultFont' => 'DejaVu Sans',
+        'isHtml5ParserEnabled' => true,
+        'isRemoteEnabled' => true,
+    ]);
 
-        // اسم الملف
-        $fileName = 'commission-' . $commission->id . '.pdf';
+    $fileName = 'commission-' . $commission->id . '.pdf';
 
-        // مسار التخزين
-        $path = storage_path('app/public/commissions');
+    $path = storage_path('app/public/commissions');
 
-        // إنشاء المجلد إذا غير موجود
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
-
-        // حفظ الملف مباشرة
-        file_put_contents(
-            $path . '/' . $fileName,
-            $pdf->output()
-        );
-
-        // حفظ الرابط بالداتابيز
-        $commission->receipt_pdf = 'commissions/' . $fileName;
-        $commission->save();
-
-        return back()->with(
-            'success',
-            'Commission approved and PDF generated.'
-        );
+    if (!file_exists($path)) {
+        mkdir($path, 0777, true);
     }
+
+    file_put_contents(
+        $path . '/' . $fileName,
+        $pdf->output()
+    );
+
+    $commission->receipt_pdf = 'commissions/' . $fileName;
+    $commission->save();
+
+    return back()->with('success', 'Commission approved and PDF generated.');
+}
 
     public function reject(Request $request, BookingCommission $commission)
     {
