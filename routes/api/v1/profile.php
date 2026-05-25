@@ -4,7 +4,7 @@
 use App\Http\Controllers\Customer\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-    Route::middleware(['auth:sanctum','role:customer'])->prefix('profiles')
+    Route::middleware(['auth:sanctum'])->prefix('profiles')
     ->group(function (){
 
      Route::post('',[ProfileController::class,'store']);

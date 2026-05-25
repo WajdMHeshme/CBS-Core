@@ -68,7 +68,6 @@
         action="{{ route('lessor.lessor.commission.pay', $commission->id) }}"
         enctype="multipart/form-data"
         class="border border-black/10 rounded-xl p-5 bg-white space-y-4 shadow-sm">
-
         @csrf
 
         <div>

@@ -47,7 +47,10 @@ class FavoriteService
             ]);
         }
 
-        return $favorite->delete();
+        $favorite->delete();
+        return response()->json([
+            'message' => 'Car removed from favorites successfully.'
+        ]);
     }
 
     public function getFavorites()
