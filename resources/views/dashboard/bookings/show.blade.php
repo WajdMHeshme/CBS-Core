@@ -346,19 +346,12 @@
                     $booking->commission &&
                     $booking->commission->status !== 'paid'
                     )
-                    <form method="POST" action="{{ route('employee.booking.conversation', $booking->id) }}">
-                        @csrf
-                        <button class="px-3 py-1 rounded-full text-sm bg-indigo-50 border border-indigo-200 text-indigo-700 hover:bg-indigo-100">
-                            {{ __('messages.dashboard.send_message_to_lessor') }}
-                        </button>
-                    </form>
                     @endif
-                    @if($isOwner && $status === 'approved' && $booking->commission()->doesntExist())
-                    <form method="POST" action="{{ route('employee.commission.create', $booking->id) }}">
+                    @if($isOwner && $status === 'approved')
+                    <form method="POST" action="{{ route('employee.commissions.request', $booking->id) }}">
                         @csrf
                         <button class="px-3 py-1 rounded-full text-sm bg-purple-50 border border-purple-200 text-purple-700 hover:bg-purple-100">
-                            Request Commission
-                        </button>
+                            {{ __('messages.dashboard.send_message_to_lessor') }} </button>
                     </form>
                     @endif
                     <a href="{{ auth()->user()->hasRole('admin') ? route('employee.bookings.index') : route('employee.bookings.my') }}"

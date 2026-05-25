@@ -14,16 +14,16 @@ class CommissionRequestedNotification extends Notification
         public BookingCommission $commission
     ) {}
 
-    public function via(object $notifiable): array
+    public function via($notifiable): array
     {
         return ['database'];
     }
 
-    public function toArray(object $notifiable): array
+    public function toDatabase($notifiable): array
     {
         return [
-            'type' => 'commission',
             'title' => 'Commission Payment Requested',
+
             'message' => sprintf(
                 'A new commission payment request has been created for booking #%s. Amount required: %s %s',
                 $this->commission->booking_id,
@@ -33,7 +33,7 @@ class CommissionRequestedNotification extends Notification
 
             'commission_id' => $this->commission->id,
             'booking_id' => $this->commission->booking_id,
-            'amount' => $this->commission->amount,
+            'amount' => (float) $this->commission->amount,
             'currency' => $this->commission->currency,
             'status' => $this->commission->status,
         ];

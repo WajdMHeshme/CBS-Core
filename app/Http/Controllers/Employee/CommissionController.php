@@ -6,7 +6,6 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\BookingCommission;
-use App\Models\User;
 use App\Notifications\CommissionApprovedNotification;
 use App\Notifications\CommissionRequestedNotification;
 use App\Services\CommissionService;
@@ -44,36 +43,20 @@ class CommissionController extends Controller
     }
 
 
-    public function requestCommission(Booking $booking)
-    {
-        // حماية: فقط الموظف المسؤول
-        if ($booking->employee_id !== Auth::id()) {
-            abort(403, 'Unauthorized');
-        }
+public function requestCommission(Booking $booking)
+{
+    // حماية: فقط الموظف المسؤول
+    if ($booking->employee_id !== Auth::id()) {
+        abort(403, 'Unauthorized');
+    }
 
-        if ($booking->commission()->exists()) {
-            return back()->with(
-                'error',
-                'Commission already exists.'
-            );
-        }
+    // إذا العمولة موجودة مسبقًا
+    if ($booking->commission()->exists()) {
 
-        $price = $booking->car->price ?? 0;
+        $commission = $booking->commission;
 
-        $amount = round($price * 0.05, 2);
-
-        $commission = $this->commissionService->createForBooking(
-            $booking,
-            Auth::user(),
-            $amount
-        );
-
-        $commission->load([
-            'lessor',
-            'booking',
-        ]);
-
-        if ($commission->lessor) {
+        // إعادة إرسال الإشعار
+        if ($commission && $commission->lessor) {
 
             $commission->lessor->notify(
                 new CommissionRequestedNotification($commission)
@@ -82,9 +65,38 @@ class CommissionController extends Controller
 
         return back()->with(
             'success',
-            'Commission created and notification sent successfully.'
+            'Commission notification resent successfully.'
         );
     }
+
+    $price = $booking->car->price ?? 0;
+
+    $amount = round($price * 0.05, 2);
+
+    $commission = $this->commissionService->createForBooking(
+        $booking,
+        Auth::user(),
+        $amount
+    );
+
+    $commission->load([
+        'lessor',
+        'booking',
+    ]);
+
+    // إرسال الإشعار
+    if ($commission->lessor) {
+
+        $commission->lessor->notify(
+            new CommissionRequestedNotification($commission)
+        );
+    }
+
+    return back()->with(
+        'success',
+        'Commission created and notification sent successfully.'
+    );
+}
 
 
     public function uploadPayment(Request $request, BookingCommission $commission)
