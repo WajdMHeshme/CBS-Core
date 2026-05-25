@@ -11,40 +11,42 @@ return new class extends Migration
      */
     public function up(): void
     {
-Schema::create('bookings', function (Blueprint $table) {
-    $table->id();
+        Schema::create('bookings', function (Blueprint $table) {
+            $table->id();
 
-    $table->foreignId('user_id')
-        ->constrained('users')
-        ->cascadeOnDelete();
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->cascadeOnDelete();
 
-    $table->foreignId('car_id')
-        ->constrained('cars')
-        ->cascadeOnDelete();
+            $table->foreignId('car_id')
+                ->constrained('cars')
+                ->cascadeOnDelete();
 
-    $table->foreignId('employee_id')
-        ->nullable()
-        ->constrained('users')
-        ->nullOnDelete();
+            $table->foreignId('employee_id')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
 
-    $table->dateTime('scheduled_at');
+            $table->dateTime('scheduled_at');
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
 
-    $table->enum('status', [
-        'pending',
-        'approved',
-        'rescheduled',
-        'canceled',
-        'rejected',
-        'completed'
-    ])->default('pending');
+            $table->enum('status', [
+                'pending',
+                'approved',
+                'rescheduled',
+                'canceled',
+                'rejected',
+                'completed'
+            ])->default('pending');
 
-    $table->text('notes')->nullable();
-    $table->text('reason')->nullable();
-    $table->text('rejection_reason')->nullable();
-    $table->timestamp('rejected_at')->nullable();
+            $table->text('notes')->nullable();
+            $table->text('reason')->nullable();
+            $table->text('rejection_reason')->nullable();
+            $table->timestamp('rejected_at')->nullable();
 
-    $table->timestamps();
-});
+            $table->timestamps();
+        });
     }
 
     /**

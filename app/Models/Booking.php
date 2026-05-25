@@ -14,6 +14,8 @@ class Booking extends Model
         'car_id',
         'employee_id',
         'scheduled_at',
+        'start_date',
+        'end_date',
         'status',
         'notes',
         'rejection_reason',
@@ -21,6 +23,8 @@ class Booking extends Model
 
     protected $casts = [
         'scheduled_at' => 'datetime',
+        'start_date'   => 'date',
+        'end_date'     => 'date', 
     ];
 
     public function user()

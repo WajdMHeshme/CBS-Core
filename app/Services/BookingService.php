@@ -13,51 +13,62 @@ class BookingService
      */
     public function create(array $data): Booking
     {
-
         $car = Car::find($data['car_id'] ?? null);
 
-        if (! $car) {
+        if (!$car) {
             throw new \Exception('Car not found');
         }
 
-
         $userId = auth('sanctum')->id();
 
-        if (! $userId) {
+        if (!$userId) {
             throw new \Exception('Unauthenticated');
-        }
-
-        if (!empty($data['start_date']) && !empty($data['end_date'])) {
-
-            $isBooked = Booking::where('car_id', $car->id)
-                ->where(function ($q) use ($data) {
-                    $q->whereBetween('start_date', [$data['start_date'], $data['end_date']])
-                      ->orWhereBetween('end_date', [$data['start_date'], $data['end_date']]);
-                })
-                ->exists();
-
-            if ($isBooked) {
-                throw new \Exception('Car is already booked for this period');
-            }
         }
 
         return DB::transaction(function () use ($data, $userId, $car) {
 
+            // ✅ Lock الصف داخل الـ transaction لمنع Race Condition
+            $car = Car::lockForUpdate()->findOrFail($car->id);
+
+            // ✅ التحقق من التعارض داخل الـ transaction
+            if (!empty($data['start_date']) && !empty($data['end_date'])) {
+                $this->ensureCarAvailable($car->id, $data['start_date'], $data['end_date']);
+            }
+
             $booking = Booking::create([
-                'car_id' => $car->id,
-                'user_id' => $userId,
-
-                'employee_id' => $car->employee_id ?? null,
-
+                'car_id'       => $car->id,
+                'user_id'      => $userId,
+                'employee_id'  => $car->employee_id ?? null,
                 'scheduled_at' => $data['scheduled_at'] ?? null,
-                'start_date' => $data['start_date'] ?? null,
-                'end_date' => $data['end_date'] ?? null,
-
-                'status' => 'pending',
+                'start_date'   => $data['start_date'] ?? null,
+                'end_date'     => $data['end_date'] ?? null,
+                'status'       => 'pending',
             ]);
 
             return $booking->load(['car', 'employee', 'user']);
         });
+    }
+
+    /**
+     * ✅ منطق التحقق الصحيح — يغطي كل حالات التعارض الممكنة:
+     *
+     *  موجود:   |-------|
+     *  جديد:  |---|              ← start قبل، end في المنتصف
+     *  جديد:          |---|      ← start في المنتصف، end بعد
+     *  جديد:    |---|            ← جوا الموجود بالكامل
+     *  جديد:  |-----------|      ← يغطي الموجود بالكامل ← whereBetween كان يفشل هون!
+     */
+    private function ensureCarAvailable(int $carId, string $startDate, string $endDate): void
+    {
+        $conflict = Booking::where('car_id', $carId)
+            ->whereNotIn('status', ['canceled', 'rejected']) // ✅ تجاهل الحجوزات الملغية
+            ->where('start_date', '<', $endDate)            // ✅ الشرط الصحيح
+            ->where('end_date', '>', $startDate)
+            ->exists();
+
+        if ($conflict) {
+            throw new \Exception('Car is already booked for this period');
+        }
     }
 
     /**

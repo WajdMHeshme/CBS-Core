@@ -16,9 +16,7 @@ class BookingController extends Controller
 {
     use AuthorizesRequests;
 
-    public function __construct(private BookingService $bookingService)
-    {
-    }
+    public function __construct(private BookingService $bookingService) {}
 
     /**
      * Customer bookings
@@ -27,7 +25,7 @@ class BookingController extends Controller
     {
         $bookings = Booking::with(['car', 'employee', 'user'])
             ->where('user_id', auth('sanctum')->id())
-            ->when($request->status, fn ($q) => $q->where('status', $request->status))
+            ->when($request->status, fn($q) => $q->where('status', $request->status))
             ->latest()
             ->paginate(10);
 
@@ -37,38 +35,35 @@ class BookingController extends Controller
     /**
      * Create booking
      */
+    // BookingController - store()
     public function store(BookingRequest $request)
     {
         try {
             $booking = $this->bookingService->create($request->validated());
 
-            $admins = User::role('admin')->get();
-            foreach ($admins as $admin) {
-                $admin->notify(new BookingActionNotification(
-                    action: 'created',
-                    bookingId: $booking->id,
-                    byUser: $booking->user->name ?? 'Customer'
-                ));
-            }
-
-            $employees = User::role('employee')->get();
-            foreach ($employees as $employee) {
-                $employee->notify(new BookingActionNotification(
-                    action: 'created',
-                    bookingId: $booking->id,
-                    byUser: $booking->user->name ?? 'Customer'
-                ));
-            }
+            dispatch(fn() => $this->notifyUsers($booking));
 
             return response()->json([
                 'message' => __('messages.booking.created'),
-                'data' => new BookingResource($booking),
+                'data'    => new BookingResource($booking),
             ], 201);
-
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ], 422);
+            return response()->json(['message' => $e->getMessage()], 422);
+        }
+    }
+
+    private function notifyUsers(Booking $booking, string $action = 'created'): void
+    {
+        $byUser = $booking->user->name ?? 'Customer';
+
+        $users = User::role(['admin', 'employee'])->get();
+
+        foreach ($users as $user) {
+            $user->notify(new BookingActionNotification(
+                action: $action,
+                bookingId: $booking->id,
+                byUser: $byUser
+            ));
         }
     }
 
