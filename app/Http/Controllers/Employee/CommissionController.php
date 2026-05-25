@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Employee;
 
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\BookingCommission;
+use App\Models\User;
 use App\Notifications\CommissionApprovedNotification;
+use App\Notifications\CommissionRequestedNotification;
 use App\Services\CommissionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\CommissionPaymentUploadedNotification;
 
 class CommissionController extends Controller
 {
@@ -50,43 +52,79 @@ class CommissionController extends Controller
         }
 
         if ($booking->commission()->exists()) {
-            return back()->with('error', 'Commission already exists.');
+            return back()->with(
+                'error',
+                'Commission already exists.'
+            );
         }
 
         $price = $booking->car->price ?? 0;
+
         $amount = round($price * 0.05, 2);
 
-        $this->commissionService->createForBooking(
+        $commission = $this->commissionService->createForBooking(
             $booking,
             Auth::user(),
             $amount
         );
 
-        return back()->with('success', 'Commission created successfully.');
+        $commission->load([
+            'lessor',
+            'booking',
+        ]);
+
+        if ($commission->lessor) {
+
+            $commission->lessor->notify(
+                new CommissionRequestedNotification($commission)
+            );
+        }
+
+        return back()->with(
+            'success',
+            'Commission created and notification sent successfully.'
+        );
     }
 
 
     public function uploadPayment(Request $request, BookingCommission $commission)
     {
+        if ($commission->lessor_id !== Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
         $request->validate([
             'payment_reference' => 'nullable|string|max:255',
-            'payment_image' => 'nullable|image|max:2048',
+            'payment_image'     => 'nullable|image|max:2048',
         ]);
 
         $imagePath = null;
 
+        // رفع صورة الدفع
         if ($request->hasFile('payment_image')) {
+
             $imagePath = $request->file('payment_image')
                 ->store('commissions/payments', 'public');
         }
-
-        $this->commissionService->uploadPaymentProof(
+        $commission = $this->commissionService->uploadPaymentProof(
             $commission,
             $request->payment_reference,
             $imagePath
         );
 
-        return back()->with('success', 'Payment uploaded successfully.');
+        // re-fetch لضمان العلاقات
+        $commission = BookingCommission::with('employee')->findOrFail($commission->id);
+
+        if ($commission->employee) {
+            $commission->employee->notify(
+                new CommissionPaymentUploadedNotification($commission)
+            );
+        }
+
+        return back()->with(
+            'success',
+            'Payment uploaded successfully.'
+        );
     }
 
 
