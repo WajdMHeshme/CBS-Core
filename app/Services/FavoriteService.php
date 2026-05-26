@@ -29,15 +29,22 @@ class FavoriteService
             ]);
         }
 
-        return Favorite::create([
+        $favorite = Favorite::create([
             'user_id' => Auth::id(),
-            'car_id' => $carId,
+            'car_id'  => $carId,
+        ]);
+
+        return response()->json([
+            'message' => 'Car added to favorites successfully.',
+            'data' => Favorite::with('car.images')
+                ->find($favorite->id)
         ]);
     }
 
     public function removeFromFavorites($carId)
     {
-        $favorite = Favorite::where('user_id', Auth::id())
+        $favorite = Favorite::with('car.images')
+            ->where('user_id', Auth::id())
             ->where('car_id', $carId)
             ->first();
 
@@ -47,16 +54,23 @@ class FavoriteService
             ]);
         }
 
+        // حفظ البيانات قبل الحذف
+        $favoriteData = $favorite->toArray();
+
         $favorite->delete();
+
         return response()->json([
-            'message' => 'Car removed from favorites successfully.'
+            'message' => 'Car removed from favorites successfully.',
+            'data' => $favoriteData
         ]);
     }
 
     public function getFavorites()
     {
-        return Favorite::with('car')
-            ->where('user_id', Auth::id())
-            ->get();
+        return response()->json([
+            'data' => Favorite::with('car.images')
+                ->where('user_id', Auth::id())
+                ->get()
+        ]);
     }
 }
