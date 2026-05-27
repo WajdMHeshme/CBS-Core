@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Events\LessorRequestCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLessorRequest;
 use App\Services\LessorRequestService;
@@ -31,6 +32,8 @@ class LessorRequestController extends Controller
         }
 
         $lessorRequest = $this->service->create($data);
+
+        event(new LessorRequestCreated($lessorRequest));
 
         return response()->json([
             'message' => 'Request submitted successfully',

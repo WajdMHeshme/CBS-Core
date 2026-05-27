@@ -28,5 +28,9 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\CommissionRejected::class => [
             \App\Listeners\SendCommissionRejectedNotification::class,
         ],
+        \App\Events\LessorRequestCreated::class => [
+            \App\Listeners\SendLessorRequestNotification::class,
+        ],
+
     ];
 }
