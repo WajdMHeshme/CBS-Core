@@ -3,12 +3,14 @@
     <div class="mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
         {{-- Left Section: Logo --}}
-        <div class="flex items-center gap-3">
-            <img src="/logo2.png" alt="logo" class="h-12 w-12 rounded-full object-cover">
-            <a href="{{ url('dashboard') }}" class="flex items-center gap-3">
+        <div class="flex items-center">
+            <a
+                class="flex items-center gap-3 group">
+                {{-- Brand Name --}}
                 <div class="hidden sm:flex flex-col leading-tight">
-                    <span class="text-2xl font-bold text-black">CBS</span>
-                    <span class="text-xs text-gray-500">Dashboard</span>
+                    <span class="text-2xl lg:text-4xl font-extrabold tracking-wide text-gray-900">
+                        Luxe<span class="text-black">Drive</span>
+                    </span>
                 </div>
             </a>
         </div>
@@ -58,16 +60,16 @@
                     </svg>
 
                     @php
-                        $userNotifications = auth()->user()->unreadNotifications;
-                        if(auth()->user()->hasRole('employee')) {
-                            $userNotifications = $userNotifications->where('data.type', 'booking');
-                        }
+                    $userNotifications = auth()->user()->unreadNotifications;
+                    if(auth()->user()->hasRole('employee')) {
+                    $userNotifications = $userNotifications->where('data.type', 'booking');
+                    }
                     @endphp
 
                     @if($userNotifications->count())
-                        <span class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold px-1.5 rounded-full animate-pulse">
-                            {{ $userNotifications->count() }}
-                        </span>
+                    <span class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold px-1.5 rounded-full animate-pulse">
+                        {{ $userNotifications->count() }}
+                    </span>
                     @endif
                 </button>
 
@@ -76,78 +78,82 @@
                     <div class="px-6 py-3 font-semibold text-gray-700 border-b border-gray-100 bg-indigo-50 flex items-center justify-between">
                         <span>Notifications</span>
                         @if($userNotifications->count())
-                            <form method="POST" action="{{ route('notifications.read') }}">
-                                @csrf
-                                <button type="submit" class="text-black text-xs hover:underline">Mark all as read</button>
-                            </form>
+                        <form method="POST" action="{{ route('notifications.read') }}">
+                            @csrf
+                            <button type="submit" class="text-black text-xs hover:underline">Mark all as read</button>
+                        </form>
                         @endif
                     </div>
                     <div class="max-h-80 overflow-y-auto divide-y divide-gray-100 bg-white">
-@forelse($userNotifications as $notification)
-    <div
-        x-data="{
+                        @forelse($userNotifications as $notification)
+                        <div
+                            x-data="{
             open: false
-        }"
-    >
+        }">
 
-        {{-- Item --}}
-        <div
-            @click="open = true"
-            class="px-4 py-3 flex items-start gap-3 hover:bg-indigo-50 transition cursor-pointer group">
+                            {{-- Item --}}
+                            <div
+                                @click="open = true"
+                                class="px-4 py-3 flex items-start gap-3 hover:bg-indigo-50 transition cursor-pointer group">
 
-            <span class="h-3 w-3 mt-1 rounded-full bg-black"></span>
+                                <span class="h-3 w-3 mt-1 rounded-full bg-black"></span>
 
-            <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium text-gray-800 truncate group-hover:underline">
-                    {{ $notification->data['message'] ?? 'No message' }}
-                </p>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-800 truncate group-hover:underline">
+                                        {{ $notification->data['message'] ?? 'No message' }}
+                                    </p>
 
-                <div class="mt-1 flex items-center gap-2 text-xs text-gray-500">
-                    <span>by <span class="text-gray-700 font-medium">
-                        {{ $notification->data['by'] ?? 'System' }}
-                    </span></span>
+                                    <div class="mt-1 flex items-center gap-2 text-xs text-gray-500">
+                                        <span>by <span class="text-gray-700 font-medium">
+                                                {{ $notification->data['by'] ?? 'System' }}
+                                            </span></span>
 
-                    <span>• {{ $notification->created_at->diffForHumans() }}</span>
-                </div>
-            </div>
-        </div>
+                                        <span>• {{ $notification->created_at->diffForHumans() }}</span>
+                                    </div>
+                                </div>
+                            </div>
 
-        {{-- GLOBAL FIXED MODAL (IMPORTANT) --}}
-        <div
-            x-show="open"
-            x-cloak
-            x-transition
-            class="fixed z-[9999] flex items-center justify-center p-4">
+                            {{-- GLOBAL FIXED MODAL (IMPORTANT) --}}
+                            <div
+                                x-show="open"
+                                x-cloak
+                                x-transition
+                                class="fixed z-[9999] flex items-center justify-center p-4">
 
-            <div
-                @click.away="open = false"
-                class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+                                <div
+                                    @click.away="open = false"
+                                    class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
 
-                <div class="px-5 py-4 border-b flex justify-between">
-                    <h2 class="font-semibold">Notification</h2>
+                                    <div class="px-5 py-4 border-b flex justify-between">
+                                        <h2 class="font-semibold">Notification</h2>
 
-                    <button @click="open = false">✕</button>
-                </div>
+                                        <button @click="open = false">✕</button>
+                                    </div>
 
-                <div class="p-5 space-y-3">
+                                    <div class="p-5 space-y-3">
 
-                    <p class="text-gray-800">
-                        {{ $notification->data['message'] ?? 'No message' }}
-                    </p>
+                                        <p class="text-gray-800">
+                                            {{ $notification->data['message'] ?? 'No message' }}
+                                        </p>
 
-                    <div class="text-sm text-gray-500 border-t pt-3">
-                        By: {{ $notification->data['by'] ?? 'System' }}
-                        <br>
-                        {{ $notification->created_at->format('Y-m-d H:i') }}
-                    </div>
-                </div>
+                                        <div class="text-sm text-gray-500 border-t pt-3">
+                                            By: {{ $notification->data['by'] ?? 'System' }}
+                                            <br>
+                                            {{ $notification->created_at->format('Y-m-d H:i') }}
+                                        </div>
+                                    </div>
 
-            </div>
-        </div>
+                                </div>
+                            </div>
 
-    </div>
-@empty
-                            <div class="px-6 py-8 text-center text-sm text-gray-500 flex items-center justify-between">No new notifications <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-off-icon lucide-bell-off"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M17 17H4a1 1 0 0 1-.74-1.673C4.59 13.956 6 12.499 6 8a6 6 0 0 1 .258-1.742"/><path d="m2 2 20 20"/><path d="M8.668 3.01A6 6 0 0 1 18 8c0 2.687.77 4.653 1.707 6.05"/></svg></span></div>
+                        </div>
+                        @empty
+                        <div class="px-6 py-8 text-center text-sm text-gray-500 flex items-center justify-between">No new notifications <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-off-icon lucide-bell-off">
+                                    <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+                                    <path d="M17 17H4a1 1 0 0 1-.74-1.673C4.59 13.956 6 12.499 6 8a6 6 0 0 1 .258-1.742" />
+                                    <path d="m2 2 20 20" />
+                                    <path d="M8.668 3.01A6 6 0 0 1 18 8c0 2.687.77 4.653 1.707 6.05" />
+                                </svg></span></div>
                         @endforelse
                     </div>
                 </div>
@@ -178,13 +184,13 @@
 
             {{-- New Property Button --}}
             @role('admin')
-                <a href="{{ url('dashboard/cars/create') }}"
-                    class="hidden md:inline-flex items-center gap-2 px-3 py-2 rounded-full bg-black  text-white text-sm font-semibold shadow hover:scale-[1.02] transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path d="M12 5v14M5 12h14" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    {{ __('messages.header.new_car') }}
-                </a>
+            <a href="{{ url('dashboard/cars/create') }}"
+                class="hidden md:inline-flex items-center gap-2 px-3 py-2 rounded-full bg-black  text-white text-sm font-semibold shadow hover:scale-[1.02] transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                {{ __('messages.header.new_car') }}
+            </a>
             @endrole
 
             {{-- User Menu (Merged & Fixed) --}}
@@ -206,9 +212,9 @@
                     <div class="px-4 py-3">
                         <div class="flex {{ app()->getLocale() == 'ar' ? 'justify-start' : 'justify-end' }} mb-1">
                             @role('admin')
-                                <span class="px-2 py-0.5 text-xs rounded-full bg-indigo-100 text-black font-semibold">{{ __('messages.header.admin_badge') }}</span>
+                            <span class="px-2 py-0.5 text-xs rounded-full bg-indigo-100 text-black font-semibold">{{ __('messages.header.admin_badge') }}</span>
                             @elserole('employee')
-                                <span class="px-2 py-0.5 text-xs rounded-full bg-indigo-50 text-black font-medium">{{ __('messages.header.employee_badge') }}</span>
+                            <span class="px-2 py-0.5 text-xs rounded-full bg-indigo-50 text-black font-medium">{{ __('messages.header.employee_badge') }}</span>
                             @endrole
                         </div>
                         <p class="text-sm font-medium text-gray-800">{{ auth()->user()?->name }}</p>
@@ -218,10 +224,10 @@
                     <div class="border-t border-gray-100"></div>
 
                     @role('admin')
-                        <a href="{{ url('dashboard/cars') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-start">{{ __('messages.sidebar.cars') }}</a>
-                        <a href="{{ url('dashboard/bookings') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-start">{{ __('messages.sidebar.bookings') }}</a>
+                    <a href="{{ url('dashboard/cars') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-start">{{ __('messages.sidebar.cars') }}</a>
+                    <a href="{{ url('dashboard/bookings') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-start">{{ __('messages.sidebar.bookings') }}</a>
                     @elserole('employee')
-                        <a href="{{ url('dashboard/my-own-bookings') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-start">{{ __('messages.sidebar.my_bookings') }}</a>
+                    <a href="{{ url('dashboard/my-own-bookings') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-start">{{ __('messages.sidebar.my_bookings') }}</a>
                     @endrole
 
                     <div class="border-t border-gray-100"></div>

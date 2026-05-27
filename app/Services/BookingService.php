@@ -2,40 +2,38 @@
 
 namespace App\Services;
 
+use App\Events\BookingCreated;
 use App\Models\Booking;
 use App\Models\Car;
+use App\Repositories\Contracts\BookingRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 
 class BookingService
 {
+    public function __construct(
+        protected BookingRepositoryInterface $bookings
+    ) {}
+
     /**
-     * Create booking (transaction)
+     * Create booking
      */
-    public function create(array $data): Booking
+    public function create(array $data, int $userId): Booking
     {
-        $car = Car::find($data['car_id'] ?? null);
-
-        if (!$car) {
-            throw new \Exception('Car not found');
-        }
-
-        $userId = auth('sanctum')->id();
-
-        if (!$userId) {
-            throw new \Exception('Unauthenticated');
-        }
+        $car = Car::findOrFail($data['car_id']);
 
         return DB::transaction(function () use ($data, $userId, $car) {
 
-            // ✅ Lock الصف داخل الـ transaction لمنع Race Condition
             $car = Car::lockForUpdate()->findOrFail($car->id);
 
-            // ✅ التحقق من التعارض داخل الـ transaction
             if (!empty($data['start_date']) && !empty($data['end_date'])) {
-                $this->ensureCarAvailable($car->id, $data['start_date'], $data['end_date']);
+                $this->ensureCarAvailable(
+                    $car->id,
+                    $data['start_date'],
+                    $data['end_date']
+                );
             }
 
-            $booking = Booking::create([
+            $booking = $this->bookings->create([
                 'car_id'       => $car->id,
                 'user_id'      => $userId,
                 'employee_id'  => $car->employee_id ?? null,
@@ -45,26 +43,19 @@ class BookingService
                 'status'       => 'pending',
             ]);
 
-            return $booking->load(['car', 'employee', 'user']);
+            event(new BookingCreated($booking));
+
+            return $booking;
         });
     }
 
     /**
-     * ✅ منطق التحقق الصحيح — يغطي كل حالات التعارض الممكنة:
-     *
-     *  موجود:   |-------|
-     *  جديد:  |---|              ← start قبل، end في المنتصف
-     *  جديد:          |---|      ← start في المنتصف، end بعد
-     *  جديد:    |---|            ← جوا الموجود بالكامل
-     *  جديد:  |-----------|      ← يغطي الموجود بالكامل ← whereBetween كان يفشل هون!
+     * Check availability
      */
-    private function ensureCarAvailable(int $carId, string $startDate, string $endDate): void
+    private function ensureCarAvailable(int $carId, string $start, string $end): void
     {
-        $conflict = Booking::where('car_id', $carId)
-            ->whereNotIn('status', ['canceled', 'rejected']) // ✅ تجاهل الحجوزات الملغية
-            ->where('start_date', '<', $endDate)            // ✅ الشرط الصحيح
-            ->where('end_date', '>', $startDate)
-            ->exists();
+        $conflict = $this->bookings
+            ->getCarBookingsInRange($carId, $start, $end);
 
         if ($conflict) {
             throw new \Exception('Car is already booked for this period');
@@ -72,26 +63,34 @@ class BookingService
     }
 
     /**
-     * Show booking details
+     * Show booking
      */
-    public function show(Booking $booking)
+    public function show(Booking $booking): Booking
     {
-        return $booking->load([
-            'car',
-            'employee',
-            'user',
-        ]);
+        return $this->bookings->findById($booking->id);
     }
 
     /**
      * Cancel booking
      */
-    public function cancel(Booking $booking)
+    public function cancel(Booking $booking): Booking
     {
-        $booking->update([
-            'status' => 'canceled',
-        ]);
+        if (!in_array($booking->status, ['pending', 'approved'])) {
+            throw new \Exception(
+                'Only pending or approved bookings can be canceled'
+            );
+        }
 
-        return $booking;
+        return $this->bookings->update($booking, [
+            'status' => 'canceled'
+        ]);
+    }
+
+    /**
+     * Get user bookings
+     */
+    public function getUserBookings(int $userId, ?string $status = null)
+    {
+        return $this->bookings->getUserBookings($userId, $status);
     }
 }

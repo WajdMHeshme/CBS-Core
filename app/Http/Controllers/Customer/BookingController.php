@@ -39,8 +39,10 @@ class BookingController extends Controller
     public function store(BookingRequest $request)
     {
         try {
-            $booking = $this->bookingService->create($request->validated());
-
+            $booking = $this->bookingService->create(
+                $request->validated(),
+                auth('sanctum')->id()
+            );
             dispatch(fn() => $this->notifyUsers($booking));
 
             return response()->json([

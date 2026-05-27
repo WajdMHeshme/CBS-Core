@@ -1,6 +1,6 @@
 # 🚗 CBS Core – Multi-Lessor Car Booking System
 
-![CBS Core](public/logo2.png)
+![CBS Core](public/logo.png)
 
 ## 📌 About the Project
 

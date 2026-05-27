@@ -60,7 +60,11 @@ html, body {
     <div class="w-full max-w-md">
 
       <div class="flex flex-col items-center justify-center gap-3 mb-8">
-        <span class="text-black text-3xl font-extrabold tracking-tight">Car Rental<span class="text-gray-400 font-medium">Sys</span></span>
+
+                    {{-- Brand Name --}}
+                    <h1 class="text-5xl font-extrabold tracking-tight text-gray-900">
+                        Luxe<span class="text-black">Drive</span>
+                    </h1>
         <p class="text-gray-500 text-sm mt-1">Manage cars, bookings & more</p>
       </div>
 

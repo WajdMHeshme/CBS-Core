@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Employee;
 
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Events\CommissionApproved;
+use App\Events\CommissionPaymentUploaded;
+use App\Events\CommissionRejected;
+use App\Events\CommissionRequested;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\BookingCommission;
-use App\Notifications\CommissionApprovedNotification;
-use App\Notifications\CommissionRequestedNotification;
 use App\Services\CommissionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Notifications\CommissionPaymentUploadedNotification;
 
 class CommissionController extends Controller
 {
@@ -19,7 +19,11 @@ class CommissionController extends Controller
         protected CommissionService $commissionService
     ) {}
 
-
+    /*
+    |--------------------------------------------------------------------------
+    | LIST COMMISSIONS
+    |--------------------------------------------------------------------------
+    */
     public function index()
     {
         $commissions = BookingCommission::with(['booking.car', 'lessor'])
@@ -30,6 +34,11 @@ class CommissionController extends Controller
         return view('dashboard.commissions.index', compact('commissions'));
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | SHOW COMMISSION
+    |--------------------------------------------------------------------------
+    */
     public function show($id)
     {
         $commission = BookingCommission::with([
@@ -42,179 +51,123 @@ class CommissionController extends Controller
         return view('dashboard.commissions.show', compact('commission'));
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | REQUEST COMMISSION
+    |--------------------------------------------------------------------------
+    */
+    public function requestCommission(Booking $booking)
+    {
+        abort_if($booking->employee_id !== Auth::id(), 403);
 
-public function requestCommission(Booking $booking)
-{
-    // حماية: فقط الموظف المسؤول
-    if ($booking->employee_id !== Auth::id()) {
-        abort(403, 'Unauthorized');
-    }
+        $booking->load('car');
 
-    // إذا العمولة موجودة مسبقًا
-    if ($booking->commission()->exists()) {
+        abort_if(!$booking->car?->price_per_day, 500, 'Car price not set');
 
-        $commission = $booking->commission;
+        $amount = round($booking->car->price_per_day * 0.05, 2);
 
-        // إعادة إرسال الإشعار
-        if ($commission && $commission->lessor) {
-
-            $commission->lessor->notify(
-                new CommissionRequestedNotification($commission)
-            );
-        }
-
-        return back()->with(
-            'success',
-            'Commission notification resent successfully.'
+        $commission = $this->commissionService->createForBooking(
+            $booking,
+            Auth::user(),
+            $amount
         );
+
+        $commission->load(['lessor', 'booking']);
+
+        event(new CommissionRequested($commission));
+
+        return back()->with('success', 'Commission requested successfully');
     }
 
-    $price = $booking->car->price ?? 0;
-
-    $amount = round($price * 0.05, 2);
-
-    $commission = $this->commissionService->createForBooking(
-        $booking,
-        Auth::user(),
-        $amount
-    );
-
-    $commission->load([
-        'lessor',
-        'booking',
-    ]);
-
-    // إرسال الإشعار
-    if ($commission->lessor) {
-
-        $commission->lessor->notify(
-            new CommissionRequestedNotification($commission)
-        );
-    }
-
-    return back()->with(
-        'success',
-        'Commission created and notification sent successfully.'
-    );
-}
-
-
+    /*
+    |--------------------------------------------------------------------------
+    | UPLOAD PAYMENT
+    |--------------------------------------------------------------------------
+    */
     public function uploadPayment(Request $request, BookingCommission $commission)
     {
-        if ($commission->lessor_id !== Auth::id()) {
-            abort(403, 'Unauthorized');
-        }
+        abort_if($commission->lessor_id !== Auth::id(), 403);
 
-        $request->validate([
+        $data = $request->validate([
             'payment_reference' => 'nullable|string|max:255',
             'payment_image'     => 'nullable|image|max:2048',
         ]);
 
-        $imagePath = null;
+        $imagePath = $request->file('payment_image')
+            ?->store('commissions/payments', 'public');
 
-        // رفع صورة الدفع
-        if ($request->hasFile('payment_image')) {
-
-            $imagePath = $request->file('payment_image')
-                ->store('commissions/payments', 'public');
-        }
         $commission = $this->commissionService->uploadPaymentProof(
             $commission,
-            $request->payment_reference,
+            $data['payment_reference'],
             $imagePath
         );
 
-        // re-fetch لضمان العلاقات
-        $commission = BookingCommission::with('employee')->findOrFail($commission->id);
+        $commission->load(['employee', 'lessor']);
 
-        if ($commission->employee) {
-            $commission->employee->notify(
-                new CommissionPaymentUploadedNotification($commission)
-            );
-        }
+        event(new CommissionPaymentUploaded($commission));
 
-        return back()->with(
-            'success',
-            'Payment uploaded successfully.'
-        );
+        return back()->with('success', 'Payment uploaded successfully');
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | APPROVE COMMISSION
+    |--------------------------------------------------------------------------
+    */
+    // CommissionController.php
 
-    public function approve(BookingCommission $commission)
+    public function approve(BookingCommission $commission) 
     {
+        $this->authorizeAction($commission);
+
         $commission = $this->commissionService->approve(
             $commission,
             Auth::user()
         );
 
-        // تحميل العلاقات المطلوبة
         $commission->load([
-            'booking.car.carType',
-            'booking.car.owner',
+            'booking.car',
             'booking.user',
             'lessor',
             'employee',
         ]);
 
-        $booking = $commission->booking;
-        $car = $booking->car;
+        event(new CommissionApproved($commission));
 
-        // إنشاء PDF
-        $pdf = Pdf::loadView(
-            'dashboard.lessor.commissions.commission_receipt',
-            [
-                'commission' => $commission,
-                'booking'    => $booking,
-                'car'        => $car,
-                'customer'   => $booking->user,
-                'lessor'     => $commission->lessor,
-                'employee'   => Auth::user(),
-            ]
-        )->setOptions([
-            'defaultFont' => 'DejaVu Sans',
-            'isHtml5ParserEnabled' => true,
-            'isRemoteEnabled' => true,
-        ]);
-
-        $fileName = 'commission-' . $commission->id . '.pdf';
-
-        $path = storage_path('app/public/commissions');
-
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
-
-        file_put_contents(
-            $path . '/' . $fileName,
-            $pdf->output()
-        );
-
-        // حفظ رابط الملف
-        $commission->receipt_pdf = 'commissions/' . $fileName;
-        $commission->save();
-
-        // إرسال إشعار للمؤجر
-        if ($commission->lessor) {
-
-            $commission->lessor->notify(
-                new CommissionApprovedNotification($commission)
-            );
-        }
-
-        return back()->with(
-            'success',
-            'Commission approved, PDF generated, and notification sent successfully.'
-        );
+        return back()->with('success', 'Commission approved successfully');
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | REJECT COMMISSION
+    |--------------------------------------------------------------------------
+    */
     public function reject(Request $request, BookingCommission $commission)
     {
+        abort_if($commission->employee_id !== Auth::id(), 403);
+
+        $notes = $request->input('notes');
+
         $this->commissionService->reject(
             $commission,
             Auth::user(),
-            $request->notes
+            $notes
         );
 
-        return back()->with('success', 'Commission rejected.');
+        $commission = BookingCommission::with(['lessor', 'employee'])->findOrFail($commission->id);
+
+        event(new CommissionRejected($commission, $notes));
+
+        return back()->with('success', 'Commission rejected successfully');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | PRIVATE AUTH CHECK
+    |--------------------------------------------------------------------------
+    */
+    private function authorizeAction(BookingCommission $commission): void
+    {
+        abort_if($commission->employee_id !== Auth::id(), 403);
     }
 }
