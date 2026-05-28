@@ -21,20 +21,34 @@ class NewMessageNotification extends Notification
 
     public function toDatabase($notifiable): array
     {
+        $sender  = $this->message->sender;
+        $booking = $this->message->booking;
+
+        $senderName  = $sender?->name ?? 'Someone';
+        $bookingId   = $this->message->booking_id;
+        $carInfo     = $booking?->car?->name ?? "Booking #{$bookingId}";
+        $preview     = $this->getMessagePreview();
+
         return [
-
-            'type' => 'new_message',
-
-            'title' => 'New Message',
-
-            'message' => 'You received a new message from support.',
-
-            'conversation_id' => $this->message->conversation_id,
-
-            'booking_id' => $this->message->booking_id ?? null,
-
-            'url' => '/dashboard/chat/' .
-                $this->message->conversation_id,
+            'type'       => 'new_message',
+            'title'      => 'New Message from ' . $senderName,
+            'message'    => "\"{$preview}\" — regarding {$carInfo}",
+            'booking_id' => $bookingId,
+            'sender_id'  => $this->message->sender_id,
+            'sender_name' => $senderName,
+            'url'        => '/dashboard/bookings/' . $bookingId . '/chat',
         ];
+    }
+
+    /**
+     * Truncate the message to a short readable preview.
+     */
+    private function getMessagePreview(int $limit = 60): string
+    {
+        $text = $this->message->message ?? '';
+
+        return strlen($text) > $limit
+            ? substr($text, 0, $limit) . '...'
+            : $text;
     }
 }

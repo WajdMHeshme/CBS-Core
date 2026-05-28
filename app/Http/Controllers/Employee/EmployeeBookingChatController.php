@@ -11,7 +11,6 @@ class EmployeeBookingChatController extends Controller
     // Show the chat interface
     public function index()
     {
-        // مثال: نجيب الحجوزات الخاصة بالموظف الحالي
         $reservations = Booking::with('customer')
             ->where('employee_id', Auth::id())
             ->get()

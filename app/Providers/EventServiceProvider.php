@@ -7,7 +7,6 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
-
         \App\Events\BookingCreated::class => [
             \App\Listeners\SendBookingNotification::class,
         ],
@@ -28,14 +27,17 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\CommissionRejected::class => [
             \App\Listeners\SendCommissionRejectedNotification::class,
         ],
+
         \App\Events\LessorRequestCreated::class => [
             \App\Listeners\SendLessorRequestNotification::class,
         ],
-        [
-            \App\Events\LessorRequestStatusUpdated::class => [
-                \App\Listeners\SendLessorRequestStatusNotification::class,
-            ],
+
+        \App\Events\LessorRequestStatusUpdated::class => [
+            \App\Listeners\SendLessorRequestStatusNotification::class,
         ],
 
+        \App\Events\MessageSent::class => [
+            \App\Listeners\SendNewMessageNotification::class,
+        ],
     ];
 }
