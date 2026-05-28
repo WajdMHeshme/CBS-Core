@@ -11,7 +11,7 @@ class BookingAssignmentService
         return User::role('employee')
             ->withCount([
                 'assignedBookings as bookings_at_same_time' => function ($query) use ($scheduledAt) {
-                    $query->whereBetween('scheduled_at', [
+                    $query->whereBetween('start_date', [
                         now()->parse($scheduledAt)->subHour(),
                         now()->parse($scheduledAt)->addHour(),
                     ]);

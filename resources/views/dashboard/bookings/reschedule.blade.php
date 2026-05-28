@@ -39,7 +39,7 @@
                 </p>
 
                 <p class="font-medium text-gray-900 mt-1">
-                    {{ $booking->scheduled_at }}
+                    {{ $booking->start_date ? $booking->start_date->format('Y-m-d H:i') : __('messages.reports.no_data') }}
                 </p>
             </div>
 
@@ -57,12 +57,12 @@
                     </label>
 
                     <input type="datetime-local"
-                           name="scheduled_at"
-                           value="{{ old('scheduled_at') }}"
+                           name="start_date"
+                           value="{{ old('start_date') }}"
                            class="w-full border rounded-xl px-3.5 py-2.5 text-sm
                                   focus:ring-2 focus:ring-gray-900/20 focus:border-gray-800">
 
-                    @error('scheduled_at')
+                    @error('start_date')
                         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>

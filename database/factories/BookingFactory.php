@@ -14,14 +14,22 @@ class BookingFactory extends Factory
 
     public function definition(): array
     {
+        $startDate = Carbon::now()
+            ->addDays($this->faker->numberBetween(1, 20));
+
+        $endDate = (clone $startDate)
+            ->addDays($this->faker->numberBetween(1, 10));
+
         return [
             'user_id' => User::inRandomOrder()->value('id'),
-            'employee_id' => null, // رح نعبّيه بالSeeder
+
+            'employee_id' => null,
+
             'car_id' => Car::inRandomOrder()->value('id'),
 
-            'scheduled_at' => Carbon::now()
-                ->addDays($this->faker->numberBetween(1, 20))
-                ->setTime($this->faker->numberBetween(9, 18), 0),
+            'start_date' => $startDate->toDateString(),
+
+            'end_date' => $endDate->toDateString(),
 
             'status' => $this->faker->randomElement([
                 'pending',

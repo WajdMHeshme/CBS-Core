@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Booking;
 use App\Services\CommissionService;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -13,6 +12,7 @@ class EmployeeBookingService
     public function __construct(
         protected CommissionService $commissionService
     ) {}
+
     /**
      * Get bookings for employee + unassigned pending bookings
      */
@@ -31,54 +31,50 @@ class EmployeeBookingService
     }
 
     /**
-     * Approve booking
+     * APPROVE
      */
-public function approve(Booking $booking)
-{
-    if (!in_array($booking->status, ['pending', 'rescheduled'])) {
-        throw ValidationException::withMessages([
-            'status' => 'Action not allowed. Booking must be pending or rescheduled.',
-        ]);
-    }
+    public function approve(Booking $booking)
+    {
+        if (!in_array($booking->status, ['pending', 'rescheduled'])) {
+            throw ValidationException::withMessages([
+                'status' => 'Action not allowed',
+            ]);
+        }
 
-    if (is_null($booking->employee_id)) {
-        $booking->employee_id = Auth::id();
-        $booking->save();
-    }
+        if (!$booking->employee_id) {
+            $booking->employee_id = Auth::id();
+            $booking->save();
+        }
 
-    if ($this->hasTimeConflict(
-        $booking->car_id,
-        $booking->scheduled_at,
-        $booking->id
-    )) {
-        throw ValidationException::withMessages([
-            'scheduled_at' => 'This car is already booked at this time.',
-        ]);
-    }
-
-    $booking->update([
-        'status' => 'approved',
-        'rescheduled_at' => null,
-    ]);
-
-    //  حساب العمولة بشكل آمن
-    if (!$booking->commission()->exists()) {
-
-        $price = $booking->car->price_per_day;
-        $commissionAmount = round($price * 0.05, 2);
-
-        $this->commissionService->createForBooking(
-            $booking,
-            Auth::user(),
-            $commissionAmount
+        $this->assertNoCarConflict(
+            $booking->car_id,
+            $booking->start_date,
+            $booking->end_date,
+            $booking->id
         );
-    }
 
-    return $booking;
-}
+        $booking->update([
+            'status' => 'approved',
+            'rescheduled_at' => null,
+        ]);
+
+        if (!$booking->commission()->exists()) {
+
+            $price = $booking->car->price_per_day;
+            $commissionAmount = round($price * 0.05, 2);
+
+            $this->commissionService->createForBooking(
+                $booking,
+                Auth::user(),
+                $commissionAmount
+            );
+        }
+
+        return $booking;
+    }
 
     /**
-     * Cancel booking
+     * CANCEL
      */
     public function cancel(Booking $booking)
     {
@@ -88,7 +84,7 @@ public function approve(Booking $booking)
             ]);
         }
 
-        if (is_null($booking->employee_id)) {
+        if (!$booking->employee_id) {
             $booking->employee_id = Auth::id();
             $booking->save();
         }
@@ -101,23 +97,13 @@ public function approve(Booking $booking)
     }
 
     /**
-     * Reschedule booking
+     * RESCHEDULE
      */
-    public function reschedule(Booking $booking, $scheduleAt)
+    public function reschedule(Booking $booking, $start, $end)
     {
-        if (is_null($booking->employee_id)) {
+        if (!$booking->employee_id) {
             $booking->employee_id = Auth::id();
             $booking->save();
-        }
-
-        if ($this->hasTimeConflict(
-            $booking->employee_id,
-            $scheduleAt,
-            $booking->id
-        )) {
-            throw ValidationException::withMessages([
-                'scheduled_at' => 'Employee already has a booking at this time',
-            ]);
         }
 
         if (!in_array($booking->status, ['pending', 'approved', 'rescheduled'])) {
@@ -126,9 +112,17 @@ public function approve(Booking $booking)
             ]);
         }
 
+        $this->assertNoCarConflict(
+            $booking->car_id,
+            $start,
+            $end,
+            $booking->id
+        );
+
         $booking->update([
             'status' => 'rescheduled',
-            'scheduled_at' => $scheduleAt,
+            'start_date' => $start,
+            'end_date' => $end,
             'rescheduled_at' => now(),
         ]);
 
@@ -136,11 +130,11 @@ public function approve(Booking $booking)
     }
 
     /**
-     * Complete booking
+     * COMPLETE
      */
     public function complete(Booking $booking)
     {
-        if (is_null($booking->employee_id)) {
+        if (!$booking->employee_id) {
             $booking->employee_id = Auth::id();
             $booking->save();
         }
@@ -164,41 +158,22 @@ public function approve(Booking $booking)
     }
 
     /**
-     * Time conflict check
-     */
-    public function hasTimeConflict($carId, $scheduledAt, $excludeId = null)
-    {
-        if (empty($carId)) {
-            return false;
-        }
-
-        return Booking::where('car_id', $carId)
-            ->when($excludeId, fn($q) => $q->where('id', '!=', $excludeId))
-            ->whereIn('status', ['pending', 'approved', 'rescheduled'])
-            ->whereBetween('scheduled_at', [
-                Carbon::parse($scheduledAt)->subHour(),
-                Carbon::parse($scheduledAt)->addHour(),
-            ])
-            ->exists();
-    }
-
-    /**
-     * Reject booking
+     * REJECT
      */
     public function reject(Booking $booking, $reason = null)
     {
-        if (is_null($booking->employee_id)) {
+        if (!$booking->employee_id) {
             $booking->employee_id = Auth::id();
             $booking->save();
         }
 
         if ($booking->employee_id !== Auth::id()) {
-            abort(403, 'You are not allowed to reject this booking');
+            abort(403, 'Forbidden');
         }
 
         if (!in_array($booking->status, ['pending', 'rescheduled'])) {
             throw ValidationException::withMessages([
-                'status' => 'Action is not allowed. Booking must be pending or rescheduled.',
+                'status' => 'Action is not allowed',
             ]);
         }
 
@@ -209,5 +184,24 @@ public function approve(Booking $booking)
         ]);
 
         return $booking;
+    }
+
+    /**
+     * UNIFIED CONFLICT CHECK (FIXED)
+     */
+    private function assertNoCarConflict($carId, $start, $end, $excludeId = null)
+    {
+        $conflict = Booking::where('car_id', $carId)
+            ->when($excludeId, fn($q) => $q->where('id', '!=', $excludeId))
+            ->whereIn('status', ['approved', 'rescheduled'])
+            ->where('start_date', '<', $end)
+            ->where('end_date', '>', $start)
+            ->exists();
+
+        if ($conflict) {
+            throw ValidationException::withMessages([
+                'date' => 'Car already booked for this period',
+            ]);
+        }
     }
 }

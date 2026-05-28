@@ -18,13 +18,13 @@ class DashboardController extends Controller
             ->values();
 
         $rawBooking = Booking::select(
-            DB::raw("DATE_FORMAT(scheduled_at, '%Y-%m') as month"),
+            DB::raw("DATE_FORMAT(start_date, '%Y-%m') as month"),
             DB::raw("SUM(status = 'pending') as pending"),
             DB::raw("SUM(status = 'approved') as approved"),
             DB::raw("SUM(status = 'rejected') as rejected")
         )
-            ->whereNotNull('scheduled_at')
-            ->where('scheduled_at', '>=', now()->subMonths(6))
+            ->whereNotNull('start_date')
+            ->where('start_date', '>=', now()->subMonths(6))
             ->groupBy('month')
             ->get()
             ->keyBy('month');

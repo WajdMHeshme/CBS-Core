@@ -12,7 +12,8 @@ class BookingResource extends JsonResource
         return [
             'id' => $this->id,
             'status' => $this->status,
-            'scheduled_at' => $this->scheduled_at?->format('Y-m-d H:i'),
+            'start_date' => $this->start_date?->format('Y-m-d H:i'),
+            'end_date' => $this->end_date?->format('Y-m-d H:i'),
             'notes' => $this->notes,
             'rejection_reason' => $this->rejection_reason,
 

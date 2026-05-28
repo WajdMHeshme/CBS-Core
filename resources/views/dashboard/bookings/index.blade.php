@@ -158,7 +158,7 @@
                     <path fill-rule="evenodd" d="M6.75 2.25a.75.75 0 01.75.75V4.5h9V3a.75.75 0 011.5 0v1.5h.75A2.25 2.25 0 0121 6.75v12A2.25 2.25 0 0118.75 21H5.25A2.25 2.25 0 013 18.75v-12A2.25 2.25 0 015.25 4.5H6V3a.75.75 0 01.75-.75zM3.75 9h16.5v9.75a.75.75 0 01-.75.75H4.5a.75.75 0 01-.75-.75V9z" clip-rule="evenodd" />
                 </svg>
                 <p class="text-sm text-gray-700">
-                    <span class="font-medium">{{ $booking->scheduled_at }}</span>
+                    <span class="font-medium">{{ $booking->start_date->format('Y-m-d H:i') }}</span>
                 </p>
             </div>
 

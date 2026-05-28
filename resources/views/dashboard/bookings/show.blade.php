@@ -117,7 +117,7 @@
                             </svg>
 
                             <p class="text-sm text-gray-700">
-                                {{ $booking->scheduled_at }}
+                                {{ $booking->start_date ? $booking->start_date->format('Y-m-d H:i') : __('messages.reports.no_data') }}
                             </p>
                         </div>
                     </div>

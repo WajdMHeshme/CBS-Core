@@ -36,7 +36,7 @@
                         {{ $booking->car->title ?? __('messages.reports.unknown') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-gray-600">
-                        {{ $booking->scheduled_at ?? __('messages.reports.no_data') }}
+                        {{ $booking->start_date ?? __('messages.reports.no_data') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center gap-4">

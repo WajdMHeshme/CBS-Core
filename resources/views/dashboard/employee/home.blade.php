@@ -123,7 +123,7 @@
                             </td>
 
                             <td class="px-4 py-2 text-sm" dir="ltr">
-                                {{ $booking->scheduled_at->format('d M Y H:i') }}
+                                {{ $booking->start_date->format('d M Y H:i') }}
                             </td>
 
                         </tr>

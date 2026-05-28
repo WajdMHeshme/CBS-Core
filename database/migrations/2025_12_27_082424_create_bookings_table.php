@@ -27,7 +27,6 @@ return new class extends Migration
                 ->constrained('users')
                 ->nullOnDelete();
 
-            $table->dateTime('scheduled_at');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
 

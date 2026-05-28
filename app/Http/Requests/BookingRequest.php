@@ -16,10 +16,8 @@ class BookingRequest extends FormRequest
         return [
             'car_id' => 'required|exists:cars,id',
 
-            'scheduled_at' => 'required|date|after:now',
-
-            'start_date' => 'nullable|date|after_or_equal:today',
-            'end_date' => 'nullable|date|after:start_date',
+            'start_date' => 'required|date|after_or_equal:today',
+            'end_date' => 'required|date|after:start_date',
 
             'notes' => 'nullable|string|max:500',
         ];

@@ -27,7 +27,11 @@ class BookingSeeder extends Seeder
 
         Booking::factory()
             ->count(40)
-            ->sequence(fn() => ['car_id' => $cars->random()->id])
-            ->create(['employee_id' => $employee->id]);
+            ->sequence(fn () => [
+                'car_id' => $cars->random()->id,
+            ])
+            ->create([
+                'employee_id' => $employee->id,
+            ]);
     }
 }

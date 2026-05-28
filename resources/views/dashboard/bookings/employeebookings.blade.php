@@ -66,7 +66,7 @@ $isRtl = app()->getLocale() == 'ar';
                     </p>
 
                     <p class="font-semibold text-primary">
-                      {{ __('messages.user.role_lessor') }}:  {{ $lessor?->name ?? 'Unknown Lessor' }}
+                        {{ __('messages.user.role_lessor') }}: {{ $lessor?->name ?? 'Unknown Lessor' }}
                     </p>
                 </div>
 
@@ -84,21 +84,36 @@ $isRtl = app()->getLocale() == 'ar';
 
             <div class="border-t border-gray-200 my-3"></div>
 
-            <div class="flex items-center gap-2">
-                <div class="text-sm">
-                    <p class="font-medium text-gray-800">
-                        {{ $user?->name ?? 'Unknown User' }}
+            <div class="flex items-center gap-3">
+                <div class="flex flex-col leading-tight">
+
+                    <p class="font-medium text-gray-800 truncate max-w-[180px]">
+                        {{ $user?->name ?? 'Unknown user' }}
                     </p>
-                    <p class="text-xs text-gray-500">
-                        {{ $user?->email ?? '-' }}
+
+                    <p class="text-xs text-gray-500 truncate max-w-[180px]">
+                        {{ $user?->email ?? 'No email available' }}
                     </p>
+
                 </div>
             </div>
 
-            <div class="mt-3 flex items-center gap-2 text-sm text-gray-700">
-                <span class="font-medium">
-                    {{ $booking->scheduled_at ?? '-' }}
-                </span>
+            <div class="mt-3 grid grid-cols-2 gap-4 text-sm text-gray-700">
+
+                <div class="flex flex-col">
+                    <span class="text-xs text-gray-500">Start date</span>
+                    <span class="font-medium">
+                        {{ optional($booking->start_date)->format('d M Y H:i') ?? '-' }}
+                    </span>
+                </div>
+
+                <div class="flex flex-col">
+                    <span class="text-xs text-gray-500">End date</span>
+                    <span class="font-medium">
+                        {{ optional($booking->end_date)->format('d M Y H:i') ?? '-' }}
+                    </span>
+                </div>
+
             </div>
 
             <div class="mt-6 flex flex-wrap gap-2">

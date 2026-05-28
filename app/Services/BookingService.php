@@ -19,28 +19,26 @@ class BookingService
      */
     public function create(array $data, int $userId): Booking
     {
-        $car = Car::findOrFail($data['car_id']);
+        return DB::transaction(function () use ($data, $userId) {
 
-        return DB::transaction(function () use ($data, $userId, $car) {
+            $car = Car::lockForUpdate()->findOrFail($data['car_id']);
 
-            $car = Car::lockForUpdate()->findOrFail($car->id);
+            $start = $data['start_date'];
+            $end   = $data['end_date'];
 
-            if (!empty($data['start_date']) && !empty($data['end_date'])) {
-                $this->ensureCarAvailable(
-                    $car->id,
-                    $data['start_date'],
-                    $data['end_date']
-                );
-            }
+            $this->ensureCarAvailable(
+                $car->id,
+                $start,
+                $end
+            );
 
             $booking = $this->bookings->create([
-                'car_id'       => $car->id,
-                'user_id'      => $userId,
-                'employee_id'  => $car->employee_id ?? null,
-                'scheduled_at' => $data['scheduled_at'] ?? null,
-                'start_date'   => $data['start_date'] ?? null,
-                'end_date'     => $data['end_date'] ?? null,
-                'status'       => 'pending',
+                'car_id'      => $car->id,
+                'user_id'     => $userId,
+                'employee_id' => $car->employee_id ?? null,
+                'start_date'  => $start,
+                'end_date'    => $end,
+                'status'      => 'pending',
             ]);
 
             event(new BookingCreated($booking));
@@ -50,12 +48,16 @@ class BookingService
     }
 
     /**
-     * Check availability
+     * Check availability (FIXED & RELIABLE)
      */
-    private function ensureCarAvailable(int $carId, string $start, string $end): void
+    private function ensureCarAvailable(int $carId, string $start, string $end, ?int $excludeId = null): void
     {
-        $conflict = $this->bookings
-            ->getCarBookingsInRange($carId, $start, $end);
+        $conflict = Booking::where('car_id', $carId)
+            ->when($excludeId, fn($q) => $q->where('id', '!=', $excludeId))
+            ->whereIn('status', ['approved', 'rescheduled'])
+            ->where('start_date', '<', $end)
+            ->where('end_date', '>', $start)
+            ->exists();
 
         if ($conflict) {
             throw new \Exception('Car is already booked for this period');

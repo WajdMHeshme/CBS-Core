@@ -18,7 +18,7 @@ class EmployeeBookingChatController extends Controller
                 return (object) [
                     'id' => $booking->id,
                     'customer_name' => $booking->customer->name ?? 'N/A',
-                    'date' => $booking->scheduled_at->format('Y-m-d H:i'),
+                    'date' => $booking->start_date->format('Y-m-d H:i'),
                     'short_note' => $booking->notes ? substr($booking->notes, 0, 30) : '',
                 ];
             });
