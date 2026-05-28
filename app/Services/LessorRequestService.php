@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\LessorRequestStatusUpdated;
 use App\Models\LessorRequest;
 
 class LessorRequestService
@@ -19,6 +20,7 @@ class LessorRequestService
             'identity_back_image' => $data['identity_back_image'] ?? null,
         ]);
     }
+
     public function updateStatus(
         LessorRequest $lessorRequest,
         string $status
@@ -29,8 +31,17 @@ class LessorRequestService
         ]);
 
         if ($status === 'approved') {
+
             $lessorRequest->user->assignRole('lessor');
         }
+
+        // dispatch event
+        event(
+            new LessorRequestStatusUpdated(
+                $lessorRequest,
+                $status
+            )
+        );
 
         return $lessorRequest->fresh();
     }

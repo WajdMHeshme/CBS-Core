@@ -31,6 +31,11 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\LessorRequestCreated::class => [
             \App\Listeners\SendLessorRequestNotification::class,
         ],
+        [
+            \App\Events\LessorRequestStatusUpdated::class => [
+                \App\Listeners\SendLessorRequestStatusNotification::class,
+            ],
+        ],
 
     ];
 }
