@@ -25,4 +25,9 @@ Route::middleware('auth:sanctum')->group(function () {
         '/notifications/test',
         [NotificationController::class, 'test']
     );
+
+    Route::delete(
+        '/notifications/{id}',
+        [NotificationController::class, 'destroy']
+    );
 });

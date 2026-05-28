@@ -33,8 +33,8 @@ class LessorRequestStatusNotification extends Notification
             'status' => $this->status,
 
             'url' => $this->status === 'approved'
-                ? '/lessor/dashboard'
-                : '/dashboard',
+                ? 'http://localhost:8000/login'
+                : '',
         ];
     }
 }

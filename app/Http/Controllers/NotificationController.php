@@ -57,4 +57,21 @@ class NotificationController extends Controller
             'message' => 'Notification sent successfully'
         ]);
     }
+
+
+    public function destroy(
+        string $id,
+        Request $request
+    ) {
+
+        $notification = $request->user()
+            ->notifications()
+            ->findOrFail($id);
+
+        $notification->delete();
+
+        return response()->json([
+            'message' => 'Notification deleted successfully'
+        ]);
+    }
 }
