@@ -142,7 +142,7 @@ $asideBorder = $isRtl ? 'border-l' : 'border-r';
                     </a>
 
                     {{-- Support Tickets --}}
-                    <a href="{{ route('employee.support') }}"
+                    <a href="{{ route('support.index') }}"
                         class="{{ $linkBase }} {{ $linkDirectional }} {{ request()->is('dashboard/support-tickets*') ? 'bg-indigo-50 text-black font-semibold' : 'text-gray-700 hover:bg-gray-50' }}">
 
                         <svg xmlns="http://www.w3.org/2000/svg"

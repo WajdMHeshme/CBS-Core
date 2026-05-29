@@ -9,7 +9,7 @@
             <!-- Support Icon -->
             <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M18.364 5.636a9 9 0 11-12.728 0m12.728 0A9 9 0 005.636 18.364M18.364 5.636L12 12m0 0l-6.364-6.364M12 12v9"/>
+                    d="M18.364 5.636a9 9 0 11-12.728 0m12.728 0A9 9 0 005.636 18.364M18.364 5.636L12 12m0 0l-6.364-6.364M12 12v9" />
             </svg>
 
             {{ __('messages.dashboard.support_tickets') }}
@@ -29,7 +29,7 @@
                     <!-- Ticket Icon -->
                     <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-6 4h6m-6-8h6M5 4h14a2 2 0 012 2v2a2 2 0 01-2 2 2 2 0 000 4 2 2 0 012 2v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2a2 2 0 012-2 2 2 0 000-4 2 2 0 01-2-2V6a2 2 0 012-2z"/>
+                            d="M9 12h6m-6 4h6m-6-8h6M5 4h14a2 2 0 012 2v2a2 2 0 01-2 2 2 2 0 000 4 2 2 0 012 2v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2a2 2 0 012-2 2 2 0 000-4 2 2 0 01-2-2V6a2 2 0 012-2z" />
                     </svg>
 
                     <span class="font-bold text-gray-800">
@@ -53,7 +53,7 @@
                 <div class="flex items-center gap-2 text-gray-700">
                     <!-- User -->
                     <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 10a4 4 0 100-8 4 4 0 000 8zM2 18a8 8 0 1116 0H2z"/>
+                        <path d="M10 10a4 4 0 100-8 4 4 0 000 8zM2 18a8 8 0 1116 0H2z" />
                     </svg>
                     <span class="font-medium">{{ $ticket->name }}</span>
                 </div>
@@ -62,7 +62,7 @@
                     <!-- Email -->
                     <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M16 12H8m8 0H8m8 0V8a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h10a2 2 0 002-2v-4z"/>
+                            d="M16 12H8m8 0H8m8 0V8a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h10a2 2 0 002-2v-4z" />
                     </svg>
                     <span>{{ $ticket->email }}</span>
                 </div>
@@ -71,7 +71,7 @@
                     <!-- Phone -->
                     <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 5a2 2 0 012-2h2l2 5-2 1c1 3 3 5 6 6l1-2 5 2v2a2 2 0 01-2 2h-1C8.477 19 3 14.523 3 9V5z"/>
+                            d="M3 5a2 2 0 012-2h2l2 5-2 1c1 3 3 5 6 6l1-2 5 2v2a2 2 0 01-2 2h-1C8.477 19 3 14.523 3 9V5z" />
                     </svg>
                     <span>{{ $ticket->phone }}</span>
                 </div>
@@ -83,10 +83,22 @@
                 {{ $ticket->subject }}
             </h3>
 
+            ```blade
             {{-- Message --}}
-            <p class="text-sm text-gray-500 leading-relaxed">
-                {{ \Illuminate\Support\Str::limit($ticket->message, 120) }}
-            </p>
+            <div>
+                <p class="text-sm text-gray-500 leading-relaxed break-all">
+                    {{ \Illuminate\Support\Str::limit($ticket->message, 120) }}
+                </p>
+
+                @if(strlen($ticket->message) > 120)
+                <a href="{{ route('support.show', $ticket->id) }}"
+                    class="text-blue-500 text-xs mt-2 inline-block hover:underline">
+                    Show more
+                </a>
+                @endif
+            </div>
+            ```
+
 
             {{-- Footer --}}
             <div class="flex justify-between items-center text-xs text-gray-400 pt-2 border-t">

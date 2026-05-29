@@ -182,7 +182,7 @@
                 </div>
             </div>
 
-            {{-- New Property Button --}}
+            {{-- New Car Button --}}
             @role('admin')
             <a href="{{ url('dashboard/cars/create') }}"
                 class="hidden md:inline-flex items-center gap-2 px-3 py-2 rounded-full bg-black  text-white text-sm font-semibold shadow hover:scale-[1.02] transition">

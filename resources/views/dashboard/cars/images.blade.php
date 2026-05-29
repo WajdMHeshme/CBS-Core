@@ -1,11 +1,11 @@
 @extends('dashboard.layout')
 
-@section('title', 'Property Images')
+@section('title', 'Car Images')
 
 @section('content')
 <div class="container">
 
-    <h2>Property Images #{{ $property->id }}</h2>
+    <h2>car Images #{{ $car->id }}</h2>
 
     @if(session('success'))
         <div style="padding:10px;background:#d1fae5;margin:10px 0;">
@@ -24,7 +24,7 @@
     @endif
 
     {{-- Upload Form --}}
-    <form action="{{ route('admin.properties.images.store', $property->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.cars.images.store', $car->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div style="margin-bottom:10px;">
@@ -44,7 +44,7 @@
 
     {{-- Link to trashed page --}}
     <div style="margin-bottom:15px;">
-        <a href="{{ route('admin.properties.images.trashed', $property->id) }}">View Trashed Images</a>
+        <a href="{{ route('admin.cars.images.trashed', $car->id) }}">View Trashed Images</a>
     </div>
 
     {{-- Images list --}}
@@ -63,14 +63,14 @@
 
                 <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
                     {{-- Set main --}}
-                    <form method="POST" action="{{ route('admin.properties.images.setMain', [$property->id, $img->id]) }}">
+                    <form method="POST" action="{{ route('admin.cars.images.setMain', [$car->id, $img->id]) }}">
                         @csrf
                         @method('PATCH')
                         <button type="submit">Set Main</button>
                     </form>
 
                     {{-- soft delete only --}}
-                    <form method="POST" action="{{ route('admin.properties.images.destroy', [$property->id, $img->id]) }}"
+                    <form method="POST" action="{{ route('admin.cars.images.destroy', [$car->id, $img->id]) }}"
                         onsubmit="return confirm('delete?');">
                         @csrf
                         @method('DELETE')

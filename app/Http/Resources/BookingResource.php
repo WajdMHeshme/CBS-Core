@@ -17,7 +17,7 @@ class BookingResource extends JsonResource
             'notes' => $this->notes,
             'rejection_reason' => $this->rejection_reason,
 
-            // Car instead of property
+            // Car instead of car
             'car' => $this->car ? [
                 'id' => $this->car->id,
                 'title' => $this->car->title,

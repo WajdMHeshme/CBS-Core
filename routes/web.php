@@ -5,12 +5,10 @@ use App\Http\Controllers\Admin\AmenityController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CarController as AdminCarController;
 use App\Http\Controllers\Admin\CarImageController;
-use App\Http\Controllers\Admin\LessorRequestAdminController;
 use App\Http\Controllers\Admin\Reports\BookingsReportController;
 use App\Http\Controllers\Admin\Reports\CarReportController;
 use App\Http\Controllers\Employee\BookingMessageController;
-use App\Http\Controllers\Employee\SupportTicketController as EmployeeSupportTicketController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Customer\SupportTicketController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -142,8 +140,11 @@ Route::middleware(['auth', 'role:employee|admin'])
 
         Route::get(
             'support-tickets',
-            [EmployeeSupportTicketController::class, 'index']
-        )->name('employee.support');
+            [SupportTicketController::class, 'index']
+        )->name('support.index');
+
+        Route::get('/dashboard/support-tickets/{ticket}', [SupportTicketController::class, 'show'])
+            ->name('support.show');
     });
 
 require __DIR__ . '/web/auth.php';
