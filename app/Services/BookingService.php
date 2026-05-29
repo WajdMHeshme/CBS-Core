@@ -26,12 +26,34 @@ class BookingService
             $start = $data['start_date'];
             $end   = $data['end_date'];
 
+            /**
+             * Validate dates
+             */
+            $this->validateBookingDates($start, $end);
+
+            /**
+             * Check if car already booked
+             */
             $this->ensureCarAvailable(
                 $car->id,
                 $start,
                 $end
             );
 
+            /**
+             * Prevent duplicate user booking
+             * ONLY if periods overlap
+             */
+            $this->ensureUserHasNoActiveBooking(
+                $userId,
+                $car->id,
+                $start,
+                $end
+            );
+
+            /**
+             * Create booking
+             */
             $booking = $this->bookings->create([
                 'car_id'      => $car->id,
                 'user_id'     => $userId,
@@ -48,19 +70,90 @@ class BookingService
     }
 
     /**
-     * Check availability (FIXED & RELIABLE)
+     * Validate booking dates
      */
-    private function ensureCarAvailable(int $carId, string $start, string $end, ?int $excludeId = null): void
-    {
+    private function validateBookingDates(
+        string $start,
+        string $end
+    ): void {
+
+        if ($start >= $end) {
+            throw new \Exception(
+                'End date must be after start date'
+            );
+        }
+    }
+
+    /**
+     * Prevent duplicate booking requests
+     */
+    private function ensureUserHasNoActiveBooking(
+        int $userId,
+        int $carId,
+        string $start,
+        string $end
+    ): void {
+
+        $exists = Booking::where('user_id', $userId)
+            ->where('car_id', $carId)
+
+            ->whereIn('status', [
+                'pending',
+                'approved',
+                'rescheduled'
+            ])
+
+            ->where(function ($query) use ($start, $end) {
+
+                $query
+                    ->where('start_date', '<', $end)
+                    ->where('end_date', '>', $start);
+            })
+
+            ->exists();
+
+        if ($exists) {
+            throw new \Exception(
+                'You already have a booking for this car during this period'
+            );
+        }
+    }
+
+    /**
+     * Check car availability
+     */
+    private function ensureCarAvailable(
+        int $carId,
+        string $start,
+        string $end,
+        ?int $excludeId = null
+    ): void {
+
         $conflict = Booking::where('car_id', $carId)
-            ->when($excludeId, fn($q) => $q->where('id', '!=', $excludeId))
-            ->whereIn('status', ['approved', 'rescheduled'])
-            ->where('start_date', '<', $end)
-            ->where('end_date', '>', $start)
+
+            ->when(
+                $excludeId,
+                fn($q) => $q->where('id', '!=', $excludeId)
+            )
+
+            ->whereIn('status', [
+                'approved',
+                'rescheduled'
+            ])
+
+            ->where(function ($query) use ($start, $end) {
+
+                $query
+                    ->where('start_date', '<', $end)
+                    ->where('end_date', '>', $start);
+            })
+
             ->exists();
 
         if ($conflict) {
-            throw new \Exception('Car is already booked for this period');
+            throw new \Exception(
+                'Car is already booked for this period'
+            );
         }
     }
 
@@ -77,7 +170,11 @@ class BookingService
      */
     public function cancel(Booking $booking): Booking
     {
-        if (!in_array($booking->status, ['pending', 'approved'])) {
+        if (!in_array($booking->status, [
+            'pending',
+            'approved'
+        ])) {
+
             throw new \Exception(
                 'Only pending or approved bookings can be canceled'
             );
@@ -91,8 +188,13 @@ class BookingService
     /**
      * Get user bookings
      */
-    public function getUserBookings(int $userId, ?string $status = null)
-    {
-        return $this->bookings->getUserBookings($userId, $status);
+    public function getUserBookings(
+        int $userId,
+        ?string $status = null
+    ) {
+        return $this->bookings->getUserBookings(
+            $userId,
+            $status
+        );
     }
 }

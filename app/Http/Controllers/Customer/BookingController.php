@@ -16,16 +16,30 @@ class BookingController extends Controller
 {
     use AuthorizesRequests;
 
-    public function __construct(private BookingService $bookingService) {}
+    public function __construct(
+        private BookingService $bookingService
+    ) {}
 
     /**
      * Customer bookings
      */
     public function index(Request $request)
     {
-        $bookings = Booking::with(['car', 'employee', 'user'])
+        $bookings = Booking::with([
+            'car',
+            'employee',
+            'user'
+        ])
             ->where('user_id', auth('sanctum')->id())
-            ->when($request->status, fn($q) => $q->where('status', $request->status))
+
+            ->when(
+                $request->status,
+                fn($q) => $q->where(
+                    'status',
+                    $request->status
+                )
+            )
+
             ->latest()
             ->paginate(10);
 
@@ -35,14 +49,15 @@ class BookingController extends Controller
     /**
      * Create booking
      */
-    // BookingController - store()
     public function store(BookingRequest $request)
     {
         try {
+
             $booking = $this->bookingService->create(
                 $request->validated(),
                 auth('sanctum')->id()
             );
+
             dispatch(fn() => $this->notifyUsers($booking));
 
             return response()->json([
@@ -50,22 +65,37 @@ class BookingController extends Controller
                 'data'    => new BookingResource($booking),
             ], 201);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 422);
+
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 422);
         }
     }
 
-    private function notifyUsers(Booking $booking, string $action = 'created'): void
-    {
+    /**
+     * Notify admins & employees
+     */
+    private function notifyUsers(
+        Booking $booking,
+        string $action = 'created'
+    ): void {
+
         $byUser = $booking->user->name ?? 'Customer';
 
-        $users = User::role(['admin', 'employee'])->get();
+        $users = User::role([
+            'admin',
+            'employee'
+        ])->get();
 
         foreach ($users as $user) {
-            $user->notify(new BookingActionNotification(
-                action: $action,
-                bookingId: $booking->id,
-                byUser: $byUser
-            ));
+
+            $user->notify(
+                new BookingActionNotification(
+                    action: $action,
+                    bookingId: $booking->id,
+                    byUser: $byUser
+                )
+            );
         }
     }
 
@@ -86,32 +116,16 @@ class BookingController extends Controller
      */
     public function cancel(Booking $booking)
     {
-
         $booking = $this->bookingService->cancel($booking);
 
-        $byUser = $booking->user->name ?? 'Customer';
-
-        $users = User::role(['admin', 'employee'])->get();
-        foreach ($users as $user) {
-            $user->notify(new BookingActionNotification(
-                action: 'cancelled',
-                bookingId: $booking->id,
-                byUser: $byUser
-            ));
-        }
-
-        $employees = User::role('employee')->get();
-        foreach ($employees as $employee) {
-            $employee->notify(new BookingActionNotification(
-                action: 'cancelled',
-                bookingId: $booking->id,
-                byUser: $byUser
-            ));
-        }
+        dispatch(fn() => $this->notifyUsers(
+            $booking,
+            'cancelled'
+        ));
 
         return response()->json([
             'message' => __('messages.booking.canceled'),
-            'data' => new BookingResource($booking),
+            'data'    => new BookingResource($booking),
         ]);
     }
 }
