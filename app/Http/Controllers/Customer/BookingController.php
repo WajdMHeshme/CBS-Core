@@ -91,9 +91,9 @@ class BookingController extends Controller
 
         $byUser = $booking->user->name ?? 'Customer';
 
-        $admins = User::role('admin')->get();
-        foreach ($admins as $admin) {
-            $admin->notify(new BookingActionNotification(
+        $users = User::role(['admin', 'employee'])->get();
+        foreach ($users as $user) {
+            $user->notify(new BookingActionNotification(
                 action: 'cancelled',
                 bookingId: $booking->id,
                 byUser: $byUser

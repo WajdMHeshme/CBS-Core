@@ -43,11 +43,16 @@ class BookingPolicy
 
     public function employeeCancel(User $user, Booking $booking): bool
     {
-        if ($user->hasRole('admin')) return true;
+        if ($user->hasRole('admin')) {
+            return true;
+        }
 
         return
             $user->hasRole('employee') &&
-            $booking->employee_id === $user->id &&
+            (
+                $booking->employee_id == $user->id ||
+                is_null($booking->employee_id)
+            ) &&
             in_array($booking->status, ['pending', 'approved', 'rescheduled']);
     }
 

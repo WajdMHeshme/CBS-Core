@@ -78,18 +78,22 @@ class EmployeeBookingController extends Controller
     /**
      * Cancel booking
      */
-    public function cancel(Booking $booking)
-    {
-        $this->authorize('employeeCancel', $booking);
+public function cancel(Booking $booking)
+{
+    $this->authorize('employeeCancel', $booking);
 
-        $booking = $this->employeeBookingService->cancel($booking);
-
-        $this->notifyUsers('cancelled', $booking);
-
-        return redirect()
-            ->route('employee.bookings.show', $booking->id)
-            ->with('status', __('messages.booking.cancelled'));
+    if (is_null($booking->employee_id)) {
+        $booking->update(['employee_id' => Auth::id()]);
     }
+
+    $booking = $this->employeeBookingService->cancel($booking);
+
+    $this->notifyUsers('cancelled', $booking);
+
+    return redirect()
+        ->route('employee.bookings.show', $booking->id)
+        ->with('status', __('messages.booking.cancelled'));
+}
 
     /**
      * Reschedule booking
