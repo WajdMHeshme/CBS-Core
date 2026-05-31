@@ -52,6 +52,7 @@ return [
     'reject' => 'Reject',
     // Sidebar
     'sidebar' => [
+        'reviews' => 'Reviews',
         'commissions_requests' => 'Commissions Requests',
         'system_name' => 'Car Rental and Management System',
         'rights_reserved' => 'All rights reserved',

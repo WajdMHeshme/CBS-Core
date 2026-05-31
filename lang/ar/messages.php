@@ -45,6 +45,7 @@ return [
 
     // Sidebar
     'sidebar' => [
+        'reviews' => 'مراجعات السيارات',
         'commissions_requests' => 'طلبات العمولة',
         'system_name' => 'نظام تأجير وإدارة السيارات',
         'rights_reserved' => 'جميع الحقوق محفوظة',

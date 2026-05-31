@@ -31,15 +31,15 @@ class EmployeeBookingController extends Controller
         $user = $request->user();
         $status = $request->get('status');
 
-        $query = Booking::with(['user', 'car', 'employee', 'review.user'])
-            ->when($status, fn ($q) => $q->where('status', $status));
+        $query = Booking::with(['user', 'car', 'employee'])
+            ->when($status, fn($q) => $q->where('status', $status));
 
         if ($user->hasRole('admin')) {
             $bookings = $query->latest()->paginate(6);
         } else {
             $bookings = $query->where('employee_id', $user->id)
-                              ->latest()
-                              ->paginate(6);
+                ->latest()
+                ->paginate(6);
         }
 
         return view('dashboard.bookings.index', compact('bookings', 'status'));
@@ -78,22 +78,22 @@ class EmployeeBookingController extends Controller
     /**
      * Cancel booking
      */
-public function cancel(Booking $booking)
-{
-    $this->authorize('employeeCancel', $booking);
+    public function cancel(Booking $booking)
+    {
+        $this->authorize('employeeCancel', $booking);
 
-    if (is_null($booking->employee_id)) {
-        $booking->update(['employee_id' => Auth::id()]);
+        if (is_null($booking->employee_id)) {
+            $booking->update(['employee_id' => Auth::id()]);
+        }
+
+        $booking = $this->employeeBookingService->cancel($booking);
+
+        $this->notifyUsers('cancelled', $booking);
+
+        return redirect()
+            ->route('employee.bookings.show', $booking->id)
+            ->with('status', __('messages.booking.cancelled'));
     }
-
-    $booking = $this->employeeBookingService->cancel($booking);
-
-    $this->notifyUsers('cancelled', $booking);
-
-    return redirect()
-        ->route('employee.bookings.show', $booking->id)
-        ->with('status', __('messages.booking.cancelled'));
-}
 
     /**
      * Reschedule booking
@@ -104,7 +104,8 @@ public function cancel(Booking $booking)
 
         $booking = $this->employeeBookingService->reschedule(
             $booking,
-            $request->scheduled_at
+            $request->start_date,
+            $request->end_date 
         );
 
         $this->notifyUsers('rescheduled', $booking);

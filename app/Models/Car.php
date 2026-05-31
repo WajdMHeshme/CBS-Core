@@ -86,7 +86,7 @@ class Car extends Model
 
     public function reviews()
     {
-        return $this->hasMany(CarReview::class, 'car_id');
+        return $this->hasMany(Review::class, 'car_id');
     }
 
     public function favorites()

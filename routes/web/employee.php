@@ -4,6 +4,7 @@ use App\Http\Controllers\Employee\CommissionController;
 use App\Http\Controllers\Employee\EmployeeBookingController;
 
 use App\Http\Controllers\Employee\EmployeeDashboardController;
+use App\Http\Controllers\Employee\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -82,3 +83,29 @@ Route::post(
     '/employee/bookings/{booking}/conversation',
     [\App\Http\Controllers\Employee\BookingConversationController::class, 'send']
 )->name('employee.booking.conversation');
+
+// =========================
+// Reviews Management (Employee)
+// =========================
+Route::middleware(['auth', 'role:admin|employee'])->group(function () {
+
+    // 📋 All reviews
+    Route::get('/reviews', [ReviewController::class, 'index'])
+        ->name('employee.reviews.index');
+
+    // ⏳ Pending reviews
+    Route::get('/reviews/pending', [ReviewController::class, 'pending'])
+        ->name('employee.reviews.pending');
+
+    // 👁️ Show review
+    Route::get('/reviews/{review}', [ReviewController::class, 'show'])
+        ->name('employee.reviews.show');
+
+    // ✅ Approve review
+    Route::patch('/reviews/{review}/approve', [ReviewController::class, 'approve'])
+        ->name('employee.reviews.approve');
+
+    // ❌ Reject review
+    Route::patch('/reviews/{review}/reject', [ReviewController::class, 'reject'])
+        ->name('employee.reviews.reject');
+});

@@ -45,42 +45,58 @@
 
             {{-- Form --}}
             <form action="{{ route('employee.bookings.reschedule', $booking->id) }}"
-                  method="POST"
-                  class="space-y-5">
+                method="POST"
+                class="space-y-5">
                 @csrf
                 @method('PATCH')
 
                 {{-- New Schedule --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">
-                        {{ __('messages.booking.new_date_time') }}
+                        {{ __('messages.booking.new_start_date') }}
                     </label>
 
-                    <input type="datetime-local"
-                           name="start_date"
-                           value="{{ old('start_date') }}"
-                           class="w-full border rounded-xl px-3.5 py-2.5 text-sm
-                                  focus:ring-2 focus:ring-gray-900/20 focus:border-gray-800">
+                    <input type="date"
+                        name="start_date"
+                        value="{{ old('start_date', $booking->start_date?->format('Y-m-d')) }}"
+                        class="w-full border rounded-xl px-3.5 py-2.5 text-sm
+                  focus:ring-2 focus:ring-gray-900/20 focus:border-gray-800">
 
                     @error('start_date')
-                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                    <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ __('messages.booking.end_date') }}
+                    </label>
+
+                    <input type="date"
+                        name="end_date"
+                        value="{{ old('end_date', $booking->end_date?->format('Y-m-d')) }}"
+                        class="w-full border rounded-xl px-3.5 py-2.5 text-sm
+                  focus:ring-2 focus:ring-gray-900/20 focus:border-gray-800">
+
+                    @error('end_date')
+                    <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 {{-- Actions --}}
-            <div class="flex items-center gap-3 pt-2">
+                <div class="flex items-center gap-3 pt-2">
 
-                <button
-                    class="px-3 py-2 rounded-lg bg-black text-white text-sm font-medium hover:bg-black">
-                    {{ __('messages.user.save_changes') }}
-                </button>
+                    <button
+                        class="px-3 py-2 rounded-lg bg-black text-white text-sm font-medium hover:bg-black">
+                        {{ __('messages.user.save_changes') }}
+                    </button>
 
-                <a href="{{ route('employee.bookings.show', $booking->id) }}"
-                class="px-3 py-2 rounded-lg border text-sm hover:bg-gray-50">
-                    {{ __('messages.booking.cancel') }}
-                </a>
+                    <a href="{{ route('employee.bookings.show', $booking->id) }}"
+                        class="px-3 py-2 rounded-lg border text-sm hover:bg-gray-50">
+                        {{ __('messages.booking.cancel') }}
+                    </a>
 
-            </div>
+                </div>
 
             </form>
         </div>

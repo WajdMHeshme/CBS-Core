@@ -31,9 +31,6 @@ class ReviewResource extends JsonResource
                     'title' => $this->car->title,
                 ];
             }),
-
-            'booking_id' => $this->booking_id,
-
             'created_at' => $this->created_at?->toDateTimeString(),
         ];
     }

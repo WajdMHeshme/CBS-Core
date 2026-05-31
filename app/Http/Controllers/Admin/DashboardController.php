@@ -18,13 +18,12 @@ class DashboardController extends Controller
             ->values();
 
         $rawBooking = Booking::select(
-            DB::raw("DATE_FORMAT(start_date, '%Y-%m') as month"),
-            DB::raw("SUM(status = 'pending') as pending"),
-            DB::raw("SUM(status = 'approved') as approved"),
-            DB::raw("SUM(status = 'rejected') as rejected")
+            DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"),
+            DB::raw("SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending"),
+            DB::raw("SUM(CASE WHEN status = 'approved' THEN 1 ELSE 0 END) as approved"),
+            DB::raw("SUM(CASE WHEN status = 'rejected' THEN 1 ELSE 0 END) as rejected")
         )
-            ->whereNotNull('start_date')
-            ->where('start_date', '>=', now()->subMonths(6))
+            ->where('created_at', '>=', now()->subMonths(6))
             ->groupBy('month')
             ->get()
             ->keyBy('month');

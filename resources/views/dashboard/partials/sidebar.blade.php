@@ -166,6 +166,32 @@ $asideBorder = $isRtl ? 'border-l' : 'border-r';
                         </span>
                     </a>
 
+                    {{-- Reviews --}}
+                    <a href="{{ route('employee.reviews.index') }}"
+                        class="{{ $linkBase }} {{ $linkDirectional }}
+    {{ request()->is('reviews*') ? 'bg-indigo-50 text-black font-semibold' : 'text-gray-700 hover:bg-gray-50' }}">
+
+                        {{-- Icon --}}
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="h-6 w-6 flex-shrink-0"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="1.7">
+
+                            <path stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.563.563 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L7.02 20.54a.563.563 0 01-.84-.61l1.285-5.385a.563.563 0 00-.182-.557L3.079 10.385a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345l2.125-5.111z" />
+
+                        </svg>
+
+                        {{-- Text --}}
+                        <span class="text-base font-medium">
+                            {{ __('messages.sidebar.reviews') }}
+                        </span>
+
+                    </a>
+
                 </nav>
                 @elserole('employee')
 
@@ -231,6 +257,31 @@ $asideBorder = $isRtl ? 'border-l' : 'border-r';
                         <span class="text-base font-medium">
                             {{ __('messages.sidebar.support_tickets') }}
                         </span>
+                    </a>
+                    {{-- Reviews --}}
+                    <a href="{{ route('employee.reviews.index') }}"
+                        class="{{ $linkBase }} {{ $linkDirectional }}
+    {{ request()->is('reviews*') ? 'bg-indigo-50 text-black font-semibold' : 'text-gray-700 hover:bg-gray-50' }}">
+
+                        {{-- Icon --}}
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="h-6 w-6 flex-shrink-0"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="1.7">
+
+                            <path stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.563.563 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L7.02 20.54a.563.563 0 01-.84-.61l1.285-5.385a.563.563 0 00-.182-.557L3.079 10.385a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345l2.125-5.111z" />
+
+                        </svg>
+
+                        {{-- Text --}}
+                        <span class="text-base font-medium">
+                            {{ __('messages.sidebar.reviews') }}
+                        </span>
+
                     </a>
                 </nav>
 

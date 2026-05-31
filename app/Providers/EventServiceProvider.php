@@ -39,5 +39,8 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\MessageSent::class => [
             \App\Listeners\SendNewMessageNotification::class,
         ],
+        \App\Events\ReviewApproved::class => [
+            \App\Listeners\SendReviewApprovedNotification::class,
+        ],
     ];
 }
