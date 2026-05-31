@@ -253,6 +253,8 @@ return [
         'view_details' => 'View Details',
         'back_to_list' => 'Back to List',
         'save_changes' => 'Save Changes',
+        'new_start_date' => "New Start Date",
+        'end_date' => "New End Date",
         'approve' => 'Approve',
         'reject' => 'Reject',
         'reschedule' => 'Reschedule',

@@ -253,6 +253,8 @@ return [
         'booking_details' => 'تفاصيل الحجز',
         'details_subtitle' => 'معلومات الحجز الكاملة وإجراءات الإدارة',
         'customer' => 'العميل',
+        'new_start_date' => "تاريخ بداية الحجز الجديد",
+        'end_date' => "تاريخ نهاية الحجز",
         'car' => 'السيارة',
         'scheduled_visit' => 'موعد الزيارة',
         'assigned_employee' => 'الموظف المسؤول',
