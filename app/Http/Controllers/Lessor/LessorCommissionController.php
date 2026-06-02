@@ -20,10 +20,8 @@ class LessorCommissionController extends Controller
     }
     public function pay(Request $request, BookingCommission $commission)
     {
-        // 🔒 تأكيد أن العمولة تخص هذا المؤجر
         abort_unless($commission->lessor_id === Auth::id(), 403);
 
-        // ❌ إذا تمت الموافقة مسبقاً
         if ($commission->status === 'paid') {
             return back()->with('error', 'Commission already approved');
         }

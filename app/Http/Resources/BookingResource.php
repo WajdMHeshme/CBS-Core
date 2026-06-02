@@ -24,6 +24,12 @@ class BookingResource extends JsonResource
                 'brand' => $this->car->brand,
                 'model' => $this->car->model,
                 'price_per_day' => $this->car->price_per_day,
+                'images' => $this->car->images->map(function ($image) {
+                    return [
+                        'id' => $image->id,
+                        'url' => asset('storage/' . $image->image_path),
+                    ];
+                }),
             ] : null,
 
             // Customer (user)

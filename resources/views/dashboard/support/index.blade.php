@@ -83,7 +83,6 @@
                 {{ $ticket->subject }}
             </h3>
 
-            ```blade
             {{-- Message --}}
             <div>
                 <p class="text-sm text-gray-500 leading-relaxed break-all">
@@ -97,7 +96,6 @@
                 </a>
                 @endif
             </div>
-            ```
 
 
             {{-- Footer --}}
