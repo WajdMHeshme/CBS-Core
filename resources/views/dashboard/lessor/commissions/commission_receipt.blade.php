@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <style>
-        {
-            ! ! file_get_contents(public_path('pdf/commissions.css')) ! !
-        }
+        {!! file_get_contents(public_path('pdf/commissions.css')) !!}
     </style>
 </head>
 
@@ -121,12 +118,6 @@ $statusClass = strtolower($commission->status ?? 'pending');
                         <tr>
                             <th>Brand</th>
                             <td>{{ $car->brand ?? '-' }}</td>
-                            <th>Model</th>
-                            <td>{{ $car->model ?? '-' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Price Per Day</th>
-                            <td>{{ number_format((float) $car->price_per_day, 2) }} {{ $car->currency ?? 'SYR' }}</td>
                             <th>Model</th>
                             <td>{{ $car->model ?? '-' }}</td>
                         </tr>
