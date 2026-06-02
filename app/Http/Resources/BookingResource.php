@@ -27,7 +27,7 @@ class BookingResource extends JsonResource
                 'images' => $this->car->images->map(function ($image) {
                     return [
                         'id' => $image->id,
-                        'url' => asset('storage/' . $image->image_path),
+                        'url' => asset('storage/' . $image->path),
                     ];
                 }),
             ] : null,
