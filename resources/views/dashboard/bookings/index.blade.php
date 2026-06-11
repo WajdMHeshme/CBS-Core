@@ -139,6 +139,10 @@
                         {{ $booking->user->email }}
                     </p>
                 </div>
+                <div class="mt-2 text-sm text-gray-600">
+                    <span class="font-medium">{{ __('messages.booking.plan') }}:</span>
+                    {{ $booking->bookingPlan->name ?? 'N/A' }}
+                </div>
 
             </div>
             <p class="font-semibold text-primary py-2">

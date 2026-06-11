@@ -52,6 +52,21 @@
                 {{-- Grid Layout for Details --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
+                    <div class="p-4 border rounded-xl">
+                        <h4 class="font-medium text-gray-800 mb-2">
+                            {{ __('messages.booking.plan') }}
+                        </h4>
+
+                        <p class="text-sm font-semibold text-gray-700">
+                            {{ $booking->bookingPlan->name ?? 'N/A' }}
+                        </p>
+
+                        @if($booking->bookingPlan?->description)
+                        <p class="text-xs text-gray-500 mt-1">
+                            {{ $booking->bookingPlan->description }}
+                        </p>
+                        @endif
+                    </div>
                     {{-- Customer --}}
                     <div class="p-4 border rounded-xl">
                         <h4 class="font-medium text-gray-800 mb-2">{{ __('messages.booking.customer') }}</h4>

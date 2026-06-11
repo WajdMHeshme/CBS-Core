@@ -84,18 +84,35 @@ $isRtl = app()->getLocale() == 'ar';
 
             <div class="border-t border-gray-200 my-3"></div>
 
-            <div class="flex items-center gap-3">
-                <div class="flex flex-col leading-tight">
+            <div class="flex items-start justify-between gap-4">
 
-                    <p class="font-medium text-gray-800 truncate max-w-[180px]">
-                        {{ $user?->name ?? 'Unknown user' }}
-                    </p>
+                {{-- User Info --}}
+                <div class="flex items-center gap-3 min-w-0">
 
-                    <p class="text-xs text-gray-500 truncate max-w-[180px]">
-                        {{ $user?->email ?? 'No email available' }}
-                    </p>
+                    <div class="flex flex-col leading-tight min-w-0">
 
+                        <p class="font-medium text-gray-800 truncate max-w-[180px]">
+                            {{ $user?->name ?? 'Unknown user' }}
+                        </p>
+
+                        <p class="text-xs text-gray-500 truncate max-w-[180px]">
+                            {{ $user?->email ?? 'No email available' }}
+                        </p>
+
+                    </div>
                 </div>
+
+                {{-- Booking Plan --}}
+                <div class="flex  items-center gap-2 whitespace-nowrap">
+                    <span class="text-xs text-indigo-500 font-bold">
+                        {{ __('messages.booking.plan') }}
+                    </span>
+
+                    <span class="px-2 py-1 text-xs rounded-lg border bg-indigo-50 text-indigo-700 border-indigo-200">
+                        {{ $booking->bookingPlan->name ?? 'N/A' }}
+                    </span>
+                </div>
+
             </div>
 
             <div class="mt-3 grid grid-cols-2 gap-4 text-sm text-gray-700">

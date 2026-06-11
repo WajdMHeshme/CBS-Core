@@ -251,6 +251,7 @@ return [
         'new_date_time' => 'New Date & Time',
         'notes' => 'Notes',
         'view_details' => 'View Details',
+        'plan' => 'Plan',
         'back_to_list' => 'Back to List',
         'save_changes' => 'Save Changes',
         'new_start_date' => "New Start Date",

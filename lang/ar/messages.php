@@ -260,6 +260,7 @@ return [
         'assigned_employee' => 'الموظف المسؤول',
         'no_reason_recorded' => 'لم يتم تسجيل سبب للرفض.',
         'customer_review' => 'تقييم العميل',
+        'plan' => 'الخطة',
         'back_to_list' => 'العودة للقائمة',
         'review_after_completion' => 'سيظهر التقييم هنا بعد إتمام الحجز.',
         'awaiting_customer_review' => 'بانتظار تقييم العميل',
