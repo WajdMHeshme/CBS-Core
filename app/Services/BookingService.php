@@ -7,6 +7,8 @@ use App\Models\Booking;
 use App\Models\Car;
 use App\Repositories\Contracts\BookingRepositoryInterface;
 use Illuminate\Support\Facades\DB;
+use App\Models\BookingPlan;
+use Carbon\Carbon;
 
 class BookingService
 {
@@ -22,9 +24,26 @@ class BookingService
         return DB::transaction(function () use ($data, $userId) {
 
             $car = Car::lockForUpdate()->findOrFail($data['car_id']);
+            $plan = BookingPlan::findOrFail(
+                $data['booking_plan_id']
+            );
 
             $start = $data['start_date'];
             $end   = $data['end_date'];
+
+            $days = Carbon::parse($start)
+                ->diffInDays(Carbon::parse($end));
+
+            $basePrice = $car->price_per_day * $days;
+
+            $finalPrice = $basePrice;
+
+            if ($plan->extra_percentage > 0) {
+                $finalPrice += (
+                    $basePrice *
+                    $plan->extra_percentage / 100
+                );
+            }
 
             /**
              * Validate dates
@@ -55,12 +74,14 @@ class BookingService
              * Create booking
              */
             $booking = $this->bookings->create([
-                'car_id'      => $car->id,
-                'user_id'     => $userId,
-                'employee_id' => $car->employee_id ?? null,
-                'start_date'  => $start,
-                'end_date'    => $end,
-                'status'      => 'pending',
+                'car_id'          => $car->id,
+                'user_id'         => $userId,
+                'employee_id'     => $car->employee_id ?? null,
+                'booking_plan_id' => $plan->id,
+                'start_date'      => $start,
+                'end_date'        => $end,
+                'final_price'     => $finalPrice,
+                'status'          => 'pending',
             ]);
 
             event(new BookingCreated($booking));
@@ -168,22 +189,38 @@ class BookingService
     /**
      * Cancel booking
      */
-    public function cancel(Booking $booking): Booking
-    {
-        if (!in_array($booking->status, [
-            'pending',
-            'approved'
-        ])) {
+public function cancel(Booking $booking): Booking
+{
+    $booking->load('bookingPlan');
 
-            throw new \Exception(
-                'Only pending or approved bookings can be canceled'
-            );
+    if (!in_array($booking->status, ['pending', 'approved'])) {
+
+        if ($booking->status === 'canceled') {
+            abort(422, 'This booking is already canceled');
         }
 
-        return $this->bookings->update($booking, [
-            'status' => 'canceled'
-        ]);
+        if ($booking->status === 'completed') {
+            abort(422, 'Completed bookings cannot be canceled');
+        }
+
+        abort(422, 'This booking cannot be canceled in its current status');
     }
+
+    if (!$booking->bookingPlan->cancellation_allowed) {
+        abort(403, 'Cancellation is not allowed for this booking plan');
+    }
+
+    $deadline = Carbon::parse($booking->start_date)
+        ->subHours($booking->bookingPlan->cancellation_hours_before);
+
+    if (now()->greaterThan($deadline)) {
+        abort(422, 'Cancellation period has expired for this booking');
+    }
+
+    return $this->bookings->update($booking, [
+        'status' => 'canceled'
+    ]);
+}
 
     /**
      * Get user bookings

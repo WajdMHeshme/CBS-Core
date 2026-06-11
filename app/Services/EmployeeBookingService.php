@@ -59,9 +59,17 @@ class EmployeeBookingService
         ]);
 
         if (!$booking->commission()->exists()) {
+            $booking->load('car.owner');
 
-            $price = $booking->car->price_per_day;
-            $commissionAmount = round($price * 0.05, 2);
+            $price = $booking->car?->price_per_day ?? 0;
+
+            $owner = $booking->car?->owner;
+
+            $isPro = $owner?->is_pro === true;
+
+            $rate = $isPro ? 0.05 : 0.10;
+
+            $commissionAmount = round($price * $rate, 2);
 
             $this->commissionService->createForBooking(
                 $booking,

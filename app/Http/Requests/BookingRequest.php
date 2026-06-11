@@ -15,10 +15,12 @@ class BookingRequest extends FormRequest
     {
         return [
             'car_id' => 'required|exists:cars,id',
-
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after:start_date',
-
+            'booking_plan_id' => [
+                'required',
+                'exists:booking_plans,id'
+            ],
             'notes' => 'nullable|string|max:500',
         ];
     }
@@ -28,10 +30,8 @@ class BookingRequest extends FormRequest
         return [
             'car_id.required' => 'Car is required',
             'car_id.exists' => 'Selected car does not exist',
-
             'scheduled_at.after' => 'The booking date must be in the future',
             'scheduled_at.date' => 'Invalid date format',
-
             'start_date.after_or_equal' => 'Start date must be today or later',
             'end_date.after' => 'End date must be after start date',
         ];

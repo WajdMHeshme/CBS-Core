@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AmenityController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CarController as AdminCarController;
 use App\Http\Controllers\Admin\CarImageController;
+use App\Http\Controllers\Admin\ProRequestController;
 use App\Http\Controllers\Admin\Reports\BookingsReportController;
 use App\Http\Controllers\Admin\Reports\CarReportController;
 use App\Http\Controllers\Employee\BookingMessageController;
@@ -145,6 +146,17 @@ Route::middleware(['auth', 'role:employee|admin'])
 
         Route::get('/dashboard/support-tickets/{ticket}', [SupportTicketController::class, 'show'])
             ->name('support.show');
+    });
+
+Route::prefix('admin')
+    ->middleware(['auth', 'role:admin'])
+    ->group(function () {
+
+        Route::get('/pro-requests', [ProRequestController::class, 'index']);
+
+        Route::post('/pro-requests/{proRequest}/approve', [ProRequestController::class, 'approve']);
+
+        Route::post('/pro-requests/{proRequest}/reject', [ProRequestController::class, 'reject']);
     });
 
 require __DIR__ . '/web/auth.php';

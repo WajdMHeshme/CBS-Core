@@ -6,15 +6,17 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-public function run(): void
-{
-    $this->call([
-        RoleSeeder::class,
-        UserSeeder::class,
-        AmenitiesSeeder::class,
-        CarTypeSeeder::class,
-        CarSeeder::class,
-        BookingSeeder::class,
-    ]);
-}
+    public function run(): void
+    {
+        $this->call([
+            RoleSeeder::class,
+            UserSeeder::class,
+            AmenitiesSeeder::class,
+            CarTypeSeeder::class,
+            CarSeeder::class,
+            BookingSeeder::class,
+            BookingPlanSeeder::class,
+
+        ]);
+    }
 }

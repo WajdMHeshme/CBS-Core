@@ -17,12 +17,22 @@ class User extends Authenticatable
         'email',
         'password',
         'is_active',
+        'is_pro',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'is_active' => 'boolean',
+            'is_pro' => 'boolean',
+        ];
+    }
 
     public function bookings()
     {
@@ -47,5 +57,10 @@ class User extends Authenticatable
     public function profile()
     {
         return $this->hasOne(Profile::class);
+    }
+
+    public function proRequest()
+    {
+        return $this->hasOne(ProRequest::class);
     }
 }

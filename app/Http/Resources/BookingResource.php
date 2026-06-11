@@ -14,6 +14,8 @@ class BookingResource extends JsonResource
             'status' => $this->status,
             'start_date' => $this->start_date?->format('Y-m-d H:i'),
             'end_date' => $this->end_date?->format('Y-m-d H:i'),
+            'booking_plan' => $this->bookingPlan?->name,
+            'final_price'  => $this->final_price,
             'notes' => $this->notes,
             'rejection_reason' => $this->rejection_reason,
 

@@ -13,6 +13,8 @@ class Booking extends Model
         'user_id',
         'car_id',
         'employee_id',
+        'booking_plan_id',
+        'final_price',
         'start_date',
         'end_date',
         'status',
@@ -54,5 +56,9 @@ class Booking extends Model
     public function conversations()
     {
         return $this->hasMany(BookingConversation::class);
+    }
+    public function bookingPlan()
+    {
+        return $this->belongsTo(BookingPlan::class);
     }
 }

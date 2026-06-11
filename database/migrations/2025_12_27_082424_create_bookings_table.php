@@ -26,6 +26,11 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('users')
                 ->nullOnDelete();
+            $table->foreignId('booking_plan_id')
+                ->nullable()
+                ->constrained();
+            $table->decimal('final_price', 10, 2)
+                ->default(0);
 
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();

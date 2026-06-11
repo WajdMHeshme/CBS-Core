@@ -18,13 +18,15 @@ class CarService
     {
         return $this->cars->approvedQuery()
             ->with(['carType', 'mainImage', 'amenities'])
+            ->orderByRaw('(select is_pro from users where users.id = cars.user_id) desc')
             ->get();
     }
 
     public function getPaginated(array $filters = []): LengthAwarePaginator
     {
         $query = $this->cars->approvedQuery()
-            ->with(['carType', 'mainImage', 'amenities', 'images']);
+            ->with(['carType', 'mainImage', 'amenities', 'images'])
+            ->orderByRaw('(select is_pro from users where users.id = cars.user_id) desc');
 
         $this->applyFilters($query, $filters);
 
