@@ -53,12 +53,16 @@ class BookingController extends Controller
     {
         try {
 
+            $validated = $request->validated();
+
             $booking = $this->bookingService->create(
-                $request->validated(),
+                $validated,
                 auth('sanctum')->id()
             );
 
-            dispatch(fn() => $this->notifyUsers($booking));
+            dispatch(function () use ($booking) {
+                $this->notifyUsers($booking);
+            });
 
             return response()->json([
                 'message' => __('messages.booking.created'),
@@ -66,9 +70,18 @@ class BookingController extends Controller
             ], 201);
         } catch (\Exception $e) {
 
+            if ($e->getMessage() === 'CAR_BOOKED') {
+
+                return response()->json([
+                    'message' => 'Car is already booked for this period',
+                    'booked_periods' => $this->bookingService
+                        ->getBookedPeriodsByCar($request->car_id),
+                ], 422);
+            }
+
             return response()->json([
-                'message' => $e->getMessage()
-            ], 422);
+                'message' => $e->getMessage(),
+            ], 500);
         }
     }
 

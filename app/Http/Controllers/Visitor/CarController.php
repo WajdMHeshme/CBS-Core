@@ -5,16 +5,21 @@ namespace App\Http\Controllers\Visitor;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CarResource;
 use App\Models\Car;
+use App\Services\BookingService;
 use App\Services\CarService;
 use Illuminate\Http\Request;
 
 class CarController extends Controller
 {
     protected CarService $carService;
+    protected BookingService $bookingService;
 
-    public function __construct(CarService $carService)
-    {
+    public function __construct(
+        CarService $carService,
+        BookingService $bookingService
+    ) {
         $this->carService = $carService;
+        $this->bookingService = $bookingService;
     }
 
     /**
@@ -45,5 +50,13 @@ class CarController extends Controller
         }
 
         return new CarResource($car);
+    }
+
+
+    public function bookedPeriods($carId)
+    {
+        return response()->json(
+            $this->bookingService->getBookedPeriodsByCar((int) $carId)
+        );
     }
 }

@@ -172,9 +172,7 @@ class BookingService
             ->exists();
 
         if ($conflict) {
-            throw new \Exception(
-                'Car is already booked for this period'
-            );
+            throw new \Exception('CAR_BOOKED');
         }
     }
 
@@ -189,38 +187,32 @@ class BookingService
     /**
      * Cancel booking
      */
-public function cancel(Booking $booking): Booking
-{
-    $booking->load('bookingPlan');
+    public function cancel(Booking $booking): Booking
+    {
+        $booking->load('bookingPlan');
 
-    if (!in_array($booking->status, ['pending', 'approved'])) {
+        if (!in_array($booking->status, ['pending', 'approved'])) {
 
-        if ($booking->status === 'canceled') {
-            abort(422, 'This booking is already canceled');
+            if ($booking->status === 'canceled') {
+                abort(422, 'This booking is already canceled');
+            }
+
+            if ($booking->status === 'completed') {
+                abort(422, 'Completed bookings cannot be canceled');
+            }
+
+            abort(422, 'This booking cannot be canceled in its current status');
         }
 
-        if ($booking->status === 'completed') {
-            abort(422, 'Completed bookings cannot be canceled');
+        if (!$booking->bookingPlan->cancellation_allowed) {
+            abort(422, 'Cancellation is not allowed for this booking plan');
         }
 
-        abort(422, 'This booking cannot be canceled in its current status');
+
+        return $this->bookings->update($booking, [
+            'status' => 'canceled'
+        ]);
     }
-
-    if (!$booking->bookingPlan->cancellation_allowed) {
-        abort(403, 'Cancellation is not allowed for this booking plan');
-    }
-
-    $deadline = Carbon::parse($booking->start_date)
-        ->subHours($booking->bookingPlan->cancellation_hours_before);
-
-    if (now()->greaterThan($deadline)) {
-        abort(422, 'Cancellation period has expired for this booking');
-    }
-
-    return $this->bookings->update($booking, [
-        'status' => 'canceled'
-    ]);
-}
 
     /**
      * Get user bookings
@@ -233,5 +225,20 @@ public function cancel(Booking $booking): Booking
             $userId,
             $status
         );
+    }
+
+
+    public function getBookedPeriodsByCar(int $carId)
+    {
+        return Booking::where('car_id', $carId)
+            ->whereIn('status', ['pending', 'approved', 'rescheduled'])
+            ->orderBy('start_date')
+            ->get()
+            ->map(function ($booking) {
+                return [
+                    'start' => $booking->start_date,
+                    'end'   => $booking->end_date,
+                ];
+            });
     }
 }
