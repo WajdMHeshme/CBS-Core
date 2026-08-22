@@ -3,7 +3,7 @@ namespace App\Listeners;
 
 use App\Events\CommissionApproved;
 
-class GeneratePDFOnApproval
+class GeneratePDFOnApprovalNotification
 {
     public function handle(CommissionApproved $event): void
     {

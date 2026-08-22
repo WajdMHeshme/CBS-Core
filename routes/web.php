@@ -59,7 +59,7 @@ Route::get('/dashboard', function () {
         $user->hasRole('lessor') => redirect()->route('lessor.dashboard'),
         default => redirect('/login'),
     };
-})->middleware(['auth', 'check.active']);
+})->middleware(['auth', 'check.active'])->name('dashboard');
 
 
 /*
@@ -73,7 +73,7 @@ Route::middleware(['auth', 'check.active', 'role:admin'])
     ->name('dashboard.admin.')
     ->group(function () {
 
-        Route::get('/', [DashboardController::class, 'index'])->name('index');
+        Route::get('home', [DashboardController::class, 'index'])->name('index');
         Route::get('/cars/pending', [AdminCarController::class, 'pending'])
             ->name('cars.pending');
         Route::resource('amenities', AmenityController::class)->except(['show']);

@@ -13,18 +13,18 @@ class AmenitiesSeeder extends Seeder
     public function run(): void
     {
         $features = [
-            'Automatic Transmission',   // قير أوتوماتيك
-            'Manual Transmission',      // قير عادي
-            'Air Conditioning',         // تكييف
-            'GPS Navigation',           // نظام ملاحة
-            'Bluetooth',                // بلوتوث
-            'Cruise Control',          // مثبت سرعة
-            'Parking Sensors',         // حساسات ركن
-            'Rear Camera',             // كاميرا خلفية
-            '4x4',                     // دفع رباعي
-            'Diesel',                  // ديزل
-            'Hybrid',                 // هايبرد
-            'Electric',                // كهربائي   
+            'Automatic Transmission',
+            'Manual Transmission',
+            'Air Conditioning',
+            'GPS Navigation',
+            'Bluetooth',
+            'Cruise Control',
+            'Parking Sensors',
+            'Rear Camera',
+            '4x4',
+            'Diesel',
+            'Hybrid',
+            'Electric',                
             'Sunroof',
         ];
 

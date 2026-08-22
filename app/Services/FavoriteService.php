@@ -54,7 +54,6 @@ class FavoriteService
             ]);
         }
 
-        // حفظ البيانات قبل الحذف
         $favoriteData = $favorite->toArray();
 
         $favorite->delete();

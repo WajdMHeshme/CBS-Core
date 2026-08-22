@@ -25,12 +25,11 @@ return new class extends Migration
                 ->constrained('users')
                 ->cascadeOnDelete();
 
-            // 💡 مهم: نضيف حالة request أولية
             $table->enum('status', [
-                'requested',        // جديد (الموظف طلب العمولة)
-                'pending',          // بانتظار الدفع
-                'payment_uploaded', // المؤجر رفع إثبات
-                'paid',             // تم التأكيد
+                'requested',        
+                'pending',
+                'payment_uploaded',
+                'paid',
                 'rejected',
             ])->default('requested');
 
