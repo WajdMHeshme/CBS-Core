@@ -13,7 +13,13 @@ class CheckActive
         $user = $request->user();
 
         if ($user && ! $user->is_active) {
-            Auth::logout();
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json([
+                    'message' => 'Your account is disabled by admin.',
+                ], 403);
+            }
+
+            Auth::guard('web')->logout();
 
             return redirect()
                 ->route('login')
